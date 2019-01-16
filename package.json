@@ -7,17 +7,19 @@
   "license": "Apache-2.0",
   "main": "./lib/index.js",
   "bin": {
-    "kiwi": "./lib/index.js"
+    "kiwi": "./lib/cli/index.js"
   },
   "scripts": {
-    "build": "tsc -p .",
-    "watch": "tsc -w -p .",
-    "start": "yarn build && ./lib/index.js",
-    "deploy": "yarn build && sudo yarn global add"
+    "start": "./lib/cli/index.js",
+    "build": "tsc -w -p .",
+    "deploy": "sudo npm remove -g && sudo npm install -g"
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "commander": "^2.19.0"
+    "commander": "^2.19.0",
+    "inquirer": "^6.2.1",
+    "path": "^0.12.7",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
