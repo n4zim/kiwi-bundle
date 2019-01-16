@@ -1,2 +1,2 @@
-declare const _default: (directory: string) => void;
+declare const _default: (path: string) => void;
 export default _default;

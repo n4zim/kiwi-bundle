@@ -6,15 +6,22 @@ import initCommand from './init'
 const packageJson = require('../../package.json')
 
 const triggerError = (command: Command, text: string) => {
-  console.error(chalk.red(`[Error] ${text}\n`))
-  command.outputHelp()
+  console.error(chalk.red(`[ERROR] ${text}\n`))
 }
 
-const triggerErrorTooManyArgs = (command: Command, expected: number|string)  => {
-  triggerError(command, `Too many arguments, there are ${command.parent.rawArgs.length - 3} instead of ${expected}`)
+const generateErrorTooManyArgs = (command: Command, expected: number|string)  => {
+  return `Too many arguments, there are ${command.parent.rawArgs.length - 3} instead of ${expected}`
 }
 
 const testMaxArgsCount = (command: Command, limit: number) => command.parent.rawArgs.length > limit + 3
+
+const tryCatch = (command: Command, action: any) => {
+  try {
+    action()
+  } catch(exception) {
+    triggerError(command, exception)
+  }
+}
 
 program
   .name("kiwi")
@@ -24,15 +31,17 @@ program
 program
   .command('init [path]')
   .description('create a new Kiwi project')
-  .action((path: string, command: Command) => {
+  .action((path: string, command: Command) => tryCatch(command, () => {
     if(typeof path === "undefined") {
       initCommand(process.cwd())
     } else if(testMaxArgsCount(command, 1)) {
-      triggerErrorTooManyArgs(command, "0 or 1")
+      command.outputHelp()
+      console.log()
+      throw generateErrorTooManyArgs(command, "0 or 1")
     } else {
       initCommand(path)
     }
-  })
+  }))
 
 program
   .command('install')

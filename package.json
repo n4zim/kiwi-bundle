@@ -22,6 +22,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@types/inquirer": "^0.0.43",
     "@types/node": "^10.12.18",
     "nodemon": "^1.18.9",
     "ts-node": "^7.0.1",
