@@ -1,0 +1,28 @@
+{
+  "name": "kiwi-framework",
+  "version": "1.0.0",
+  "description": "A simple and clean framework for creating cross-platform applications",
+  "repository": "git@github.com:blue-forest/kiwi.git",
+  "author": "Nazim Lachter <nlachter@gmail.com>",
+  "license": "Apache-2.0",
+  "main": "./lib/index.js",
+  "bin": {
+    "kiwi": "./lib/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "start": "yarn build && ./lib/index.js",
+    "deploy": "yarn build && sudo yarn global add"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "commander": "^2.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "nodemon": "^1.18.9",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
+  }
+}

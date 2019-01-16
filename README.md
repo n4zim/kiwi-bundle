@@ -1,3 +1,3 @@
 # Kiwi
 
-## A simple and clean framework to build cross-platform apps
+## A simple and clean framework for creating cross-platform applications
