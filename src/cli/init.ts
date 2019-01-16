@@ -1,11 +1,42 @@
 import chalk from 'chalk'
 import fs from 'fs'
-import pathLib from 'path'
+//import pathLib from 'path'
+import commandExists from 'command-exists'
 import inquirer from 'inquirer'
 import { Platform } from './config'
 
-const promptData = () => {
-  console.log(`\n${chalk.bgBlack('Let\'s create a new Kiwi app !')}\n`)
+const isYarnAvailable = commandExists.sync('yarn')
+
+const promptDataForConfig = () => {
+  inquirer.prompt([
+    {
+      type: 'checkbox',
+      name: 'platforms',
+      message: 'Platforms on which you want to create your app',
+      choices: [
+        new inquirer.Separator('Browser applications'),
+        { name: 'Web', value: Platform.WEB, checked: true },
+        new inquirer.Separator('Mobile applications'),
+        { name: 'Android', value: Platform.ANDROID },
+        { name: 'iOS', value: Platform.IOS },
+        new inquirer.Separator('Desktop applications'),
+        { name: 'Linux', value: Platform.LINUX },
+        { name: 'Windows', value: Platform.WINDOWS },
+        { name: 'MacOS', value: Platform.MACOS },
+      ],
+      validate: answer => {
+        if(answer.length < 1) return "You must choose at least one platform"
+        return true
+      },
+    },
+  ])
+}
+
+const createPackageFile = (data: {}) => {
+
+}
+
+const promptDataForPackage = () => {
   inquirer.prompt([
     {
       type: 'input',
@@ -36,33 +67,14 @@ const promptData = () => {
         return 'It\'s not a valid Git URL (HTTPS or SSH)'
       }
     },
-    {
-      type: 'checkbox',
-      name: 'platforms',
-      message: 'Platforms on which you want to create your app',
-      choices: [
-        new inquirer.Separator('Browser applications'),
-        { name: 'Web', value: Platform.WEB, checked: true },
-        new inquirer.Separator('Mobile applications'),
-        { name: 'Android', value: Platform.ANDROID },
-        { name: 'iOS', value: Platform.IOS },
-        new inquirer.Separator('Desktop applications'),
-        { name: 'Linux', value: Platform.LINUX },
-        { name: 'Windows', value: Platform.WINDOWS },
-        { name: 'MacOS', value: Platform.MACOS },
-      ],
-      validate: answer => {
-        if(answer.length < 1) return "You must choose at least one platform"
-        return true
-      },
-    },
   ]).then(answers => {
-    console.log(answers)
+    createPackageFile(answers)
+    promptDataForConfig()
   })
 }
 
 const checkDirectory = (path: string, content: string[]) => {
-  const srcPath = pathLib.join(path, "src")
+  //const srcPath = pathLib.join(path, "src")
   if(content.indexOf('kiwi.yml') !== -1) {
     console.log(chalk.blue(`Kiwi is already initialized inside ${path}`))
   /*} else if(content.indexOf('package.json') !== -1) {
@@ -70,7 +82,12 @@ const checkDirectory = (path: string, content: string[]) => {
   } else if(content.indexOf('src') !== -1 && fs.lstatSync(srcPath).isDirectory()) {
     throw `The directory ${path} must not contain an src/ directory`*/
   } else {
-    promptData()
+    console.log(`\n${chalk.bgBlack('Let\'s create a new Kiwi app !')}\n`)
+    if(content.indexOf('package.json') === -1) {
+      promptDataForPackage()
+    } else {
+      promptDataForConfig()
+    }
   }
 }
 

@@ -35,5 +35,6 @@ class Config implements ConfigParams {
 
 export {
   Config as default,
+  ConfigParams,
   Platform,
 }

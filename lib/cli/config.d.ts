@@ -16,4 +16,4 @@ declare class Config implements ConfigParams {
     constructor(json?: ConfigParams);
     write(projectDir: string): void;
 }
-export { Config as default, Platform, };
+export { Config as default, ConfigParams, Platform, };
