@@ -1,6 +1,6 @@
 {
   "name": "kiwi-framework",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple and clean framework for creating cross-platform applications",
   "repository": "git@github.com:blue-forest/kiwi.git",
   "author": "Nazim Lachter <nlachter@gmail.com>",
