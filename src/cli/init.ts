@@ -8,17 +8,24 @@ import { Platform } from './config'
 
 const isYarnAvailable = commandExists.sync('yarn')
 
-const createPackageFile = (path: string, answers: {}) => {
-  exec(`cd ${path} && npm init --yes`, errorInit => {
-    if(errorInit !== null) throw `NPM init failed : ${errorInit}`
-    const packagePath = pathLib.join(path, "package.json")
-    fs.readFile(packagePath, (errorRead, packageContent) => {
-      if(errorRead !== null) throw `NPM package read failed : ${errorRead}`
-      console.log(packageContent.toString())
-      //fs.writeFileSync(packagePath, JSON.stringify(data))
-    })
-  })
-}
+/*const createPackageFile = (path: string,
+  answers: { name:string, version:string, description:string, authorName:string, authorEmail:string }) =>
+{
+  const data: { name:string, version:string, description?:string, authorName?:string, authorEmail?:string } = {
+    name: answers.name,
+    version: "1.0.0",
+  }
+  if(answers.description.length > 0) data.description = answers.description
+  if(answers.authorName.length > 0) data.name = answers.authorName
+  if(answers.authorEmail.length > 0) {
+    if(data.name.length === 0) {
+      data.name = answers.authorEmail
+    } else {
+      data.name += ` <${answers.authorEmail}>`
+    }
+  }
+  fs.writeFileSync(pathLib.join(path, "package.json"), JSON.stringify(data, null, 2))
+}*/
 
 const createConfigFile = (path: string, data: {}) => {
   console.log("CONFIG FILE CREATED")
@@ -89,7 +96,7 @@ const promptDataForPackage = (path: string) => {
       }
     },
   ]).then(answers => {
-    createPackageFile(path, answers)
+    //createPackageFile(path, answers)
     promptDataForConfig(path)
   })
 }

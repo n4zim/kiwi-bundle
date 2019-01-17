@@ -1,5 +1,5 @@
 import API from './api'
-import Database from './database'
+import Database from './storage'
 import Logger from './logger'
 import Router from './router'
 
