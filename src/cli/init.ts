@@ -1,13 +1,30 @@
 import chalk from 'chalk'
 import fs from 'fs'
-//import pathLib from 'path'
 import commandExists from 'command-exists'
 import inquirer from 'inquirer'
+import pathLib from 'path'
+import { exec } from 'child_process'
 import { Platform } from './config'
 
 const isYarnAvailable = commandExists.sync('yarn')
 
-const promptDataForConfig = () => {
+const createPackageFile = (path: string, answers: {}) => {
+  exec(`cd ${path} && npm init --yes`, errorInit => {
+    if(errorInit !== null) throw `NPM init failed : ${errorInit}`
+    const packagePath = pathLib.join(path, "package.json")
+    fs.readFile(packagePath, (errorRead, packageContent) => {
+      if(errorRead !== null) throw `NPM package read failed : ${errorRead}`
+      console.log(packageContent.toString())
+      //fs.writeFileSync(packagePath, JSON.stringify(data))
+    })
+  })
+}
+
+const createConfigFile = (path: string, data: {}) => {
+  console.log("CONFIG FILE CREATED")
+}
+
+const promptDataForConfig = (path: string) => {
   inquirer.prompt([
     {
       type: 'checkbox',
@@ -29,14 +46,13 @@ const promptDataForConfig = () => {
         return true
       },
     },
-  ])
+  ]).then(answers => {
+    createConfigFile(path, answers)
+    console.log(`\n    ${chalk.bgGreenBright.black('Your project is now ready !')}\n`)
+  })
 }
 
-const createPackageFile = (data: {}) => {
-
-}
-
-const promptDataForPackage = () => {
+const promptDataForPackage = (path: string) => {
   inquirer.prompt([
     {
       type: 'input',
@@ -54,8 +70,13 @@ const promptDataForPackage = () => {
     },
     {
       type: 'input',
-      name: 'author',
+      name: 'authorName',
       message: 'Enter your name',
+    },
+    {
+      type: 'input',
+      name: 'authorEmail',
+      message: 'Enter your e-mail address',
     },
     {
       type: 'input',
@@ -68,37 +89,31 @@ const promptDataForPackage = () => {
       }
     },
   ]).then(answers => {
-    createPackageFile(answers)
-    promptDataForConfig()
+    createPackageFile(path, answers)
+    promptDataForConfig(path)
   })
 }
 
 const checkDirectory = (path: string, content: string[]) => {
-  //const srcPath = pathLib.join(path, "src")
   if(content.indexOf('kiwi.yml') !== -1) {
     console.log(chalk.blue(`Kiwi is already initialized inside ${path}`))
-  /*} else if(content.indexOf('package.json') !== -1) {
-    throw `The directory ${path} must not contain an existing Node package (package.json)`
-  } else if(content.indexOf('src') !== -1 && fs.lstatSync(srcPath).isDirectory()) {
-    throw `The directory ${path} must not contain an src/ directory`*/
   } else {
-    console.log(`\n${chalk.bgBlack('Let\'s create a new Kiwi app !')}\n`)
+    console.log(`\n    ${chalk.bgBlack('Let\'s create a new Kiwi app')}\n`)
     if(content.indexOf('package.json') === -1) {
-      promptDataForPackage()
+      promptDataForPackage(path)
     } else {
-      promptDataForConfig()
+      promptDataForConfig(path)
     }
   }
 }
 
 export default (path: string) => {
   if(fs.existsSync(path)) {
-    if(fs.lstatSync(path).isDirectory()) {
-      checkDirectory(path, fs.readdirSync(path))
-    } else {
+    if(!fs.lstatSync(path).isDirectory()) {
       throw `The path ${path} is not a directory`
     }
   } else {
-    throw `The path ${path} does not exists`
+    exec(`mkdir -p ${path}`)
   }
+  checkDirectory(path, fs.readdirSync(path))
 }
