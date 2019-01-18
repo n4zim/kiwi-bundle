@@ -1,18 +1,15 @@
-import * as React from "react"
-import { BrowserRouter, Switch, Route as ReactRoute } from "react-router-dom"
+import React from "react"
+//import { Router as ReactRouter, Switch, Route as ReactRoute } from "react-router-dom"
+import { History, createBrowserHistory } from 'history'
 
 class Route {
   name: string
   path: string
   component: React.Component
-  constructor(name: string, path?: string, component: React.Component, ) {
+  constructor(name: string, path: string, component: React.Component) {
     this.name = name
+    this.path = path
     this.component = component
-    if(typeof path !== "undefined") {
-      this.path = path
-    } else {
-      this.path = name
-    }
   }
 }
 
@@ -20,7 +17,7 @@ class Route {
 
 class Router {
   routes: Route[] = []
-  history: string[] = []
+  history: History = createBrowserHistory()
   paths: { [name: string]: string } = {}
   
   constructor(routes: Route[] = []) {
@@ -38,17 +35,18 @@ class Router {
   }
 
   render() {
-    return <BrowserRouter history={this.history}>
+    return <div>OK</div>
+    /*return <ReactRouter history={this.history}>
       <Switch>
         {this.routes.map((route: Route) => {
-          return <Route path={route.path} render={() => {
+          return <ReactRoute key={route.name} path={route.path} render={() => {
             if(Meteor.userId()) return <Redirect to={HISTORY.getRoute('index')}/>
             return themeContainer(<AccountPage/>)
           }}/>
         })}
         <Redirect from="*" to="/"/>
       </Switch>
-    </BrowserRouter>
+    </ReactRouter>*/
   }
 }
 

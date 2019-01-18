@@ -2,6 +2,7 @@
 import program, { Command } from 'commander'
 import chalk from 'chalk'
 import initCommand from './init'
+import startCommand from './start'
 
 const packageJson = require('../../package.json')
 
@@ -50,7 +51,8 @@ program
 program
   .command('start [platform]')
   .description('launch app for development purposes')
-  .action((env, options) => {
+  .action((platform, options) => {
+    startCommand(process.cwd())
   }).on('-h, --help', () => {
     console.log('\nExamples :');
     console.log();

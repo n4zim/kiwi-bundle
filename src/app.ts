@@ -1,4 +1,4 @@
-import * as React from "react"
+//import React from "react"
 import { render } from "react-dom"
 import Router, { Route } from "./router"
 import Logger from "./logger"

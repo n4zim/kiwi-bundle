@@ -1,6 +1,6 @@
 import * as localForage from "localforage"
 import { isUndefined } from "util"
-import { EntityList, EntityName } from "dropin-recipe"
+/*import { EntityList, EntityName } from "dropin-recipe"
 import { EntityDescription } from "dropin-recipe/dist/core/Entities"
 import User from "dropin-recipe/dist/entities/User"
 
@@ -71,3 +71,4 @@ class Storage {
 }
 
 export default Storage
+*/
