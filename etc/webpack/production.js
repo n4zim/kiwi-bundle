@@ -9,9 +9,9 @@ if(typeof dir === "undefined") {
   const merge = require("webpack-merge")
   const { resolve } = require("path")
 
-  module.exports = merge(require("./webpack.config"), {
+  module.exports = merge(require("./config"), {
     mode: "production",
-    entry: "./index.tsx",
+    entry: "./app.tsx",
     output: {
       filename: "js/bundle.[hash].min.js",
       path: resolve(__dirname, "..", dir),

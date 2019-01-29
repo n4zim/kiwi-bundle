@@ -1,10 +1,10 @@
-import React from "react";
 import { History } from 'history';
+import { WebComponent } from "./components";
 declare class Route {
     name: string;
     path: string;
-    component: React.Component;
-    constructor(name: string, path: string, component: React.Component);
+    component: typeof WebComponent;
+    constructor(name: string, path: string, component: typeof WebComponent);
 }
 declare class Router {
     routes: Route[];

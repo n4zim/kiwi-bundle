@@ -1,3 +1,6 @@
 import API from './api';
+import App from './app';
+import { WebComponent } from './components';
 import Logger from './logger';
-export { API, Logger, };
+import Router, { Route } from './router';
+export { API, App, Logger, Route, Router, WebComponent, };

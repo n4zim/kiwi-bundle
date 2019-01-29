@@ -17,4 +17,4 @@ class App {
 
 }
 
-export default Logger
+export default App

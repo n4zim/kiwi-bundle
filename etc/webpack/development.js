@@ -7,13 +7,13 @@ if(typeof port === "undefined") {
   console.log("\n\x1b[31m/!\\ Missing env DEV_PORT - no dev server port\x1b[0m\n")
   module.exports = null
 } else {
-  module.exports = merge(require('./webpack.config'), {
+  module.exports = merge(require('./config'), {
     mode: 'development',
     entry: [
 //      'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}`,
 //      'webpack/hot/only-dev-server',
-      './src/index.tsx',
+      './src/app.tsx',
     ],
     devServer: {
       port,

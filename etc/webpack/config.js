@@ -59,7 +59,7 @@ module.exports = {
     new CheckerPlugin(),
     new StyleLintPlugin(),
     new HtmlWebpackPlugin({
-      template: '../configs/index.html.ejs',
+      template: './node_modules/kiwi-bundle/opt/index.html.ejs',
       title: "Kiwi App",
     }),
   ],

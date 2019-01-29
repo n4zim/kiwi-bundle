@@ -4,9 +4,8 @@ import { parse as yamlParse } from "yamljs"
 import { spawn } from 'child_process'
 
 const start = (path: string, config: any) => {
-  const frameworkPath = pathLib.join(path, "node_modules", "kiwi-framework")
-  const binPath = pathLib.join(frameworkPath, "node_modules", ".bin", "webpack-dev-server")
-  const configPath = pathLib.join(frameworkPath, "configs", "webpack.dev.js")
+  const binPath = pathLib.join(path, "node_modules", ".bin", "webpack-dev-server")
+  const configPath = pathLib.join(path, "node_modules", "kiwi-bundle", "etc", "webpack", "development.js")
 
   const env = Object.create(process.env)
   env.DEV_PORT = config.platforms.web.dev.port

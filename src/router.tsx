@@ -1,12 +1,13 @@
-import React from "react"
-//import { Router as ReactRouter, Switch, Route as ReactRoute } from "react-router-dom"
+import * as React from "react"
+import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
 import { History, createBrowserHistory } from 'history'
+import { WebComponent } from "./components"
 
 class Route {
   name: string
   path: string
-  component: React.Component
-  constructor(name: string, path: string, component: React.Component) {
+  component: typeof WebComponent
+  constructor(name: string, path: string, component: typeof WebComponent) {
     this.name = name
     this.path = path
     this.component = component
@@ -35,18 +36,14 @@ class Router {
   }
 
   render() {
-    return <div>OK</div>
-    /*return <ReactRouter history={this.history}>
+    return <ReactRouter history={this.history}>
       <Switch>
         {this.routes.map((route: Route) => {
-          return <ReactRoute key={route.name} path={route.path} render={() => {
-            if(Meteor.userId()) return <Redirect to={HISTORY.getRoute('index')}/>
-            return themeContainer(<AccountPage/>)
-          }}/>
+          return <ReactRoute key={route.name} path={route.path} component={route.component}/>
         })}
-        <Redirect from="*" to="/"/>
+        <ReactRedirect from="*" to="/"/>
       </Switch>
-    </ReactRouter>*/
+    </ReactRouter>
   }
 }
 
