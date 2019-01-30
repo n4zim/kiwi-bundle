@@ -1,6 +1,7 @@
+import * as React from "react";
 import API from './api';
 import App from './app';
 import { WebComponent } from './components';
 import Logger from './logger';
 import Router, { Route } from './router';
-export { API, App, Logger, Route, Router, WebComponent, };
+export { API, App, Logger, React, Route, Router, WebComponent, };

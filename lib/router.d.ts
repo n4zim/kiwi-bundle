@@ -1,10 +1,10 @@
 import { History } from 'history';
 import { WebComponent } from "./components";
 declare class Route {
-    name: string;
+    name: number;
     path: string;
     component: typeof WebComponent;
-    constructor(name: string, path: string, component: typeof WebComponent);
+    constructor(name: number, path: string, component: typeof WebComponent);
 }
 declare class Router {
     routes: Route[];
