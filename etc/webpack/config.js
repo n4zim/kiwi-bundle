@@ -2,7 +2,7 @@ const { CheckerPlugin } = require('awesome-typescript-loader')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-module.exports = {
+module.exports = config => ({
   resolve: {
     extensions: [ '.ts', '.tsx', '.js', '.jsx' ],
   },
@@ -60,10 +60,11 @@ module.exports = {
     new StyleLintPlugin(),
     new HtmlWebpackPlugin({
       template: './opt/index.html.ejs',
-      title: "Kiwi App",
+      title: config.project.title,
+      description: config.project.description,
     }),
   ],
   performance: {
     hints: false,
   },
-}
+})

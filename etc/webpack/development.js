@@ -1,22 +1,20 @@
-const fs = require('fs')
 const pathLib = require('path')
-const yamlParse = require("yamljs").parse
 const merge = require('webpack-merge')
 const webpack = require('webpack')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const projectPath = process.cwd()
 
-const generateWebpackConfig = (port) => merge(require('./config'), {
+const generateWebpackConfig = config => merge(require('./config')(config), {
   mode: 'development',
   entry: [
     //'react-hot-loader/patch',
-    `webpack-dev-server/client?http://localhost:${port}`,
+    `webpack-dev-server/client?http://localhost:${config.platforms.web.devPort}`,
     //'webpack/hot/only-dev-server',
     pathLib.join(projectPath, "src", "client.ts"),
   ],
   devServer: {
-    port,
+    port: config.platforms.web.devPort,
     historyApiFallback: true,
     //hot: true,
   },
@@ -45,13 +43,4 @@ const generateWebpackConfig = (port) => merge(require('./config'), {
   ],
 })
 
-module.exports = new Promise(resolve => {
-  fs.readFile(pathLib.join(projectPath, "kiwi.yml"), (error, data) => {
-    if(error) {
-      resolve(null)
-    } else {
-      const config = yamlParse(data.toString('utf-8'))
-      resolve(generateWebpackConfig(config.platforms.web.dev.port))
-    }
-  })
-})
+module.exports = require('./kiwi.config')(generateWebpackConfig)

@@ -1,37 +1,34 @@
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const WebpackCdnPlugin = require("webpack-cdn-plugin")
+const merge = require("webpack-merge")
+const pathLib = require("path")
 
-const dir = process.env.BUILD_DIR
-if(typeof dir === "undefined") {
-  console.log("\n\x1b[31m/!\\ Missing env BUILD_DIR - no destination directory\x1b[0m\n")
-  module.exports = null
-} else {
-  const merge = require("webpack-merge")
-  const { resolve } = require("path")
+const projectPath = process.cwd()
 
-  module.exports = merge(require("./config"), {
-    mode: "production",
-    entry: "./app.tsx",
-    output: {
-      filename: "js/bundle.[hash].min.js",
-      path: resolve(__dirname, "..", dir),
-    },
-    devtool: "source-map",
-    plugins: [
-      new FaviconsWebpackPlugin({
-        logo: './assets/logo.png',
-        prefix: 'icons/',
-        persistentCache: true,
-        inject: true,
-      }),
-      new WebpackCdnPlugin({
-        modules: [
-          { name: "react", var: "React", path: "umd/react.production.min.js" },
-          { name: "react-dom", var: "ReactDOM", path: "umd/react-dom.production.min.js" },
-          { name: "mobx", path: "lib/mobx.umd.min.js" },
-          { name: "localforage", path: "dist/localforage.min.js" },
-        ],
-      }),
-    ],
-  })
-}
+const generateWebpackConfig = config => merge(require('./config')(config), {
+  mode: "production",
+  entry: pathLib.join(projectPath, "src", "client.ts"),
+  output: {
+    filename: "js/bundle.[hash].min.js",
+    path: pathLib.resolve(projectPath, config.platforms.web.buildDir),
+  },
+  devtool: "source-map",
+  plugins: [
+    new FaviconsWebpackPlugin({
+      logo: pathLib.resolve(projectPath, 'assets', 'logo.png'),
+      prefix: 'icons/',
+      persistentCache: true,
+      inject: true,
+    }),
+    new WebpackCdnPlugin({
+      modules: [
+        { name: "react", var: "React", path: "umd/react.production.min.js" },
+        { name: "react-dom", var: "ReactDOM", path: "umd/react-dom.production.min.js" },
+        //{ name: "mobx", path: "lib/mobx.umd.min.js" },
+        { name: "localforage", path: "dist/localforage.min.js" },
+      ],
+    }),
+  ],
+})
+
+module.exports = require('./kiwi.config')(generateWebpackConfig)
