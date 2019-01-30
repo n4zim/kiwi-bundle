@@ -4,10 +4,10 @@ import { History, createBrowserHistory } from 'history'
 import { WebComponent } from "./components"
 
 class Route {
-  name: string
+  name: number
   path: string
   component: typeof WebComponent
-  constructor(name: string, path: string, component: typeof WebComponent) {
+  constructor(name: number, path: string, component: typeof WebComponent) {
     this.name = name
     this.path = path
     this.component = component

@@ -30,6 +30,8 @@ const start = (path: string, config: any) => {
 
 export default (path: string) => {
   fs.readFile(pathLib.join(path, "kiwi.yml"), (error, data) => {
-    start(path, yamlParse(data.toString('utf-8')))
+    if(!error) {
+      start(path, yamlParse(data.toString('utf-8')))
+    }
   })
 }

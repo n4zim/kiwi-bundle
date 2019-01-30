@@ -1,3 +1,4 @@
+import * as React from "react"
 import API from './api'
 import App from './app'
 import { WebComponent } from './components'
@@ -8,6 +9,7 @@ export {
   API,
   App,
   Logger,
+  React,
   Route,
   Router,
   WebComponent,
