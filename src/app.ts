@@ -16,13 +16,11 @@ class App {
     render(this.router.render(), renderDiv)
   }
 
-  getRouteAction(route: number): LinkAction {
-    const path = this.router.paths[route]
+  getLinkAction(name: number): LinkAction {
+    const route = this.router.getByName(name)
     return {
-      path,
-      call: () => {
-        this.router.history.push(path)
-      }
+      path: route.path,
+      call: () => { this.router.history.push(route.path) },
     }
   }
 

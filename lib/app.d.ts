@@ -6,6 +6,6 @@ declare class App {
     router: Router;
     logger: Logger;
     constructor(routes?: Route[]);
-    getRouteAction(route: number): LinkAction;
+    getLinkAction(name: number): LinkAction;
 }
 export default App;

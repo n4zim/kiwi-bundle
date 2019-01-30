@@ -9,17 +9,21 @@ export default class Router {
   app: App
   routes: Route[] = []
   history: History = createBrowserHistory()
-  paths: { [name: string]: string } = {}
+  indexes: { [name: string]: number } = {}
   
   constructor(app: App, routes: Route[] = []) {
     this.app = app
     this.routes = routes
-    routes.forEach(route => {
-      this.paths[route.name] = route.path
+    routes.forEach((route, index) => {
+      this.indexes[route.name] = index
     })
   }
 
-  injectKiwi(component: WebPageConstructor, props: any): React.ReactNode {
+  getByName(name: number): Route {
+    return this.routes[this.indexes[name]]
+  }
+
+  private injectKiwi(component: WebPageConstructor, props: any): React.ReactNode {
     return new component(this.app, props).render()
   }
 
