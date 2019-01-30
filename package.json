@@ -10,8 +10,9 @@
     "kiwi": "./lib/cli/index.js"
   },
   "scripts": {
-    "start": "./lib/cli/index.js",
-    "build": "tsc -w -p .",
+    "start": "tsc -w -p .",
+    "build": "rm -r lib/ && tsc -p .",
+    "cli": "./lib/cli/index.js",
     "deploy": "sudo npm remove -g && sudo npm install -g"
   },
   "dependencies": {

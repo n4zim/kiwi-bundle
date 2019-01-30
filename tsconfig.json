@@ -10,7 +10,8 @@
     "types": [ "node" ],
     "jsx": "react",
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "removeComments": true
   },
   "include": [ "./src/**/*" ]
 }
