@@ -1,7 +1,7 @@
 import * as React from "react"
 import API from './api'
 import App from './app'
-import { WebComponent } from './components'
+import { WebComponent, WebPage } from './components'
 import Logger from './logger'
 import Router, { Route } from './router'
 
@@ -13,4 +13,5 @@ export {
   Route,
   Router,
   WebComponent,
+  WebPage,
 }

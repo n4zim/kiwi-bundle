@@ -1,19 +1,20 @@
 import { History } from 'history';
-import { WebComponent } from "./components";
+import { WebPageConstructor } from "./components";
+import App from "./app";
 declare class Route {
     name: number;
     path: string;
-    component: typeof WebComponent;
-    constructor(name: number, path: string, component: typeof WebComponent);
+    component: WebPageConstructor;
+    constructor(name: number, path: string, component: WebPageConstructor);
 }
 declare class Router {
+    app: App;
     routes: Route[];
     history: History;
     paths: {
         [name: string]: string;
     };
-    constructor(routes?: Route[]);
-    getRoutePath(name: string): string;
+    constructor(app: App, routes?: Route[]);
     render(): JSX.Element;
 }
 export { Router as default, Route, };

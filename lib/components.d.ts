@@ -1,7 +1,13 @@
 import * as React from "react";
-interface WebComponentType {
-    render(): React.ReactNode;
+import App from "./app";
+declare class WebComponent<P = {}, S = {}, SS = any> extends React.Component<P, S, SS> {
+    constructor(props: any);
 }
-declare class WebComponent extends React.Component implements WebComponentType {
+declare class WebPage<P = {}, S = {}, SS = any> extends WebComponent<P, S, SS> {
+    kiwi: App;
+    constructor(app: App, props?: any);
 }
-export { WebComponentType, WebComponent, };
+interface WebPageConstructor<P = {}, S = {}, SS = any> {
+    new (app: App, props?: any): WebPage<P, S, SS>;
+}
+export { WebComponent, WebPage, WebPageConstructor, };

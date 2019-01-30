@@ -1,13 +1,14 @@
 import * as React from "react"
 import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
 import { History, createBrowserHistory } from 'history'
-import { WebComponent } from "./components"
+import { WebComponent, WebPageConstructor } from "./components"
+import App from "./app"
 
 class Route {
   name: number
   path: string
-  component: typeof WebComponent
-  constructor(name: number, path: string, component: typeof WebComponent) {
+  component: WebPageConstructor
+  constructor(name: number, path: string, component: WebPageConstructor) {
     this.name = name
     this.path = path
     this.component = component
@@ -17,29 +18,26 @@ class Route {
 // -----------------------------------------------
 
 class Router {
+  app: App
   routes: Route[] = []
   history: History = createBrowserHistory()
   paths: { [name: string]: string } = {}
   
-  constructor(routes: Route[] = []) {
+  constructor(app: App, routes: Route[] = []) {
+    this.app = app
     this.routes = routes
-    routes.forEach((route: Route) => {
+    routes.forEach(route => {
       this.paths[route.name] = route.path
     })
-  }
-
-  getRoutePath(name: string) {
-    if(typeof this.paths[name] === "undefined") {
-      return "/"
-    }
-    return this.paths[name]
   }
 
   render() {
     return <ReactRouter history={this.history}>
       <Switch>
         {this.routes.map((route: Route) => {
-          return <ReactRoute key={route.name} path={route.path} component={route.component}/>
+          return <ReactRoute exact key={`route${route.name}`} path={route.path} render={() => {
+            return new route.component(this.app).render()
+          }}/>
         })}
         <ReactRedirect from="*" to="/"/>
       </Switch>

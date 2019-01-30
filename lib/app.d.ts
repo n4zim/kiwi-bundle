@@ -4,5 +4,6 @@ declare class App {
     router: Router;
     logger: Logger;
     constructor(routes?: Route[]);
+    getRoutePath(name: number): string;
 }
 export default App;

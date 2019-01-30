@@ -13,7 +13,7 @@ const generateWebpackConfig = (port) => merge(require('./config'), {
     //'react-hot-loader/patch',
     `webpack-dev-server/client?http://localhost:${port}`,
     //'webpack/hot/only-dev-server',
-    pathLib.join(projectPath, "src", "client.tsx"),
+    pathLib.join(projectPath, "src", "client.ts"),
   ],
   devServer: {
     port,
