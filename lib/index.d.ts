@@ -1,7 +1,10 @@
 import * as React from "react";
 import API from './api';
 import App from './app';
-import { WebComponent, WebPage } from './components';
+import Link, { LinkAction } from './routes/Link';
 import Logger from './logger';
-import Router, { Route } from './router';
-export { API, App, Logger, React, Route, Router, WebComponent, WebPage, };
+import Route from './routes/Route';
+import Router from './routes/Router';
+import WebComponent from './components/WebComponent';
+import WebPage from './components/WebPage';
+export { API, App, Link, LinkAction, Logger, React, Route, Router, WebComponent, WebPage, };

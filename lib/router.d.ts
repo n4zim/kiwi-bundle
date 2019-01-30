@@ -1,5 +1,5 @@
 import { History } from 'history';
-import { WebPageConstructor } from "./components";
+import { WebComponent, WebPageConstructor } from "./components";
 import App from "./app";
 declare class Route {
     name: number;
@@ -17,4 +17,11 @@ declare class Router {
     constructor(app: App, routes?: Route[]);
     render(): JSX.Element;
 }
-export { Router as default, Route, };
+interface LinkProps {
+    route: number;
+}
+declare class Link extends WebComponent<LinkProps> {
+    onClick(): void;
+    render(): JSX.Element;
+}
+export { Router as default, Route, Link, };

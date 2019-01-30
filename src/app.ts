@@ -1,7 +1,8 @@
-//import React from "react"
 import { render } from "react-dom"
-import Router, { Route } from "./router"
+import Router from "./routes/Router"
+import Route from "./routes/Route"
 import Logger from "./logger"
+import { LinkAction } from "./routes/Link"
 
 class App {
   router: Router
@@ -15,11 +16,14 @@ class App {
     render(this.router.render(), renderDiv)
   }
 
-  getRoutePath(name: number) {
-    if(typeof this.router.paths[name] === "undefined") {
-      return "/"
+  getRouteAction(route: number): LinkAction {
+    const path = this.router.paths[route]
+    return {
+      path,
+      call: () => {
+        this.router.history.push(path)
+      }
     }
-    return this.router.paths[name]
   }
 
 }
