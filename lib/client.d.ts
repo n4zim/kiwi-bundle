@@ -1,15 +1,7 @@
-import { History } from 'history';
-import Route from "./routes/Route";
 import Logger from "./logger";
-import { LinkAction } from "./routes/Link";
+import Router from "./routes/Router";
 export default class Client {
-    pages: Route[];
-    pagesIndexes: {
-        [name: string]: number;
-    };
+    router: Router;
     logger: Logger;
-    history: History;
-    constructor(pages: Route[]);
-    getLinkAction(name: number): LinkAction;
-    renderReactRouter(): JSX.Element;
+    constructor(router: Router);
 }

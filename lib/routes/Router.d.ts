@@ -1,15 +1,13 @@
 import { History } from 'history';
-import App from "../app";
 import Route from './Route';
+import { LinkAction } from "./Link";
 export default class Router {
-    app: App;
-    routes: Route[];
+    pages: Route[];
     history: History;
     indexes: {
         [name: string]: number;
     };
-    constructor(app: App, routes?: Route[]);
-    getByName(name: number): Route;
-    private injectKiwi;
+    constructor(pages?: Route[]);
+    getLinkAction(name: number): LinkAction;
     render(): JSX.Element;
 }
