@@ -1,9 +1,11 @@
 import { Component } from "react";
-import App from "../app";
-export default class WebPage<P = {}, S = {}, SS = any> extends Component<P, S, SS> {
-    kiwi: App;
-    constructor(app: App, props?: any);
+import Client from "../client";
+interface Props {
+    client: Client;
 }
-export interface WebPageConstructor<P = {}, S = {}, SS = any> {
-    new (app: App, props?: any): WebPage<P, S, SS>;
+export default class WebPage extends Component<Props> {
 }
+export interface WebPageConstructor {
+    new (props?: any): WebPage;
+}
+export {};

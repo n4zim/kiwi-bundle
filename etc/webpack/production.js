@@ -7,7 +7,7 @@ const projectPath = process.cwd()
 
 const generateWebpackConfig = config => merge(require('./config')(config), {
   mode: "production",
-  entry: pathLib.join(projectPath, "src", "client.ts"),
+  entry: pathLib.join(projectPath, "src", "client", "index.ts"),
   output: {
     filename: "js/bundle.[hash].min.js",
     path: pathLib.resolve(projectPath, config.platforms.web.buildDir),

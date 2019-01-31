@@ -11,7 +11,8 @@
     "jsx": "react",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "removeComments": true
+    "removeComments": true,
+    "experimentalDecorators": true
   },
   "include": [ "./src/**/*" ]
 }

@@ -1,8 +1,8 @@
 import * as React from "react"
 import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
 import { History, createBrowserHistory } from 'history'
-import App from "../app"
-import Route from './Route'
+import App from "./app"
+import Route from '../routes/Route'
 import WebPage, { WebPageConstructor } from "../components/WebPage"
 
 export default class Router {
