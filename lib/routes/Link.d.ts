@@ -6,6 +6,7 @@ export interface LinkAction {
 }
 interface Props {
     action: LinkAction;
+    className?: string;
 }
 export default class Link extends WebComponent<Props> {
     onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void;

@@ -8,6 +8,7 @@ export interface LinkAction {
 
 interface Props {
   action: LinkAction
+  className?: string
 }
 
 export default class Link extends WebComponent<Props> {
@@ -18,7 +19,8 @@ export default class Link extends WebComponent<Props> {
   }
 
   render() {
-    return <a href={this.props.action.path} onClick={this.onClick.bind(this)}>
+    const { action, className } = this.props
+    return <a className={className} href={action.path} onClick={this.onClick.bind(this)}>
       {this.props.children}
     </a>
   }

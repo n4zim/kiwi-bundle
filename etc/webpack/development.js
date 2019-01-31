@@ -9,7 +9,7 @@ const generateWebpackConfig = config => merge(require('./config')(config), {
   mode: 'development',
   entry: [
     `webpack-dev-server/client?http://localhost:${config.platforms.web.devPort}`,
-    //'webpack/hot/only-dev-server',
+    'webpack/hot/only-dev-server',
     pathLib.join(projectPath, "src", "client", "index.ts"),
   ],
   devServer: {

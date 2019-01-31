@@ -23,7 +23,14 @@ export default class Client {
   }
   
   getLinkAction(name: number): LinkAction {
-    const route = this.pages[this.pagesIndexes[name]]
+    const index = this.pagesIndexes[name]
+    if(typeof index === "undefined") {
+      throw "Page not found on cache"
+    }
+    const route = this.pages[index]
+    if(typeof route === "undefined") {
+      throw "Page not found on router"
+    }
     return {
       path: route.path,
       call: () => { this.history.push(route.path) },
