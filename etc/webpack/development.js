@@ -8,7 +8,6 @@ const projectPath = process.cwd()
 const generateWebpackConfig = config => merge(require('./config')(config), {
   mode: 'development',
   entry: [
-    //'react-hot-loader/patch',
     `webpack-dev-server/client?http://localhost:${config.platforms.web.devPort}`,
     //'webpack/hot/only-dev-server',
     pathLib.join(projectPath, "src", "client", "index.ts"),
@@ -16,11 +15,11 @@ const generateWebpackConfig = config => merge(require('./config')(config), {
   devServer: {
     port: config.platforms.web.devPort,
     historyApiFallback: true,
-    //hot: true,
+    hot: true,
   },
   devtool: 'cheap-module-eval-source-map',
   plugins: [
-    //new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new FaviconsWebpackPlugin({
       logo: pathLib.join(projectPath, "assets", "logo.png"),

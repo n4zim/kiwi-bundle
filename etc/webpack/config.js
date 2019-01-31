@@ -1,3 +1,4 @@
+const pathLib = require('path')
 const { CheckerPlugin } = require('awesome-typescript-loader')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -5,6 +6,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = config => ({
   resolve: {
     extensions: [ '.ts', '.tsx', '.js', '.jsx' ],
+    modules: [
+      "node_modules",
+      pathLib.join("node_modules", "kiwi-bundle", "node_modules")
+    ],
   },
   module: {
     rules: [

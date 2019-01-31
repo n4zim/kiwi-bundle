@@ -6,7 +6,9 @@
     ],
     "@babel/preset-react"
   ],
-  "plugins": [],
+  "plugins": [
+    "react-hot-loader/babel"
+  ],
   "env": {
     "production": {
       "presets": [
