@@ -1,5 +1,5 @@
 import { History } from 'history';
-import Route from './Route';
+import Route from "./Route";
 import { LinkAction } from "./Link";
 export default class Router {
     pages: Route[];

@@ -1,14 +1,14 @@
 import * as React from "react"
 import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
 import { History, createBrowserHistory } from 'history'
-import Route from './Route'
-import { LinkAction } from "./Link";
+import Route from "./Route"
+import { LinkAction } from "./Link"
 
 export default class Router {
   pages: Route[] = []
   history: History = createBrowserHistory()
   indexes: { [name: string]: number } = {}
-  
+
   constructor(pages: Route[] = []) {
     this.pages = pages
     pages.forEach((page, index) => {
