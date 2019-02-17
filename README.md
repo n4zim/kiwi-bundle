@@ -12,6 +12,8 @@ Kiwi Bundle is a Javascript stack that is designed to make your life as easy as 
 
 A demo app is available here : https://github.com/theblueforest/kiwi-demo
 
+If you want to quickly deploy an example to work on, you can use https://github.com/theblueforest/kiwi-workspace
+
 ## Future improvements
 - Docker support for development and production
 - React Native will be included to build mobile apps, using the same source code
