@@ -16,18 +16,16 @@ install: echo Skipping Travis CI install...
 
 jobs:
   include:  
-    - name: Install #& Tests
+    - name: Install, test and build
       stage: init
       script:
         - yarn install
-        #- yarn test
-
-    - name: TypeScript build
-      stage: build
-      script: yarn build
+        - yarn test
+        - yarn build
 
     - name: NPM deploy
       stage: deploy
+      if: tag IS present
       on:
         branch: master
       deploy:
