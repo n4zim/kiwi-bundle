@@ -1,0 +1,37 @@
+language: node_js
+node_js: "lts/*"
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
+    - lib
+
+stages:
+  - init
+  - build
+  - deploy
+
+install: echo Skipping Travis CI install...
+
+jobs:
+  include:  
+    - name: Install #& Tests
+      stage: init
+      script:
+        - yarn install
+        #- yarn test
+
+    - name: TypeScript build
+      stage: build
+      script: yarn build
+
+    - name: NPM deploy
+      stage: deploy
+      on:
+        branch: master
+      deploy:
+        provider: npm
+        email: $NPM_EMAIL
+        api_key: $NPM_TOKEN
+        skip_cleanup: true
