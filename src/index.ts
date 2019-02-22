@@ -25,16 +25,16 @@ const initComponent = (pageModule: NodeModuleWithHot, options: InitComponentOpti
     return (elementClass: elementClass) => {
       if(pageModule.hot) {
         if(options.observer) {
-          return hot(pageModule)(observer(elementClass))
+          return hot(pageModule)(Object.assign({ id: "../test" }, observer(elementClass)))
         } else {
-          return hot(pageModule)(elementClass)
+          const doit = Object.assign({ id: pageModule.i }, pageModule)
+          console.log(doit)
+          return hot(doit)(elementClass)
         }
+      } else if(options.observer) {
+        return observer(elementClass)
       } else {
-        if(options.observer) {
-          return observer(elementClass)
-        } else {
-          return elementClass
-        }
+        return elementClass
       }
     }
 }

@@ -1,11 +1,8 @@
 import * as React from "react"
 import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
-import { History, createBrowserHistory } from 'history'
+import { History, createBrowserHistory } from "history"
 import Route from "./Route"
 import { LinkAction } from "./Link"
-import { hot } from "react-hot-loader/root"
-
-const Root = hot((props: any) => props.children)
 
 export default class Router {
   pages: Route[] = []
@@ -35,7 +32,7 @@ export default class Router {
   }
 
   render() {
-    return <Root><ReactRouter history={this.history}>
+    return <ReactRouter history={this.history}>
       <Switch>
         {this.pages.map((route: Route) => {
           /*render={props => {
@@ -49,7 +46,7 @@ export default class Router {
         })}
         <ReactRedirect from="*" to="/"/>
       </Switch>
-    </ReactRouter></Root>
+    </ReactRouter>
   }
 
 }

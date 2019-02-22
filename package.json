@@ -16,10 +16,6 @@
     "cli": "./lib/cli/index.js"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.0",
-    "@babel/core": "^7.3.3",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/preset-react": "^7.0.0",
     "@types/command-exists": "^1.2.0",
     "@types/inquirer": "^0.0.43",
     "@types/jest": "^24.0.6",
@@ -30,6 +26,10 @@
     "@types/yamljs": "^0.2.30"
   },
   "dependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.5",
     "chalk": "^2.4.2",
@@ -43,10 +43,10 @@
     "inquirer": "^6.2.2",
     "localforage": "^1.7.3",
     "mobx": "^5.9.0",
-    "mobx-react": "^5.4.2",
+    "mobx-react": "^5.4.3",
     "node-sass": "^4.10.0",
     "path": "^0.12.7",
-    "react": "^16.8.3",
+    "react": "^16.8.4",
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.8.3",
     "react-hot-loader": "^4.7.1",
