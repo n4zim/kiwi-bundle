@@ -3,13 +3,26 @@ const { CheckerPlugin } = require('awesome-typescript-loader')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const projectPath = process.cwd()
+const bundlePath = pathLib.join(projectPath, "node_modules", "kiwi-bundle")
+
 module.exports = config => ({
   resolve: {
-    extensions: [ '.ts', '.tsx', '.js', '.jsx' ],
+    extensions: [ '.ts', '.tsx', '.js' ],
     modules: [
-      "node_modules",
-      pathLib.join("node_modules", "kiwi-bundle", "node_modules")
+      pathLib.join(bundlePath, "node_modules")
     ],
+    alias: {
+      "kiwi-bundle": bundlePath,
+    },
+  },
+  performance: {
+    hints: false,
+  },
+  optimization: {
+    splitChunks: {
+      chunks: "initial",
+    },
   },
   module: {
     rules: [
@@ -21,6 +34,8 @@ module.exports = config => ({
       {
         test: /\.tsx?$/,
         use: [ 'babel-loader', 'awesome-typescript-loader' ],
+        //loader: 'awesome-typescript-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
@@ -64,12 +79,9 @@ module.exports = config => ({
     new CheckerPlugin(),
     new StyleLintPlugin(),
     new HtmlWebpackPlugin({
-      template: './opt/index.html.ejs',
+      template: pathLib.join(bundlePath, "opt", "index.html.ejs"),
       title: config.project.title,
       description: config.project.description,
     }),
   ],
-  performance: {
-    hints: false,
-  },
 })

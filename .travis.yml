@@ -8,26 +8,28 @@ cache:
     - lib
 
 stages:
-  - init
-  - build
-  - deploy
+  - name: init
+  - name: build
+    if: branch = develop AND type IS present
+  - name: deploy
+    if: branch = develop AND type IS present
 
 install: echo Skipping Travis CI install...
 
 jobs:
   include:  
-    - name: Install, test and build
+    - name: Install & test
       stage: init
       script:
         - yarn install
         - yarn test
-        - yarn build
+
+    - name: TypeScript build
+      stage: build
+      script: yarn build
 
     - name: NPM deploy
       stage: deploy
-      if: tag IS present
-      on:
-        branch: master
       deploy:
         provider: npm
         email: $NPM_EMAIL

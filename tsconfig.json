@@ -14,5 +14,8 @@
     "removeComments": true,
     "experimentalDecorators": true
   },
+  "awesomeTypescriptLoaderOptions": {
+    "useCache": true,
+  },
   "include": [ "./src/**/*" ]
 }

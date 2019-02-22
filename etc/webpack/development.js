@@ -7,9 +7,7 @@ const projectPath = process.cwd()
 
 const generateWebpackConfig = config => merge(require('./config')(config), {
   mode: 'development',
-  entry: [
-    pathLib.join(projectPath, "src", "client", "index.ts"),
-  ],
+  entry: pathLib.join(projectPath, "src", "client", "index.ts"),
   devServer: {
     port: config.platforms.web.devPort,
     historyApiFallback: true,
