@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "*": ["types/*"] },
     "target": "es5",
     "module": "commonjs",
     "lib": [ "es6", "es2015", "dom" ],
@@ -13,9 +15,6 @@
     "resolveJsonModule": true,
     "removeComments": true,
     "experimentalDecorators": true
-  },
-  "awesomeTypescriptLoaderOptions": {
-    "useCache": true,
   },
   "include": [ "./src/**/*" ]
 }

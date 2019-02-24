@@ -7,7 +7,12 @@
     "lib": [ "dom", "es5", "es6" ],
     "sourceMap": true,
     "noImplicitAny": false,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "typeRoots": ["node_modules/@types"]
+  }, 
+  "awesomeTypescriptLoaderOptions": {
+    "useCache": true
   },
-  "include": [ "./src/**/*" ]
+  "include": [ "./src/**/*" ],
+  "exclude": [ "node_modules" ]
 }

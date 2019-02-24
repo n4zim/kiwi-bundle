@@ -1,5 +1,5 @@
 import { Component } from "react"
-import Client from "../client"
+import Client from ".."
 
 /*interface Props {
   client: Client

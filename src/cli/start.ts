@@ -1,15 +1,21 @@
-import pathLib from "path"
+import WebpackDevServer from "webpack-dev-server"
+import Webpack from "webpack"
+import { readConfig } from "./config"
+import generateWebpackConfig from "./webpack/development"
+import chalk from "chalk"
 
 export default (path: string) => {
-  const bundlePath = pathLib.join(path, "node_modules", "kiwi-bundle")
-  // const binPath = pathLib.join(bundlePath, "node_modules", ".bin", "webpack-dev-server")
-  const binPath = pathLib.join(path, "node_modules", ".bin", "webpack-dev-server")
-  const configPath = pathLib.join(bundlePath, "etc", "webpack", "development.js")
+  readConfig(path).then((kiwiConfig: any) => {
+    const webpackConfig = generateWebpackConfig(kiwiConfig)
+    const server = new WebpackDevServer(Webpack(webpackConfig), webpackConfig.devServer)
 
-  process.argv[1] = binPath
-  process.argv[2] = `--context=${bundlePath}`
-  process.argv[3] = `--config=${configPath}`
-  process.argv[4] = "--hot"
 
-  require(binPath)
+    server.listen(webpackConfig.devServer.port, webpackConfig.devServer.host, () => {
+      console.log(
+        `${chalk.blue("ℹ")} ${chalk.gray("｢kwb｣")}: ` +
+        `Development server will ba available at ` +
+        chalk.bold(`http://${webpackConfig.devServer.host}:${webpackConfig.devServer.port}`)
+      )
+    })
+  })
 }

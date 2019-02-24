@@ -3,6 +3,7 @@ import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRe
 import { History, createBrowserHistory } from "history"
 import Route from "./Route"
 import { LinkAction } from "./Link"
+// import { hot } from "react-hot-loader"
 
 export default class Router {
   pages: Route[] = []
@@ -31,7 +32,7 @@ export default class Router {
     }
   }
 
-  render() {
+  private getReactRouter() {
     return <ReactRouter history={this.history}>
       <Switch>
         {this.pages.map((route: Route) => {
@@ -47,6 +48,14 @@ export default class Router {
         <ReactRedirect from="*" to="/"/>
       </Switch>
     </ReactRouter>
+  }
+
+  render() {
+    // console.log(rootModule.i)
+    // const current = Object.assign({ id: "./src/client/Page1.ts" }, module)
+    // return React.createElement(hot(current)(this.getReactRouter.bind(this)))
+    // return <RootModule>{this.getReactRouter()}</RootModule>
+    return this.getReactRouter()
   }
 
 }

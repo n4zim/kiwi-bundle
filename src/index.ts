@@ -1,15 +1,14 @@
 import * as React from "react"
 import { observable, action } from "mobx"
 import { observer } from "mobx-react"
-import Link, { LinkAction } from "./routes/Link"
-import Logger from "./Logger"
-import Route from "./routes/Route"
-import Router from "./routes/Router"
-import Store from "./stores/Store"
-import WebComponent, { WebComponentConstructor } from "./components/WebComponent"
-import WebPage, { WebPageConstructor } from "./components/WebPage"
+import Link, { LinkAction } from "./client/routes/Link"
+import Logger from "./client/Logger"
+import Route from "./client/routes/Route"
+import Router from "./client/routes/Router"
+import Store from "./client/stores/Store"
+import WebComponent, { WebComponentConstructor } from "./client/components/WebComponent"
+import WebPage, { WebPageConstructor } from "./client/components/WebPage"
 import Client from "./client"
-import { hot } from "react-hot-loader"
 
 interface InitComponentOptions {
   observer?: boolean
@@ -22,21 +21,20 @@ interface NodeModuleWithHot extends NodeModule {
 }
 
 const initComponent = (pageModule: NodeModuleWithHot, options: InitComponentOptions = {}) => {
-    return (elementClass: elementClass) => {
-      if(pageModule.hot) {
-        if(options.observer) {
-          return hot(pageModule)(Object.assign({ id: "../test" }, observer(elementClass)))
-        } else {
-          const doit = Object.assign({ id: pageModule.i }, pageModule)
-          console.log(doit)
-          return hot(doit)(elementClass)
-        }
-      } else if(options.observer) {
-        return observer(elementClass)
+  return (elementClass: elementClass) => elementClass
+  /*return (elementClass: elementClass) => {
+    if(pageModule.hot) {
+      if(options.observer) {
+        return hot(Object.assign({ id: pageModule.i }, pageModule))(observer(elementClass))
       } else {
-        return elementClass
+        return hot(Object.assign({ id: pageModule.i }, pageModule))(elementClass)
       }
+    } else if(options.observer) {
+      return observer(elementClass)
+    } else {
+      return elementClass
     }
+  }*/
 }
 
 export {
