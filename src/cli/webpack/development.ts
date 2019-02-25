@@ -8,16 +8,20 @@ const projectPath = process.cwd()
 
 export default (kiwiConfig: any): any => merge(commonConfig(kiwiConfig), {
   mode: "development",
+  entry: [
+    `webpack-dev-server/client?http://${kiwiConfig.platforms.web.devHost}:${kiwiConfig.platforms.web.devPort}`,
+    "webpack/hot/only-dev-server",
+    pathLib.join(projectPath, "src", "client", "index.tsx"),
+  ],
   devServer: {
     host: kiwiConfig.platforms.web.devHost,
     port: kiwiConfig.platforms.web.devPort,
-    contentBase: pathLib.join(projectPath, kiwiConfig.platforms.web.buildDir),
+    clientLogLevel: "warning",
     historyApiFallback: true,
-    disableHostCheck: true,
     hot: true,
     inline: true,
   },
-  devtool: "cheap-module-eval-source-map",
+  devtool: "eval",
   plugins: [
     new Webpack.NamedModulesPlugin(),
     new Webpack.HotModuleReplacementPlugin(),

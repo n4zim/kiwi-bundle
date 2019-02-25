@@ -1,5 +1,5 @@
 
-const typeCss = (color: string) => [
+const generateCss = (color: string) => [
   "border: 1px solid black",
   "padding: 2px 10px",
   "background-color: " + color,
@@ -12,23 +12,37 @@ type ContextType = Object|string
 class Logger {
   private enabled: boolean = false
 
-  enable() {
+  disable() {
     if(this.enabled) {
-      this.logInfo(this, "Already enabled")
+      this.enabled = false
+      this.logInfo(this, "Disabled")
     } else {
-      this.enabled = true
-      this.logInfo(this, "Enabled")
+      this.logError(this, "Already disabled")
     }
   }
 
   private log(context: ContextType, color: string, title: string, ...data: any) {
-    const label = typeof context === "string" ? context : context.constructor.name
-    console.groupCollapsed("%c" + label, typeCss(color), title)
-    console.log({ context })
-    data.forEach((element: any) => {
-      console.log(element)
-    })
-    console.groupEnd()
+    const isObject = typeof context !== "string"
+    const isSingle = !isObject && data.length === 0
+
+    const label = `%c${isObject ? context.constructor.name : context}`
+    const css = generateCss(color)
+
+    if(isSingle) {
+      console.log(label, css, title)
+    } else {
+      console.groupCollapsed(label, css, title)
+
+      if(isObject) {
+        console.log("Context", context)
+      }
+
+      data.forEach((element: any) => {
+        console.log(element)
+      })
+
+      console.groupEnd()
+    }
   }
 
   logSuccess(context: ContextType, title: string, ...data: any) {

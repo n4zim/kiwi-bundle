@@ -1,14 +1,25 @@
+import * as React from "react"
 import { render } from "react-dom"
-import Logger from "./Logger"
+import logger from "./logger"
 import Router from "./routes/Router"
 
+interface NodeModuleHot extends NodeModule {
+  hot?: any
+}
+
+declare var module: NodeModuleHot
+
 export default class Client {
-  constructor(router: Router) {
-    const renderDiv = document.getElementById("render")
+  constructor(rootModule: NodeModuleHot, router: Router) {
+    render(router.render(), document.getElementById("render"))
+    logger.logInfo(this, "Rendered")
 
-    // render(<Root>{router.render()}</Root>, renderDiv)
-    render(router.render(), renderDiv)
-
-    Logger.logInfo(this, "Rendered")
+    if(typeof rootModule.hot !== "undefined") {
+      rootModule.hot.accept()
+      if(typeof module.hot !== "undefined") {
+        module.hot.accept()
+      }
+      logger.logInfo("HMR", "Listening")
+    }
   }
 }

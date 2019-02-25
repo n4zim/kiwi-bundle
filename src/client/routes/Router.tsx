@@ -1,17 +1,18 @@
 import * as React from "react"
+import { createBrowserHistory } from "history"
 import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
-import { History, createBrowserHistory } from "history"
-import Route from "./Route"
 import { LinkAction } from "./Link"
-// import { hot } from "react-hot-loader"
+import Route from "./Route"
+
+const HISTORY = createBrowserHistory()
 
 export default class Router {
   pages: Route[] = []
-  history: History = createBrowserHistory()
   indexes: { [name: string]: number } = {}
 
   constructor(pages: Route[] = []) {
     this.pages = pages
+
     pages.forEach((page, index) => {
       this.indexes[page.name] = index
     })
@@ -28,34 +29,30 @@ export default class Router {
     }
     return {
       path: route.path,
-      call: () => { this.history.push(route.path) },
+      call: () => { HISTORY.push(route.path) },
     }
   }
 
-  private getReactRouter() {
-    return <ReactRouter history={this.history}>
-      <Switch>
-        {this.pages.map((route: Route) => {
-          /*render={props => {
-            return React.createElement(route.component, { ...props, client: this })
-          }}*/
-          return <ReactRoute exact
-            key={`route${route.name}`}
-            path={route.path}
-            component={route.component}
-          />
-        })}
-        <ReactRedirect from="*" to="/"/>
-      </Switch>
-    </ReactRouter>
+  private getReactRouterRoutes() {
+    return this.pages.map((route: Route) => {
+      /*render={props => {
+        return React.createElement(route.component, { ...props, client: this })
+      }}*/
+      return <ReactRoute exact
+        key={`route${route.name}`}
+        path={route.path}
+        component={route.component}
+      />
+    })
   }
 
   render() {
-    // console.log(rootModule.i)
-    // const current = Object.assign({ id: "./src/client/Page1.ts" }, module)
-    // return React.createElement(hot(current)(this.getReactRouter.bind(this)))
-    // return <RootModule>{this.getReactRouter()}</RootModule>
-    return this.getReactRouter()
+    return <ReactRouter history={HISTORY}>
+      <Switch>
+        {this.getReactRouterRoutes()}
+        <ReactRedirect from="*" to="/"/>
+      </Switch>
+    </ReactRouter>
   }
 
 }

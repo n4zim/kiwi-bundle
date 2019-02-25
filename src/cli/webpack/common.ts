@@ -7,7 +7,6 @@ const projectPath = process.cwd()
 const bundlePath = pathLib.join(projectPath, "node_modules", "kiwi-bundle")
 
 export default (kiwiConfig: any): any => ({
-  entry: pathLib.join(projectPath, "src", "client", "debug.tsx"),
   resolve: {
     extensions: [ ".ts", ".tsx", ".js" ],
     modules: [

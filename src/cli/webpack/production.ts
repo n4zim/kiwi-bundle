@@ -6,6 +6,7 @@ import commonConfig from "./common"
 const projectPath = process.cwd()
 
 export default (kiwiConfig: any): any => merge(commonConfig(kiwiConfig), {
+  entry: pathLib.join(projectPath, "src", "client", "index.tsx"),
   mode: "production",
   devtool: "source-map",
   optimization: {
