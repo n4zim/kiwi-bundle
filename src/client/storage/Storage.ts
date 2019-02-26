@@ -1,5 +1,4 @@
 import { isUndefined } from "util"
-import { EntityConstructor } from "./Entity"
 import Repository from "./Repository"
 
 enum StorageState { INIT, READY, BUSY }
@@ -23,7 +22,7 @@ class Storage {
     this.state = StorageState.READY
   }
 
-  findAll(name: string): Promise<EntityConstructor[]> {
+  findAll(name: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       if(isUndefined(this.entities[name])) {
         reject(`The entity "${name}" was not found`)
