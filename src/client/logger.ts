@@ -1,9 +1,9 @@
 
 const generateCss = (color: string) => [
-  "border: 1px solid black",
+//  "border: 1px solid black",
   "padding: 2px 10px",
   "background-color: " + color,
-  "color: white",
+//  "color: white",
   "font-size: 12px",
 ].join(";")
 
@@ -65,15 +65,19 @@ class Logger {
   }
 
   logSuccess(context: ContextType, title: string, ...data: any) {
-    this.log(context, "#7eae0c", title, ...data)
+    this.log(context, "#a4f6a5", title, ...data)
   }
 
   logError(context: ContextType, title: string,  ...data: any) {
-    this.log(context, "#a71c0d", title, ...data)
+    this.log(context, "#f68787", title, ...data)
   }
 
   logInfo(context: ContextType, title: string,  ...data: any) {
-    this.log(context, "#0f4ba6", title, ...data)
+    this.log(context, "#f1eb9a", title, ...data)
+  }
+
+  logView(context: ContextType, title: string,  ...data: any) {
+    this.log(context, "#f8a978", title, ...data)
   }
 
 }

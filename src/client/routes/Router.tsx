@@ -5,41 +5,26 @@ import { LinkAction } from "./Link"
 import Route from "./Route"
 
 const HISTORY = createBrowserHistory()
-
 export default class Router {
-  pages: Route[] = []
+  routes: Route[] = []
   indexes: { [name: string]: number } = {}
 
-  constructor(pages: Route[] = []) {
-    this.pages = pages
-
-    pages.forEach((page, index) => {
-      this.indexes[page.name] = index
-    })
+  constructor(routes: Route[] = []) {
+    this.routes = routes
   }
 
-  getLinkAction(name: number): LinkAction {
-    const index = this.indexes[name]
-    if(typeof index === "undefined") {
-      throw "Page not found on cache"
-    }
-    const route = this.pages[index]
-    if(typeof route === "undefined") {
-      throw "Page not found on router"
-    }
-    return {
-      path: route.path,
-      call: () => { HISTORY.push(route.path) },
-    }
+  private redirect(path: string) {
+    HISTORY.push(path)
+  }
+
+  getLinkAction(path: string): LinkAction {
+    return { path, call: () => { this.redirect(path) } }
   }
 
   private getReactRouterRoutes() {
-    return this.pages.map((route: Route) => {
-      /*render={props => {
-        return React.createElement(route.component, { ...props, client: this })
-      }}*/
+    return this.routes.map((route: Route, index: number) => {
       return <ReactRoute exact
-        key={`route${route.name}`}
+        key={`route${index}`}
         path={route.path}
         component={route.component}
       />

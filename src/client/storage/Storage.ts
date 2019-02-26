@@ -1,18 +1,41 @@
-import * as localForage from "localforage"
 import { isUndefined } from "util"
-/*import { EntityList, EntityName } from "dropin-recipe"
-import { EntityDescription } from "dropin-recipe/dist/core/Entities"
-import User from "dropin-recipe/dist/entities/User"
+import { EntityConstructor } from "./Entity"
+import Repository from "./Repository"
 
 enum StorageState { INIT, READY, BUSY }
 
-interface EntityDescriptionWithStore extends EntityDescription {
-  store: LocalForage
-}
-
 class Storage {
   state: StorageState = StorageState.INIT
-  entities: { [name: string]: EntityDescriptionWithStore } = {}
+  entities: { [name: string]: any } = {}
+
+  constructor(repositories: Repository[]) {
+    repositories.forEach(repository => {
+      // Put storage inside entity class
+      repository.entity.prototype.storage = this
+
+      // Add a record inside the cache
+      this.entities[repository.name] = repository.entity
+
+      // Load the repository
+      repository.load(this)
+    })
+
+    this.state = StorageState.READY
+  }
+
+  findAll(name: string): Promise<EntityConstructor[]> {
+    return new Promise((resolve, reject) => {
+      if(isUndefined(this.entities[name])) {
+        reject(`The entity "${name}" was not found`)
+      } else {
+        resolve([
+          new this.entities[name]({ text: "OK" })
+        ])
+      }
+    })
+  }
+
+  /*state: StorageState = StorageState.INIT
   insertDemoData: boolean = true
 
   constructor() {
@@ -66,9 +89,8 @@ class Storage {
     this.getStore(entityName).then(store => {
       resolve(store.removeItem(id))
     })
-  })
+  })*/
 
 }
 
 export default Storage
-*/

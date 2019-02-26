@@ -18,8 +18,9 @@ export default (kiwiConfig: any): any => merge(commonConfig(kiwiConfig), {
     port: kiwiConfig.platforms.web.devPort,
     clientLogLevel: "warning",
     historyApiFallback: true,
-    hot: true,
+    writeToDisk: true,
     inline: true,
+    hot: true,
   },
   devtool: "eval",
   plugins: [
