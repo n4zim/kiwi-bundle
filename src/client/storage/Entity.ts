@@ -37,8 +37,8 @@ export default class Entity<Data = {}> implements EntityParams<Data> {
 
 }
 
-export interface EntityConstructor<Data = {}> {
-  new(params: EntityParams<Data>): Entity<Data>
+export interface EntityConstructor<Entity = {}, Data = {}> {
+  new(params: EntityParams<Data>): Entity
 }
 
 /*class EntityMigrationUpdates {

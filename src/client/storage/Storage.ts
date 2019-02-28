@@ -37,7 +37,10 @@ class Storage {
   onUpgradeNeeded(database: IDBDatabase) {
     this.repositories.forEach(repository => {
       if(!database.objectStoreNames.contains(repository.name)) {
-        database.createObjectStore(repository.name, { keyPath: "id", autoIncrement: true })
+        const store = database.createObjectStore(repository.name, { keyPath: "id" })
+        store.createIndex("createdAt", "createdAt")
+        store.createIndex("updatedAt", "updatedAt")
+
         logger.logInfo(this, `Created ${repository.name} store`)
       }
     })
@@ -46,34 +49,20 @@ class Storage {
   onSuccess(database: IDBDatabase) {
     let check = this.repositories.length
     this.repositories.forEach(repository => {
-      // Put storage inside entity class
-      repository.entity.prototype.storage = this
+      repository.getTransaction = () => {
+        return database.transaction(repository.name, "readwrite").objectStore(repository.name)
+      }
 
-      // Add a record inside the cache
-      this.entities[repository.name] = repository.entity
+      if(typeof repository.onLoad !== "undefined") {
+        repository.onLoad(repository)
+      }
 
-      // Load the repository
-      repository.store = database.transaction(repository.name, "readwrite").objectStore(repository.name)
-      if(typeof repository.onLoad !== "undefined") repository.onLoad(repository)
       logger.logInfo(repository, `Store for ${this.name} loaded`)
 
-      // Change state
       if(--check === 0) {
         this.state = StorageState.READY
         logger.logInfo(this, "Ready")
       }
-    })
-  }
-
-  findAll(name: StorageName): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-    if(this.state !== StorageState.READY) {
-      reject(`The database is not ready`)
-    } else if(typeof this.entities[name] === "undefined") {
-      reject(`The entity "${name}" was not found`)
-    } else {
-      resolve([])
-    }
     })
   }
 
