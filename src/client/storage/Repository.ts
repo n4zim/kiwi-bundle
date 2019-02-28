@@ -1,17 +1,24 @@
 import { EntityParams } from "./Entity"
 import logger from "../logger"
-import { transaction } from "mobx";
-import { resolve } from "url";
 
 interface RepositoryParams<Entity, EntityData> {
   name: string
   version: number
   generateEntity: (params: EntityParams<EntityData>) => Entity
 }
+
+type RequestCall = (store: IDBObjectStore) => IDBRequest
+
+interface RepositoryQueueElement {
+  requestCall: RequestCall
+  resolve: (promise: Promise<any>) => void
+}
+
 export default class Repository<Entity = {}, EntityData = {}> implements RepositoryParams<Entity, EntityData> {
   name: string
   version: number
   generateEntity: (params: EntityParams<EntityData>) => Entity
+  queue: RepositoryQueueElement[] = []
   newTransaction?: () => IDBObjectStore
 
   constructor(params: RepositoryParams<Entity, EntityData>) {
@@ -21,7 +28,7 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
     logger.logInfo(this, `Loaded ${this.name} entities`)
   }
 
-  private handleRequest(request: IDBRequest): Promise<Entity[]> {
+  private handleRequest(request: IDBRequest): Promise<any> {
     return new Promise((resolve, reject) => {
       request.onsuccess = () => {
         resolve(request.result)
@@ -32,24 +39,26 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
     })
   }
 
-  private getTransaction(): Promise<IDBObjectStore> {
+  private execute(requestCall: RequestCall): Promise<any> {
     return new Promise(resolve => {
-      const interval = setInterval(() => {
-        logger.logInfo(this, `Waiting for ${this.name} transaction...`)
-        if(typeof this.newTransaction !== "undefined") {
-          resolve(this.newTransaction())
-          clearInterval(interval)
-        }
-      }, 100)
+      if(typeof this.newTransaction === "undefined") {
+        this.queue.push({ requestCall, resolve })
+      } else {
+        resolve(this.handleRequest(requestCall(this.newTransaction())))
+      }
+    })
+  }
+
+  handleQueue() {
+    this.queue.map(({ requestCall, resolve }) => {
+      if(typeof this.newTransaction !== "undefined") {
+        resolve(this.handleRequest(requestCall(this.newTransaction())))
+      }
     })
   }
 
   findAll(): Promise<Entity[]> {
-    return new Promise(resolve => {
-      this.getTransaction().then(transaction => {
-        resolve(this.handleRequest(transaction.index("updatedAt").getAll()))
-      })
-    })
+    return this.execute(store => store.index("updatedAt").getAll())
   }
 
   forEach(action: (entity: Entity) => any): void {
@@ -63,15 +72,11 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
   create(data: EntityData): Promise<Entity> {
     return new Promise(resolve => {
       const entity = this.generateEntity({ data })
-      this.getTransaction().then(transaction => {
-        this.handleRequest(transaction.put(entity))
-          .then(() => {
-            logger.logSuccess(this, `New ${this.name} record`, entity)
-          })
-          .catch(() => {
-            logger.logError(this, `Record ${this.name} not saved`, entity)
-          })
-        resolve(entity)
+      resolve(entity)
+      this.execute(store => store.put(entity)).then(() => {
+        logger.logSuccess(this, `New ${this.name} record`, entity)
+      }).catch(() => {
+        logger.logError(this, `Record ${this.name} not saved`, entity)
       })
     })
   }

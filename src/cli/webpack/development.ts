@@ -11,7 +11,7 @@ export default (kiwiConfig: any): any => merge(commonConfig(kiwiConfig), {
   entry: [
     `webpack-dev-server/client?http://${kiwiConfig.platforms.web.devHost}:${kiwiConfig.platforms.web.devPort}`,
     "webpack/hot/only-dev-server",
-    pathLib.join(projectPath, "src", "client", "index.tsx"),
+    pathLib.join(projectPath, "src", "client", "index.ts"),
   ],
   devServer: {
     host: kiwiConfig.platforms.web.devHost,

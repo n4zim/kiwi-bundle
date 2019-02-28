@@ -2,12 +2,9 @@ import Repository from "./Repository"
 import { EntityConstructor } from "./Entity"
 import logger from "../logger"
 
-enum StorageState { INIT, READY, BUSY }
-
 type StorageName = string
 
 class Storage {
-  state: StorageState = StorageState.INIT
   name: StorageName
   repositories: Repository[]
   entities: { [name: string]: EntityConstructor } = {}
@@ -29,7 +26,7 @@ class Storage {
     }
 
     databaseRequest.onsuccess = () => {
-      logger.logSuccess(this, "IndexDB connected", event)
+      logger.logSuccess(this, "IndexedDB connected", event)
       this.onSuccess(databaseRequest.result)
     }
   }
@@ -52,11 +49,15 @@ class Storage {
         return database.transaction(repository.name, "readwrite").objectStore(repository.name)
       }
 
-      logger.logInfo(repository, `Store for ${this.name} loaded`)
+      repository.handleQueue()
+
+      logger.logInfo(repository, `Repository for ${this.name} loaded`)
 
       if(--check === 0) {
-        this.state = StorageState.READY
-        logger.logInfo(this, "Ready")
+        logger.logInfo(
+          this,
+          `${this.repositories.length} repositor${this.repositories.length === 1 ? "y" : "ies"} has been loaded`
+        )
       }
     })
   }
