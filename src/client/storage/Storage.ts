@@ -1,14 +1,51 @@
-import { isUndefined } from "util"
 import Repository from "./Repository"
+import { EntityConstructor } from "./Entity"
+import logger from "../logger"
 
 enum StorageState { INIT, READY, BUSY }
 
+type StorageName = string
+
 class Storage {
   state: StorageState = StorageState.INIT
-  entities: { [name: string]: any } = {}
+  name: StorageName
+  repositories: Repository[]
+  entities: { [name: string]: EntityConstructor } = {}
 
-  constructor(repositories: Repository[]) {
-    repositories.forEach(repository => {
+  constructor(name: StorageName, repositories: Repository[]) {
+    this.name = name
+    this.repositories = repositories
+
+    const databaseRequest = window.indexedDB.open(name, 1)
+
+    databaseRequest.onerror = () => {
+      logger.logError(this, "IndexDB error", event)
+    }
+
+    databaseRequest.onupgradeneeded = () => {
+      if(databaseRequest.result) {
+        this.onUpgradeNeeded(databaseRequest.result)
+      }
+    }
+
+    databaseRequest.onsuccess = () => {
+      logger.logSuccess(this, "IndexDB connected", event)
+      this.onSuccess(databaseRequest.result)
+    }
+  }
+
+  onUpgradeNeeded(database: IDBDatabase) {
+    this.repositories.forEach(repository => {
+      if(!database.objectStoreNames.contains(repository.name)) {
+        database.createObjectStore(repository.name, { keyPath: "id", autoIncrement: true })
+        logger.logInfo(this, `Created ${repository.name} store`)
+      }
+    })
+  }
+
+  onSuccess(database: IDBDatabase) {
+    let check = this.repositories.length
+    this.repositories.forEach(repository => {
       // Put storage inside entity class
       repository.entity.prototype.storage = this
 
@@ -16,79 +53,29 @@ class Storage {
       this.entities[repository.name] = repository.entity
 
       // Load the repository
-      repository.load(this)
-    })
+      repository.store = database.transaction(repository.name, "readwrite").objectStore(repository.name)
+      if(typeof repository.onLoad !== "undefined") repository.onLoad(repository)
+      logger.logInfo(repository, `Store for ${this.name} loaded`)
 
-    this.state = StorageState.READY
+      // Change state
+      if(--check === 0) {
+        this.state = StorageState.READY
+        logger.logInfo(this, "Ready")
+      }
+    })
   }
 
-  findAll(name: string): Promise<any[]> {
+  findAll(name: StorageName): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      if(isUndefined(this.entities[name])) {
-        reject(`The entity "${name}" was not found`)
-      } else {
-        resolve([
-          new this.entities[name]({ text: "OK" })
-        ])
-      }
+    if(this.state !== StorageState.READY) {
+      reject(`The database is not ready`)
+    } else if(typeof this.entities[name] === "undefined") {
+      reject(`The entity "${name}" was not found`)
+    } else {
+      resolve([])
+    }
     })
   }
-
-  /*state: StorageState = StorageState.INIT
-  insertDemoData: boolean = true
-
-  constructor() {
-    EntityList.forEach((entity: EntityDescriptionWithStore) => {
-      entity.store = localForage.createInstance({
-        driver: localForage.LOCALSTORAGE,
-        name: entity.name,
-        version: entity.migrations.version,
-      })
-      this.entities[entity.name] = entity
-      if(this.insertDemoData) {
-        if(entity.name === EntityName.USER) {
-          this.setById(EntityName.USER, "demo", new User({ name: "Demo", password: "test" }))
-        } else {
-        }
-      }
-    })
-  }
-
-  private getStore(entityName: EntityName): Promise<LocalForage> {
-    return new Promise((resolve, reject) => {
-      if(isUndefined(this.entities[entityName])) {
-        reject(`The entity "${entityName}" was not found`)
-      } else if(isUndefined(this.entities[entityName].store)) {
-        reject(`The store of the "${entityName}" entity was not found`)
-      } else {
-        resolve(this.entities[entityName].store)
-      }
-    })
-  }
-
-  getAll = (entityName: EntityName) => new Promise(resolve => {
-    this.getStore(entityName).then(store => {
-      resolve(store.keys())
-    })
-  })
-
-  getById = (entityName: EntityName, id: string) => new Promise(resolve => {
-    this.getStore(entityName).then(store => {
-      resolve(store.getItem(id))
-    })
-  })
-
-  setById = (entityName: EntityName, id: string, value: any) => new Promise(resolve => {
-    this.getStore(entityName).then(store => {
-      resolve(store.setItem(id, value))
-    })
-  })
-
-  removeById = (entityName: EntityName, id: string) => new Promise(resolve => {
-    this.getStore(entityName).then(store => {
-      resolve(store.removeItem(id))
-    })
-  })*/
 
 }
 

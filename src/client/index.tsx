@@ -16,7 +16,7 @@ if(hotReloading) logger.logInfo("Hot", "Enabled")
 export default class Client {
   constructor(router: Router) {
     render(router.render(), document.getElementById("render"))
-    logger.logInfo(this, "Rendered")
+    logger.logInfo(this, "Started")
 
     if(hotReloading) {
       module.hot.accept()

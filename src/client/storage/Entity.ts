@@ -1,47 +1,47 @@
 import { isUndefined } from "util"
 import { uniqueHash, actionWithObjectKey } from "../../utils"
-import Storage from "./Storage"
+// import Storage from "./Storage"
 
 // -------------------------------------------------------------
 
-interface EntityParams {
+export interface EntityParams<Data> {
   id?: string
   createdAt?: Date
   updatedAt?: Date
+  data: Data
 }
 
-class Entity<Params extends EntityParams = EntityParams> implements EntityParams {
+export default class Entity<Data = {}> implements EntityParams<Data> {
   id?: string
   createdAt?: Date
   updatedAt?: Date
+  data: Data
 
-  constructor(params?: Params) {
-    if(typeof params !== "undefined" && typeof params.id !== "undefined") {
-      this.id = params.id
-    } else if(isUndefined(this.id)) {
-      this.id = uniqueHash()
+  constructor(params: EntityParams<Data>, empty: Data) {
+    this.data = params.data
+
+    if(typeof params !== "undefined") {
+      if(typeof params.id !== "undefined") {
+        this.id = params.id
+      } else if(typeof this.id === "undefined") {
+        this.id = uniqueHash()
+      }
+
+      if(typeof params.createdAt === "undefined") {
+        const date = new Date()
+        this.createdAt = date
+        this.updatedAt = date
+      }
     }
-
-    if(isUndefined(this.createdAt) || isUndefined(this.updatedAt)) {
-      const date = new Date()
-      this.createdAt = date
-      this.updatedAt = date
-    }
-  }
-
-  actionWithParam(params: Params, name: string, action: (data: any) => void) {
-    return actionWithObjectKey(params, name, action)
   }
 
 }
 
-export interface EntityConstructor<Params = EntityParams> {
-  new(params?: Params): Entity<Params>
+export interface EntityConstructor<Data = {}> {
+  new(params: EntityParams<Data>): Entity<Data>
 }
 
-// -------------------------------------------------------------
-
-class EntityMigrationUpdates {
+/*class EntityMigrationUpdates {
   constructor(from: number, to: number, action: void) {}
 }
 
@@ -60,13 +60,4 @@ interface EntityDescription {
   // name: EntityName
   migrations: EntityMigrations
   createInstance: (params: any) => any
-}
-
-// -------------------------------------------------------------
-
-export {
-  Entity,
-  EntityParams,
-  EntityMigrations,
-  EntityDescription,
-}
+}*/

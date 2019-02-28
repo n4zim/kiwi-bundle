@@ -1,6 +1,6 @@
 import { action, observable } from "mobx"
 import Client from "./client"
-import { Entity, EntityParams } from "./client/storage/Entity"
+import Entity, { EntityParams } from "./client/storage/Entity"
 import Link, { LinkAction } from "./client/routes/Link"
 import logger from "./client/logger"
 import { observer } from "mobx-react"

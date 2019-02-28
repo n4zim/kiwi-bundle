@@ -1,4 +1,4 @@
-import { Entity, EntityParams } from "./Entity"
+import Entity, { EntityParams } from "./Entity"
 
 // Right level for shares
 enum UserEntityShareLevel {
@@ -61,16 +61,18 @@ interface UserEntityObjective {
   days?: ChoiceOfWeekDays // Involved days, if empty every day will be included
 }
 
-interface UserEntityParams extends EntityParams {
+interface UserEntityParams<Data> extends EntityParams<Data> {
   owner: string
   shares?: UserEntityShare[]
   repetition?: UserEntityRepetition
 }
 
-class UserEntity<Params extends UserEntityParams> extends Entity<Params> implements UserEntityParams {
+class UserEntity<Data> extends Entity<Data> implements UserEntityParams<Data> {
   owner: string
-  constructor(params: Params) {
-    super(params)
+
+  constructor(params: UserEntityParams<Data>, empty: Data) {
+    super(params, empty)
     this.owner = params.owner
   }
+
 }
