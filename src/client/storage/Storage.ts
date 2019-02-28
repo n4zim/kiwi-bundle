@@ -40,7 +40,6 @@ class Storage {
         const store = database.createObjectStore(repository.name, { keyPath: "id" })
         store.createIndex("createdAt", "createdAt")
         store.createIndex("updatedAt", "updatedAt")
-
         logger.logInfo(this, `Created ${repository.name} store`)
       }
     })
@@ -49,12 +48,8 @@ class Storage {
   onSuccess(database: IDBDatabase) {
     let check = this.repositories.length
     this.repositories.forEach(repository => {
-      repository.getTransaction = () => {
+      repository.newTransaction = () => {
         return database.transaction(repository.name, "readwrite").objectStore(repository.name)
-      }
-
-      if(typeof repository.onLoad !== "undefined") {
-        repository.onLoad(repository)
       }
 
       logger.logInfo(repository, `Store for ${this.name} loaded`)

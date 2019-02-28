@@ -10,7 +10,7 @@ import Route from "./client/routes/Route"
 import Router from "./client/routes/Router"
 import Storage from "./client/storage/Storage"
 import Store from "./client/stores/Store"
-import WebComponent from "./client/components/WebComponent"
+import WebComponent, { WebComponentInterface } from "./client/components/WebComponent"
 import WebPage from "./client/components/WebPage"
 
 export {
@@ -30,5 +30,6 @@ export {
   Storage,
   Store,
   WebComponent,
+  WebComponentInterface,
   WebPage,
 }

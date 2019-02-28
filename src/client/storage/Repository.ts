@@ -1,21 +1,23 @@
-import { EntityConstructor, EntityParams } from "./Entity"
+import { EntityParams } from "./Entity"
 import logger from "../logger"
+import { transaction } from "mobx";
+import { resolve } from "url";
 
 interface RepositoryParams<Entity, EntityData> {
   name: string
+  version: number
   generateEntity: (params: EntityParams<EntityData>) => Entity
-  onLoad?: (data: Repository<Entity, EntityData>) => void
 }
 export default class Repository<Entity = {}, EntityData = {}> implements RepositoryParams<Entity, EntityData> {
   name: string
+  version: number
   generateEntity: (params: EntityParams<EntityData>) => Entity
-  onLoad?: (data: Repository<Entity, EntityData>) => void
-  getTransaction?: () => IDBObjectStore
+  newTransaction?: () => IDBObjectStore
 
   constructor(params: RepositoryParams<Entity, EntityData>) {
     this.name = params.name
+    this.version = params.version
     this.generateEntity = params.generateEntity
-    this.onLoad = params.onLoad
     logger.logInfo(this, `Loaded ${this.name} entities`)
   }
 
@@ -30,14 +32,23 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
     })
   }
 
+  private getTransaction(): Promise<IDBObjectStore> {
+    return new Promise(resolve => {
+      const interval = setInterval(() => {
+        logger.logInfo(this, `Waiting for ${this.name} transaction...`)
+        if(typeof this.newTransaction !== "undefined") {
+          resolve(this.newTransaction())
+          clearInterval(interval)
+        }
+      }, 100)
+    })
+  }
+
   findAll(): Promise<Entity[]> {
-    return new Promise((resolve, reject) => {
-      if(typeof this.getTransaction !== "undefined") {
-        // resolve(this.handleRequest(this.store().getAll()))
-        resolve(this.handleRequest(this.getTransaction().index("updatedAt").getAll()))
-      } else {
-        reject()
-      }
+    return new Promise(resolve => {
+      this.getTransaction().then(transaction => {
+        resolve(this.handleRequest(transaction.index("updatedAt").getAll()))
+      })
     })
   }
 
@@ -51,19 +62,17 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
 
   create(data: EntityData): Promise<Entity> {
     return new Promise(resolve => {
-      if(typeof this.getTransaction !== "undefined") {
-        const entity = this.generateEntity({ data })
-
-        this.handleRequest(this.getTransaction().put(entity))
+      const entity = this.generateEntity({ data })
+      this.getTransaction().then(transaction => {
+        this.handleRequest(transaction.put(entity))
           .then(() => {
             logger.logSuccess(this, `New ${this.name} record`, entity)
           })
           .catch(() => {
             logger.logError(this, `Record ${this.name} not saved`, entity)
           })
-
         resolve(entity)
-      }
+      })
     })
   }
 

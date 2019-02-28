@@ -1,5 +1,9 @@
-import { Component } from "react"
+import { Component, ReactFragment } from "react"
 import logger from "../logger"
+
+export interface WebComponentInterface {
+  render: ReactFragment
+}
 
 export default class WebComponent<Props = {}, S = {}, SS = any> extends Component<Props, S, SS> {
 
