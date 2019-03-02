@@ -1,12 +1,12 @@
-import chalk from 'chalk'
-import fs from 'fs'
-import commandExists from 'command-exists'
-import inquirer from 'inquirer'
-import pathLib from 'path'
-import { exec } from 'child_process'
-import { Platform } from './config'
+import chalk from "chalk"
+import fs from "fs"
+import commandExists from "command-exists"
+import inquirer from "inquirer"
+import pathLib from "path"
+import { exec } from "child_process"
+import { Platform } from "./config"
 
-const isYarnAvailable = commandExists.sync('yarn')
+const isYarnAvailable = commandExists.sync("yarn")
 
 /*const createPackageFile = (path: string,
   answers: { name:string, version:string, description:string, authorName:string, authorEmail:string }) =>
@@ -34,19 +34,19 @@ const createConfigFile = (path: string, data: {}) => {
 const promptDataForConfig = (path: string) => {
   inquirer.prompt([
     {
-      type: 'checkbox',
-      name: 'platforms',
-      message: 'Platforms on which you want to create your app',
+      type: "checkbox",
+      name: "platforms",
+      message: "Platforms on which you want to create your app",
       choices: [
-        new inquirer.Separator('Browser applications'),
-        { name: 'Web', value: Platform.WEB, checked: true },
-        new inquirer.Separator('Mobile applications'),
-        { name: 'Android', value: Platform.ANDROID },
-        { name: 'iOS', value: Platform.IOS },
-        new inquirer.Separator('Desktop applications'),
-        { name: 'Linux', value: Platform.LINUX },
-        { name: 'Windows', value: Platform.WINDOWS },
-        { name: 'MacOS', value: Platform.MACOS },
+        new inquirer.Separator("Browser applications"),
+        { name: "Web", value: Platform.WEB, checked: true },
+        new inquirer.Separator("Mobile applications"),
+        { name: "Android", value: Platform.ANDROID },
+        { name: "iOS", value: Platform.IOS },
+        new inquirer.Separator("Desktop applications"),
+        { name: "Linux", value: Platform.LINUX },
+        { name: "Windows", value: Platform.WINDOWS },
+        { name: "MacOS", value: Platform.MACOS },
       ],
       validate: answer => {
         if(answer.length < 1) return "You must choose at least one platform"
@@ -55,58 +55,58 @@ const promptDataForConfig = (path: string) => {
     },
   ]).then(answers => {
     createConfigFile(path, answers)
-    console.log(`\n    ${chalk.bgGreenBright.black('Your project is now ready !')}\n`)
+    console.log(`\n    ${chalk.bgGreenBright.black("Your project is now ready !")}\n`)
   })
 }
 
 const promptDataForPackage = (path: string) => {
   inquirer.prompt([
     {
-      type: 'input',
-      name: 'name',
-      message: 'Name of your projet',
+      type: "input",
+      name: "name",
+      message: "Name of your projet",
       validate: answer => {
         if(answer.length < 3) return "Your project name must have at least 3 characters"
         return true
       },
     },
     {
-      type: 'input',
-      name: 'description',
-      message: 'A short description of what it is',
+      type: "input",
+      name: "description",
+      message: "A short description of what it is",
     },
     {
-      type: 'input',
-      name: 'authorName',
-      message: 'Enter your name',
+      type: "input",
+      name: "authorName",
+      message: "Enter your name",
     },
     {
-      type: 'input',
-      name: 'authorEmail',
-      message: 'Enter your e-mail address',
+      type: "input",
+      name: "authorEmail",
+      message: "Enter your e-mail address",
     },
     {
-      type: 'input',
-      name: 'repository',
-      message: 'If you have a Git repository, indicate its URL',
+      type: "input",
+      name: "repository",
+      message: "If you have a Git repository, indicate its URL",
       validate: answer => {
         if(answer.length === 0) return true
         if(/^(?:https\:\/\/|git\@).*\.git$/.test(answer)) return true
-        return 'It\'s not a valid Git URL (HTTPS or SSH)'
+        return "It\"s not a valid Git URL (HTTPS or SSH)"
       }
     },
   ]).then(answers => {
-    //createPackageFile(path, answers)
+    // createPackageFile(path, answers)
     promptDataForConfig(path)
   })
 }
 
 const checkDirectory = (path: string, content: string[]) => {
-  if(content.indexOf('kiwi.yml') !== -1) {
+  if(content.indexOf("kiwi.yml") !== -1) {
     console.log(chalk.blue(`Kiwi is already initialized inside ${path}`))
   } else {
-    console.log(`\n    ${chalk.bgBlack('Let\'s create a new Kiwi app')}\n`)
-    if(content.indexOf('package.json') === -1) {
+    console.log(`\n    ${chalk.bgBlack("Let\"s create a new Kiwi app")}\n`)
+    if(content.indexOf("package.json") === -1) {
       promptDataForPackage(path)
     } else {
       promptDataForConfig(path)

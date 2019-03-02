@@ -8,5 +8,10 @@
 </head>
 <body>
   <div id="render"></div>
+  <%if (htmlWebpackPlugin.options.serviceWorker !== null) { %>
+  <script>
+    if("serviceWorker" in navigator) navigator.serviceWorker.register("js/sw.<%= webpack.hash %>.min.js", { scope: "/js/sw" })
+  </script>
+  <% } %>
 </body>
 </html>

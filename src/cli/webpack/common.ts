@@ -1,12 +1,15 @@
+import Webpack from "webpack"
 import pathLib from "path"
 import { CheckerPlugin } from "awesome-typescript-loader"
 import StyleLintPlugin from "stylelint-webpack-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
+import { webpackGetServiceWorker } from "../utils"
 
 const projectPath = process.cwd()
+const clientPath = pathLib.join(projectPath, "src", "client")
 const bundlePath = pathLib.join(projectPath, "node_modules", "kiwi-bundle")
 
-export default (kiwiConfig: any): any => ({
+export default (kiwiConfig: any): Webpack.Configuration => ({
   resolve: {
     extensions: [ ".ts", ".tsx", ".js" ],
     modules: [
@@ -20,7 +23,7 @@ export default (kiwiConfig: any): any => ({
     hints: false,
   },
   output: {
-    filename: "js/bundle.[hash].min.js",
+    filename: "js/[name].[hash].min.js",
     path: pathLib.resolve(projectPath, kiwiConfig.platforms.web.buildDir),
   },
   module: {
@@ -80,6 +83,8 @@ export default (kiwiConfig: any): any => ({
       template: pathLib.join(bundlePath, "opt", "index.html.ejs"),
       title: kiwiConfig.project.title,
       description: kiwiConfig.project.description,
+      excludeChunks: [ "sw" ],
+      serviceWorker: webpackGetServiceWorker(clientPath), // TODO : Remove code duplication
     }),
   ],
 })

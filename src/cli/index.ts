@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import program, { Command } from 'commander'
-import chalk from 'chalk'
-import initCommand from './init'
-import startCommand from './start'
+import program, { Command } from "commander"
+import chalk from "chalk"
+import initCommand from "./init"
+import startCommand from "./start"
+import buildCommand from "./build"
 
-const packageJson = require('../../package.json')
+const packageJson = require("../../package.json")
 
 const triggerError = (command: Command, text: string) => {
   console.error(chalk.red(`[ERROR] ${text}\n`))
@@ -30,8 +31,8 @@ program
   .description(packageJson.description)
 
 program
-  .command('init [path]')
-  .description('create a new Kiwi project')
+  .command("init [path]")
+  .description("create a new Kiwi project")
   .action((path: string, command: Command) => tryCatch(command, () => {
     if(typeof path === "undefined") {
       initCommand(process.cwd())
@@ -45,35 +46,39 @@ program
   }))
 
 program
-  .command('install')
-  .description('sets up project dependencies')
+  .command("install")
+  .description("sets up project dependencies")
 
 program
-  .command('start [platform]')
-  .description('launch app for development purposes')
-  .action((platform, options) => {
+  .command("start [platform]")
+  .description("launch app for development purposes")
+  .action(() => {
     startCommand(process.cwd())
-  }).on('-h, --help', () => {
-    console.log('\nExamples :');
-    console.log();
-    console.log('  $ kiwi start');
-    console.log('  $ kiwi start web');
-    console.log();
+  })
+  .on("-h, --help", () => {
+    console.log("\nExamples :")
+    console.log()
+    console.log("  $ kiwi start")
+    console.log("  $ kiwi start web")
+    console.log()
   })
 
 program
-  .command('upgrade')
-  .description('updates the entire project to the latest versions')
+  .command("upgrade")
+  .description("updates the entire project to the latest versions")
 
 program
-  .command('build')
-  .description('create a production version of your Kiwi project')
-  .option('-w, --web', 'web bundle only')
-  .option('-l, --linux', 'Linux package only')
-  .option('-W, --windows', 'Windows package only')
-  .option('-m, --mac', 'Mac OS package only')
-  .option('-a, --android', 'Android package only')
-  .option('-i, --ios', 'iOS package only')
+  .command("build")
+  .description("create a production version of your Kiwi project")
+  .action(() => {
+    buildCommand(process.cwd())
+  })
+  .option("-w, --web", "web bundle only")
+  .option("-l, --linux", "Linux package only")
+  .option("-W, --windows", "Windows package only")
+  .option("-m, --mac", "Mac OS package only")
+  .option("-a, --android", "Android package only")
+  .option("-i, --ios", "iOS package only")
 
 program.parse(process.argv)
 
