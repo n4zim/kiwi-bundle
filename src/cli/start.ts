@@ -12,6 +12,7 @@ export default (path: string) => {
     const outputPath = pathLib.resolve(path, kiwiConfig.platforms.web.buildDir)
     const webpackConfig = generateWebpackConfig(path, outputPath, kiwiConfig, WebpackMode.DEVELOPMENT)
     const server = new WebpackDevServer(Webpack(webpackConfig), webpackConfig.devServer)
+    webpackConsoleLog("Webpack launched for a watched development build...")
     server.listen(webpackConfig.devServer.port, webpackConfig.devServer.host, () => {
       webpackConsoleLog(
         `Development server will ba available at ` +

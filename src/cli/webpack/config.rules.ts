@@ -41,11 +41,11 @@ const rules = new WebpackConfig([
   },
   {
     test: /\.(ttf|eot)$/,
-    use: { loader: "file-loader", options: { name: "fonts/[hash].[ext]" } },
+    use: { loader: "file-loader", options: { name: "assets/fonts/[hash].[ext]" } },
   },
   {
     test: /\.(woff|woff2)$/,
-    use: { loader: "url-loader", options: { name: "fonts/[hash].[ext]", limit: 5000, mimetype: "application/font-woff" } },
+    use: { loader: "url-loader", options: { name: "assets/fonts/[hash].[ext]", limit: 5000, mimetype: "application/font-woff" } },
   },
 ])
 

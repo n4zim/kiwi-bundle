@@ -37,8 +37,10 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
     output: {
       filename: (data: any) => {
         const hasHash = data.chunk.name !== "sw"
-        return `js/[name]${hasHash ? ".[hash]" : ""}.min.js`
+        const isProd = mode === WebpackMode.PRODUCTION
+        return `js/[name]${hasHash ? `.[${isProd ? "contenthash" : "hash"}]` : ""}${isProd ? ".min" : ""}.js`
       },
+      chunkFilename: `js/[name].[contenthash]${mode === WebpackMode.PRODUCTION ? ".min" : ""}.js`,
       path: outputPath,
     },
 
@@ -90,8 +92,14 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
     // OPTIMIZATION
     config.optimization = {
       splitChunks: {
-        chunks: "initial",
-      },
+        cacheGroups: {
+          vendors: {
+            name: "vendors",
+            test: /[\\/]node_modules[\\/]/,
+            chunks: "all",
+          }
+        }
+      }
     }
   }
 

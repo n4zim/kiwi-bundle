@@ -9,29 +9,46 @@ import WebpackConfig from "./core"
 
 const generateFaviconsWebpackPlugin = ({ path, cache }: any) => new FaviconsWebpackPlugin({
   logo: pathLib.join(path, "assets", "logo.png"),
-  prefix: "/assets",
+  prefix: "assets/",
   persistentCache: cache,
   inject: true,
 })
 
 const generateOfflinePlugin = (dev: boolean) => {
   const options: any = {
+    safeToUseOptionalCaches: true,
     appShell: "/",
-    externals: [
-      "/"
-    ],
-    ServiceWorker: {
-      cacheName: "kiwi-offline",
+    publicPath: "/",
+    externals: [ "/" ],
+    caches: {
+      main: [
+        "index.html",
+        "js/*.js",
+        "assets/favicon.ico",
+        "assets/manifest.json",
+      ],
+      additional: [
+        "assets/manifest.webapp",
+        "assets/images/*",
+      ],
+      optional: [
+        ":rest:",
+      ]
     },
+    ServiceWorker: {
+      events: true,
+      output: `js/offline${dev ? "" : ".min"}.js`,
+    },
+    AppCache: {
+      events: true,
+    }
   }
 
   if(dev) {
     options.excludes = [
+      "assets/.cache",
       "**/*.hot-update.js",
-      "/icons/.cache",
     ]
-    options.ServiceWorker.events = true
-    options.AppCache = { events: true }
   }
 
   return new OfflinePlugin(options)
@@ -40,17 +57,20 @@ const generateOfflinePlugin = (dev: boolean) => {
 const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new WebpackConfig({
 
   common: () => [
+    new CheckerPlugin(),
+    new StyleLintPlugin(),
     new HtmlWebpackPlugin({
       template: pathLib.join(bundlePath, "opt", "index.html.ejs"),
       title: kiwiConfig.project.title,
       description: kiwiConfig.project.description,
       excludeChunks: [ "sw" ],
+      minify: {
+        collapseWhitespace: true,
+      },
     }),
   ],
 
   development: () => [
-    new CheckerPlugin(),
-    new StyleLintPlugin(),
     new Webpack.HotModuleReplacementPlugin(),
     generateFaviconsWebpackPlugin({ path, cache: true }),
     generateOfflinePlugin(true),

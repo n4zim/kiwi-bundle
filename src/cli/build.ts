@@ -13,8 +13,8 @@ export default (path: string) => {
       if(error) {
         console.error(error)
       } else {
-        webpackConsoleLog("Webpack is currently starting...")
-        Webpack(generateWebpackConfig(path, outputPath, kiwiConfig, WebpackMode.DEVELOPMENT), (err, stats) => {
+        webpackConsoleLog("Webpack launched for production build...")
+        Webpack(generateWebpackConfig(path, outputPath, kiwiConfig, WebpackMode.PRODUCTION), (err, stats) => {
           if(err) {
             console.error("Webpack error :", err)
           } else {

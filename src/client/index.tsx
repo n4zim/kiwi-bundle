@@ -7,9 +7,6 @@ interface NodeModuleHot extends NodeModule {
   hot?: any
 }
 
-const moduleCacheChildren = require.cache[0].children
-const clientModuleName = moduleCacheChildren[moduleCacheChildren.length - 1]
-
 declare var module: NodeModuleHot
 const hotReloading = typeof module.hot !== "undefined"
 if(hotReloading) logger.logInfo("Hot", "Enabled")
@@ -41,6 +38,8 @@ export default class Client {
 
     if(hotReloading) {
       module.hot.accept()
+      const moduleCacheChildren = require.cache[0].children
+      const clientModuleName = moduleCacheChildren[moduleCacheChildren.length - 1]
       require.cache[clientModuleName].hot.accept()
     }
   }
