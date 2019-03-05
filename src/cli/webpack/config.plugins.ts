@@ -3,18 +3,32 @@ import { CheckerPlugin } from "awesome-typescript-loader"
 import StyleLintPlugin from "stylelint-webpack-plugin"
 import FaviconsWebpackPlugin from "favicons-webpack-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
-import OfflinePlugin from "offline-plugin"
+// import OfflinePlugin from "offline-plugin"
 import Webpack from "webpack"
 import WebpackConfig from "./core"
 
-const generateFaviconsWebpackPlugin = ({ path, cache }: any) => new FaviconsWebpackPlugin({
+import ManifestPlugin from "webpack-pwa-manifest"
+
+const generateFaviconsWebpackPlugin = ({ path, dev }: any) => new FaviconsWebpackPlugin({
   logo: pathLib.join(path, "assets", "logo.png"),
   prefix: "assets/",
-  persistentCache: cache,
+  persistentCache: dev,
   inject: true,
+  icons: {
+    android: !dev,
+    appleIcon: !dev,
+    appleStartup: !dev,
+    coast: !dev,
+    favicons: true,
+    firefox: !dev,
+    opengraph: !dev,
+    twitter: !dev,
+    yandex: !dev,
+    windows: !dev,
+  },
 })
 
-const generateOfflinePlugin = (dev: boolean) => {
+/*const generateOfflinePlugin = (dev: boolean) => {
   const options: any = {
     safeToUseOptionalCaches: true,
     appShell: "/",
@@ -47,12 +61,13 @@ const generateOfflinePlugin = (dev: boolean) => {
   if(dev) {
     options.excludes = [
       "assets/.cache",
-      "**/*.hot-update.js",
+      */ // "**/*.hot-update.js",
+      /*
     ]
   }
 
   return new OfflinePlugin(options)
-}
+}*/
 
 const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new WebpackConfig({
 
@@ -72,13 +87,22 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
 
   development: () => [
     new Webpack.HotModuleReplacementPlugin(),
-    generateFaviconsWebpackPlugin({ path, cache: true }),
-    generateOfflinePlugin(true),
+    generateFaviconsWebpackPlugin({ path, dev: true }),
+    // generateOfflinePlugin(true),
+    new ManifestPlugin({
+      name: kiwiConfig.project.title,
+      short_name: kiwiConfig.project.title,
+      description: kiwiConfig.project.description,
+      orientation: "portrait",
+      display: "standalone",
+      start_url: "/",
+      inject: true,
+    }),
   ],
 
   production: () => [
-    generateFaviconsWebpackPlugin({ path, cache: false }),
-    generateOfflinePlugin(false),
+    generateFaviconsWebpackPlugin({ path, dev: false }),
+    // generateOfflinePlugin(false),
   ],
 
 })

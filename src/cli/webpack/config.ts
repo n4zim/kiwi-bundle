@@ -10,6 +10,7 @@ interface WebpackConfig extends Webpack.Configuration {
   entry: any
   output: any
   devServer?: any
+  optimization: any
 }
 
 export default (path: string, outputPath: string, kiwiConfig: any, mode: WebpackMode): WebpackConfig => {
@@ -32,6 +33,7 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
 
     entry: {
       main: [ pathLib.join(clientPath, "index.ts") ],
+      // sw: [ pathLib.join(bundlePath, "src", "client", "serviceWorker.ts") ],
     },
 
     output: {
@@ -40,8 +42,13 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
         const isProd = mode === WebpackMode.PRODUCTION
         return `js/[name]${hasHash ? `.[${isProd ? "contenthash" : "hash"}]` : ""}${isProd ? ".min" : ""}.js`
       },
-      chunkFilename: `js/[name].[contenthash]${mode === WebpackMode.PRODUCTION ? ".min" : ""}.js`,
+      /*chunkFilename: (data: any) => {
+        const hasHash = data.chunk.name !== "sw"
+        const isProd = mode === WebpackMode.PRODUCTION
+        return `js/[name]${hasHash ? `.[${isProd ? "contenthash" : "hash"}]` : ""}${isProd ? ".min" : ""}.js`
+      },*/
       path: outputPath,
+      globalObject: "this",
     },
 
     module: {
@@ -53,13 +60,18 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
     performance: {
       hints: false,
     },
+
+    optimization: {
+      runtimeChunk: true,
+    },
   }
 
   // Service Worker
-  const serviceWorkerPath = pathLib.join(clientPath, "serviceWorker", "index.ts")
+  // const serviceWorkerPath = pathLib.join(clientPath, "serviceWorker", "index.ts")
+  /*const serviceWorkerPath = pathLib.join(clientPath, "sw.ts")
   const serviceWorkerExists = fs.existsSync(serviceWorkerPath)
   if(serviceWorkerExists) config.entry.sw = serviceWorkerPath
-  webpackConsoleLog(serviceWorkerExists ? "Service worker detected" : "No service worker found")
+  webpackConsoleLog(serviceWorkerExists ? "Service worker detected" : "No service worker found")*/
 
   // Mode options
   if(mode === WebpackMode.DEVELOPMENT) {
@@ -90,16 +102,14 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
     config.devtool = "source-map"
 
     // OPTIMIZATION
-    config.optimization = {
-      splitChunks: {
-        cacheGroups: {
-          vendors: {
-            name: "vendors",
-            test: /[\\/]node_modules[\\/]/,
-            chunks: "all",
-          }
-        }
-      }
+    config.optimization.splitChunks = {
+      cacheGroups: {
+        vendors: {
+          name: "vendors",
+          test: /[\\/]node_modules[\\/]/,
+          chunks: "all",
+        },
+      },
     }
   }
 
