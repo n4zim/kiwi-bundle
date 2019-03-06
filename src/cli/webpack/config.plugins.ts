@@ -3,13 +3,11 @@ import { CheckerPlugin } from "awesome-typescript-loader"
 import StyleLintPlugin from "stylelint-webpack-plugin"
 import FaviconsWebpackPlugin from "favicons-webpack-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
-// import OfflinePlugin from "offline-plugin"
+import ManifestPlugin from "webpack-pwa-manifest"
 import Webpack from "webpack"
 import WebpackConfig from "./core"
 
-import ManifestPlugin from "webpack-pwa-manifest"
-
-const generateFaviconsWebpackPlugin = ({ path, dev }: any) => new FaviconsWebpackPlugin({
+const generateFaviconsPlugin = ({ path, dev }: any) => new FaviconsWebpackPlugin({
   logo: pathLib.join(path, "assets", "logo.png"),
   prefix: "assets/",
   persistentCache: dev,
@@ -28,46 +26,15 @@ const generateFaviconsWebpackPlugin = ({ path, dev }: any) => new FaviconsWebpac
   },
 })
 
-/*const generateOfflinePlugin = (dev: boolean) => {
-  const options: any = {
-    safeToUseOptionalCaches: true,
-    appShell: "/",
-    publicPath: "/",
-    externals: [ "/" ],
-    caches: {
-      main: [
-        "index.html",
-        "js/*.js",
-        "assets/favicon.ico",
-        "assets/manifest.json",
-      ],
-      additional: [
-        "assets/manifest.webapp",
-        "assets/images/*",
-      ],
-      optional: [
-        ":rest:",
-      ]
-    },
-    ServiceWorker: {
-      events: true,
-      output: `js/offline${dev ? "" : ".min"}.js`,
-    },
-    AppCache: {
-      events: true,
-    }
-  }
-
-  if(dev) {
-    options.excludes = [
-      "assets/.cache",
-      */ // "**/*.hot-update.js",
-      /*
-    ]
-  }
-
-  return new OfflinePlugin(options)
-}*/
+const generateManifestPlugin = (kiwiConfig: any) => new ManifestPlugin({
+  name: kiwiConfig.project.title,
+  short_name: kiwiConfig.project.title,
+  description: kiwiConfig.project.description,
+  orientation: "portrait",
+  display: "standalone",
+  start_url: "/",
+  inject: true,
+})
 
 const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new WebpackConfig({
 
@@ -78,31 +45,26 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
       template: pathLib.join(bundlePath, "opt", "index.html.ejs"),
       title: kiwiConfig.project.title,
       description: kiwiConfig.project.description,
+      getServiceWorkerPath: (webpack: any) => {
+        return webpack.chunks.find((c: any) => c.id === "sw").files[0]
+      },
       excludeChunks: [ "sw" ],
       minify: {
         collapseWhitespace: true,
+        minifyJS: true,
       },
     }),
   ],
 
   development: () => [
     new Webpack.HotModuleReplacementPlugin(),
-    generateFaviconsWebpackPlugin({ path, dev: true }),
-    // generateOfflinePlugin(true),
-    new ManifestPlugin({
-      name: kiwiConfig.project.title,
-      short_name: kiwiConfig.project.title,
-      description: kiwiConfig.project.description,
-      orientation: "portrait",
-      display: "standalone",
-      start_url: "/",
-      inject: true,
-    }),
+    generateFaviconsPlugin({ path, dev: true }),
+    generateManifestPlugin(kiwiConfig),
   ],
 
   production: () => [
-    generateFaviconsWebpackPlugin({ path, dev: false }),
-    // generateOfflinePlugin(false),
+    generateFaviconsPlugin({ path, dev: false }),
+    generateManifestPlugin(kiwiConfig),
   ],
 
 })

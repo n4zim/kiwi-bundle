@@ -8,5 +8,10 @@
 </head>
 <body>
   <div id="render"></div>
+  <script>
+    window.kiwi = {
+      sw: "<%= htmlWebpackPlugin.options.getServiceWorkerPath(webpack) %>",
+    }
+  </script>
 </body>
 </html>

@@ -1,66 +1,44 @@
-// import * as OfflinePluginRuntime from "offline-plugin/runtime"
 import { render } from "react-dom"
 import logger from "./logger"
 import Router from "./routes/Router"
+import "./serviceWorkerClient"
 
-import Worker from "worker-loader!./serviceWorker"
-
-const worker = new Worker()
-worker.postMessage({ a: 1 })
-worker.onmessage = (event: any) => {
-  console.log(event)
+if(typeof module.hot !== "undefined") {
+  module.hot.accept()
 }
-worker.addEventListener("message", (event: any) => {
-  console.log(event)
-})
-interface NodeModuleHot extends NodeModule {
-  hot?: any
-}
-
-declare var module: NodeModuleHot
-const hotReloading = typeof module.hot !== "undefined"
-if(hotReloading) logger.logInfo("Hot", "Enabled")
-
-/*if("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").then(function(registration) {
-    console.log("Service worker registration succeeded:", registration)
-  }, function(error) {
-    console.log("Service worker registration failed:", error)
-  })
-} else {
-  console.log("Service workers are not supported.")
-}*/
-
-/*OfflinePluginRuntime.install({
-  onInstalled: () => {
-    console.log("onInstalled")
-  },
-
-  onUpdating: () => {
-    console.log("onUpdating")
-  },
-
-  onUpdateReady: () => {
-    console.log("onUpdateReady")
-    OfflinePluginRuntime.applyUpdate()
-  },
-
-  onUpdated: () => {
-    console.log("onUpdated")
-    window.location.reload()
-  }
-})*/
 
 export default class Client {
   constructor(router: Router) {
     render(router.render(), document.getElementById("render"))
-    logger.logInfo(this, "Started")
+    logger.logSuccess(this, "Started")
 
-    if(hotReloading) {
-      module.hot.accept()
-      const moduleCacheChildren = require.cache[0].children
-      const clientModuleName = moduleCacheChildren[moduleCacheChildren.length - 1]
-      require.cache[clientModuleName].hot.accept()
+    if(typeof module.hot !== "undefined") {
+
+      // Bundle
+      // module.hot.accept()
+
+      /*.map((module: NodeModule) => {
+        if(typeof module.hot !== "undefined") {
+          module.hot.accept("./src/client/pages/Home.tsx", () => {
+            console.log("HEY")
+          })
+        }
+      })*/
+
+      // Client
+      const moduleCacheChildren: string[] = require.cache[0].children
+      const clientModuleName: string = moduleCacheChildren[moduleCacheChildren.length - 1]
+      const clientModule: NodeModule = require.cache[clientModuleName]
+      if(typeof clientModule.hot !== "undefined") {
+        logger.logInfo("Hot", "Listening")
+
+        /*require.cache.map((module: NodeModule) => {
+          clientModule.hot.accept("./src/client/pages/Home.tsx", () => {
+            console.log("HEY")
+          })
+        })*/
+      }
+
     }
   }
 }

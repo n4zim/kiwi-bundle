@@ -1,4 +1,4 @@
-import Webpack from "webpack"
+import Webpack, { NamedChunksPlugin } from "webpack"
 import pathLib from "path"
 import fs from "fs"
 import { WebpackMode } from "./core"
@@ -11,6 +11,12 @@ interface WebpackConfig extends Webpack.Configuration {
   output: any
   devServer?: any
   optimization: any
+}
+
+const generateJsOutputPath = (mode: WebpackMode, data?: any) => {
+  const isSw = typeof data !== "undefined" && data.chunk.name === "sw"
+  const isProd = mode === WebpackMode.PRODUCTION
+  return `${isSw ? "" : "js/"}[name].${isProd ? "[contenthash].min" : "[hash]"}.js`
 }
 
 export default (path: string, outputPath: string, kiwiConfig: any, mode: WebpackMode): WebpackConfig => {
@@ -33,22 +39,13 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
 
     entry: {
       main: [ pathLib.join(clientPath, "index.ts") ],
-      // sw: [ pathLib.join(bundlePath, "src", "client", "serviceWorker.ts") ],
+      sw: pathLib.join(bundlePath, "src", "client", "serviceWorker.ts"),
     },
 
     output: {
-      filename: (data: any) => {
-        const hasHash = data.chunk.name !== "sw"
-        const isProd = mode === WebpackMode.PRODUCTION
-        return `js/[name]${hasHash ? `.[${isProd ? "contenthash" : "hash"}]` : ""}${isProd ? ".min" : ""}.js`
-      },
-      /*chunkFilename: (data: any) => {
-        const hasHash = data.chunk.name !== "sw"
-        const isProd = mode === WebpackMode.PRODUCTION
-        return `js/[name]${hasHash ? `.[${isProd ? "contenthash" : "hash"}]` : ""}${isProd ? ".min" : ""}.js`
-      },*/
+      filename: (data: any) => generateJsOutputPath(mode, data),
+      chunkFilename: generateJsOutputPath(mode),
       path: outputPath,
-      globalObject: "this",
     },
 
     module: {
@@ -57,36 +54,37 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
 
     plugins: configPlugins(path, bundlePath, kiwiConfig).generate(mode),
 
+    devtool: mode === WebpackMode.PRODUCTION ? "source-map" : "eval",
+
     performance: {
       hints: false,
     },
 
     optimization: {
-      runtimeChunk: true,
+      splitChunks: {
+        cacheGroups: {
+          vendors: {
+            name: "vendors",
+            test: /[\\/]node_modules[\\/]/,
+            chunks: "all",
+          },
+        },
+      },
     },
   }
-
-  // Service Worker
-  // const serviceWorkerPath = pathLib.join(clientPath, "serviceWorker", "index.ts")
-  /*const serviceWorkerPath = pathLib.join(clientPath, "sw.ts")
-  const serviceWorkerExists = fs.existsSync(serviceWorkerPath)
-  if(serviceWorkerExists) config.entry.sw = serviceWorkerPath
-  webpackConsoleLog(serviceWorkerExists ? "Service worker detected" : "No service worker found")*/
 
   // Mode options
   if(mode === WebpackMode.DEVELOPMENT) {
 
-    // ENTRY
+    // DEV SERVER & HOT RELOADER ENTRIES
+    config.entry.main.unshift(pathLib.join(bundlePath, "lib/cli/webpack/server.js"))
+    // config.entry.main.unshift("webpack/hot/only-dev-server")
     config.entry.main.unshift(
       "webpack-dev-server/client"
         + `?http://${kiwiConfig.platforms.web.devHost}:${kiwiConfig.platforms.web.devPort}`
     )
-    config.entry.main.unshift("webpack/hot/only-dev-server")
 
-    // DEV TOOL
-    config.devtool = "eval"
-
-    // DEV SERVER
+    // DEV SERVER CONFIG
     config.devServer = {
       host: kiwiConfig.platforms.web.devHost,
       port: kiwiConfig.platforms.web.devPort,
@@ -96,21 +94,9 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
       hot: true,
     }
 
-  } else  if(mode === WebpackMode.PRODUCTION) {
+    // GLOBAL VARS
+    config.output.globalObject = "(typeof self !== 'undefined' ? self : this)"
 
-    // DEV TOOL
-    config.devtool = "source-map"
-
-    // OPTIMIZATION
-    config.optimization.splitChunks = {
-      cacheGroups: {
-        vendors: {
-          name: "vendors",
-          test: /[\\/]node_modules[\\/]/,
-          chunks: "all",
-        },
-      },
-    }
   }
 
   return config

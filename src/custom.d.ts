@@ -5,3 +5,5 @@ declare module "worker-loader!*" {
       constructor()
   }
 }
+
+declare var module: NodeModule

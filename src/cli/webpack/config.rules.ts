@@ -11,13 +11,6 @@ const rules = new WebpackConfig([
     use: [ "babel-loader", "awesome-typescript-loader" ],
     exclude: /node_modules/,
   },
-  /*{
-    // test: /\/client\/sw\.js$/,
-    // use: { loader: "worker-loader" },
-    // exclude: /node_modules/,
-    loader: "worker-loader",
-    options: { inline: true },
-  },*/
   {
     test: /\.css$/,
     use: [
