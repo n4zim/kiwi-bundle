@@ -1,40 +1,42 @@
 import pathLib from "path"
 import { CheckerPlugin } from "awesome-typescript-loader"
 import StyleLintPlugin from "stylelint-webpack-plugin"
-import FaviconsWebpackPlugin from "favicons-webpack-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
-import ManifestPlugin from "webpack-pwa-manifest"
+import AppManifestWebpackPlugin from "app-manifest-webpack-plugin"
 import Webpack from "webpack"
 import WebpackConfig from "./core"
 
-const generateFaviconsPlugin = ({ path, dev }: any) => new FaviconsWebpackPlugin({
-  logo: pathLib.join(path, "assets", "logo.png"),
-  prefix: "assets/",
-  persistentCache: dev,
-  inject: true,
-  icons: {
-    android: !dev,
-    appleIcon: !dev,
-    appleStartup: !dev,
-    coast: !dev,
-    favicons: true,
-    firefox: !dev,
-    opengraph: !dev,
-    twitter: !dev,
-    yandex: !dev,
-    windows: !dev,
-  },
-})
-
-const generateManifestPlugin = (kiwiConfig: any) => new ManifestPlugin({
-  name: kiwiConfig.project.title,
-  short_name: kiwiConfig.project.title,
-  description: kiwiConfig.project.description,
-  orientation: "portrait",
-  display: "standalone",
-  start_url: "/",
-  inject: true,
-})
+const generateIconsAndManifest = (kiwiConfig: any, path: string, cache: boolean) => {
+  return new AppManifestWebpackPlugin({
+    logo: pathLib.join(path, "assets", "logo.png"),
+    prefix: "/static/icons/",
+    output: "static/icons/",
+    inject: true,
+    emitStats: false,
+    persistentCache: cache,
+    config: {
+      appName: kiwiConfig.project.title,
+      appDescription: kiwiConfig.project.description,
+      lang: kiwiConfig.project.lang,
+      developerName: kiwiConfig.project.author,
+      display: "standalone",
+      orientation: "portrait",
+      start_url: "/?homescreen=1",
+      icons: {
+        favicons: true,
+        android: true,
+        appleIcon: true,
+        appleStartup: true,
+        firefox: true,
+        twitter: true,
+        windows: true,
+        yandex: false,
+        coast: false,
+        opengraph: false,
+      },
+    }
+  })
+}
 
 const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new WebpackConfig({
 
@@ -45,8 +47,14 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
       template: pathLib.join(bundlePath, "opt", "index.html.ejs"),
       title: kiwiConfig.project.title,
       description: kiwiConfig.project.description,
-      getServiceWorkerPath: (webpack: any) => {
-        return webpack.chunks.find((c: any) => c.id === "sw").files[0]
+      generatekiwiConfig: (webpack: any) => {
+        const config: any = {}
+        if(Array.isArray(webpack.assetsByChunkName.sw)) {
+          config.sw = webpack.assetsByChunkName.sw[0]
+        } else {
+          config.sw = webpack.assetsByChunkName.sw
+        }
+        return `<script>window.kiwi=${JSON.stringify(config)}</script>`
       },
       excludeChunks: [ "sw" ],
       minify: {
@@ -58,13 +66,11 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
 
   development: () => [
     new Webpack.HotModuleReplacementPlugin(),
-    generateFaviconsPlugin({ path, dev: true }),
-    generateManifestPlugin(kiwiConfig),
+    generateIconsAndManifest(kiwiConfig, path, true),
   ],
 
   production: () => [
-    generateFaviconsPlugin({ path, dev: false }),
-    generateManifestPlugin(kiwiConfig),
+    generateIconsAndManifest(kiwiConfig, path, false),
   ],
 
 })

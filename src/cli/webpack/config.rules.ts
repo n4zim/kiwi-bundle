@@ -29,23 +29,23 @@ const rules = new WebpackConfig([
   {
     test: /\.(jpe?g|png|gif|svg)$/i,
     loaders: [
-      "file-loader?hash=sha512&digest=hex&name=assets/images/[hash].[ext]",
+      "file-loader?hash=sha512&digest=hex&name=static/images/[hash].[ext]",
       "image-webpack-loader?bypassOnDebug&optipng.optimizationLevel=7&gifsicle.interlaced=false",
     ],
   },
   {
     test: /\.(mov|mp4)$/,
     loaders: [
-      "file-loader?name=assets/medias/[hash].[ext]",
+      "file-loader?name=static/medias/[hash].[ext]",
     ],
   },
   {
     test: /\.(ttf|eot)$/,
-    use: { loader: "file-loader", options: { name: "assets/fonts/[hash].[ext]" } },
+    use: { loader: "file-loader", options: { name: "static/fonts/[hash].[ext]" } },
   },
   {
     test: /\.(woff|woff2)$/,
-    use: { loader: "url-loader", options: { name: "assets/fonts/[hash].[ext]", limit: 5000, mimetype: "application/font-woff" } },
+    use: { loader: "url-loader", options: { name: "static/fonts/[hash].[ext]", limit: 5000, mimetype: "application/font-woff" } },
   },
 ])
 
