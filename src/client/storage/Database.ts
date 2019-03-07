@@ -1,15 +1,14 @@
 import Repository from "./Repository"
 import { EntityConstructor } from "./Entity"
 import logger from "../logger"
+import serviceWorkerClient from "../serviceWorkerClient"
 
-type StorageName = string
-
-class Storage {
-  name: StorageName
+class Database {
+  name: string
   repositories: Repository[]
   entities: { [name: string]: EntityConstructor } = {}
 
-  constructor(name: StorageName, repositories: Repository[]) {
+  constructor(name: string, repositories: Repository[]) {
     this.name = name
     this.repositories = repositories
 
@@ -45,11 +44,21 @@ class Storage {
   onSuccess(database: IDBDatabase) {
     let check = this.repositories.length
     this.repositories.forEach(repository => {
-      repository.newTransaction = () => {
-        return database.transaction(repository.name, "readwrite").objectStore(repository.name)
-      }
 
-      repository.handleQueue()
+      // Link Repository to Database
+      repository.database = database
+
+      // Call Repository requests
+      repository.callsQueue.map(handle => {
+        handle()
+      })
+
+      // Listen to new updates
+      repository.hooksQueue.map(hook => {
+        serviceWorkerClient.addChangesHook(database.name, repository.name, entity => {
+          hook(entity)
+        })
+      })
 
       logger.logInfo(repository, `Repository for ${this.name} loaded`)
 
@@ -64,4 +73,4 @@ class Storage {
 
 }
 
-export default Storage
+export default Database

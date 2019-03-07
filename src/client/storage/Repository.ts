@@ -1,5 +1,6 @@
 import { EntityParams } from "./Entity"
 import logger from "../logger"
+import serviceWorkerClient, { WorkerMessageChangeType } from "../serviceWorkerClient"
 
 interface RepositoryParams<Entity, EntityData> {
   name: string
@@ -9,17 +10,15 @@ interface RepositoryParams<Entity, EntityData> {
 
 type RequestCall = (store: IDBObjectStore) => IDBRequest
 
-interface RepositoryQueueElement {
-  requestCall: RequestCall
-  resolve: (promise: Promise<any>) => void
-}
+type Callback<Entity> = (entity: Entity) => void
 
 export default class Repository<Entity = {}, EntityData = {}> implements RepositoryParams<Entity, EntityData> {
   name: string
   version: number
   generateEntity: (params: EntityParams<EntityData>) => Entity
-  queue: RepositoryQueueElement[] = []
-  newTransaction?: () => IDBObjectStore
+  callsQueue: (() => void)[] = []
+  hooksQueue: Callback<Entity>[] = []
+  database?: IDBDatabase
 
   constructor(params: RepositoryParams<Entity, EntityData>) {
     this.name = params.name
@@ -39,20 +38,19 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
     })
   }
 
-  private execute(requestCall: RequestCall): Promise<any> {
-    return new Promise(resolve => {
-      if(typeof this.newTransaction === "undefined") {
-        this.queue.push({ requestCall, resolve })
-      } else {
-        resolve(this.handleRequest(requestCall(this.newTransaction())))
-      }
-    })
+  private generateRequest(database: IDBDatabase, requestCall: RequestCall) {
+    const store = database.transaction(this.name, "readwrite").objectStore(this.name)
+    return this.handleRequest(requestCall(store))
   }
 
-  handleQueue() {
-    this.queue.map(({ requestCall, resolve }) => {
-      if(typeof this.newTransaction !== "undefined") {
-        resolve(this.handleRequest(requestCall(this.newTransaction())))
+  private execute(requestCall: RequestCall): Promise<any> {
+    return new Promise(resolve => {
+      if(typeof this.database !== "undefined") {
+        resolve(this.generateRequest(this.database, requestCall))
+      } else {
+        this.callsQueue.push(() => {
+          resolve(this.execute(requestCall))
+        })
       }
     })
   }
@@ -73,12 +71,19 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
     return new Promise(resolve => {
       const entity = this.generateEntity({ data })
       resolve(entity)
+
       this.execute(store => store.put(entity)).then(() => {
         logger.logSuccess(this, `New ${this.name} record`, entity)
-      }).catch(() => {
-        logger.logError(this, `Record ${this.name} not saved`, entity)
+        serviceWorkerClient.propagateChanges<Entity, EntityData>(WorkerMessageChangeType.CREATE, this, entity)
+      }).catch(error => {
+        logger.logError(this, `Record ${this.name} not saved`, error, entity)
       })
+
     })
+  }
+
+  watchForNewEntries(action: Callback<Entity>) {
+    this.hooksQueue.push(action)
   }
 
 }

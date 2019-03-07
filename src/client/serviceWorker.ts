@@ -11,17 +11,10 @@ self.addEventListener("install", () => {
 })
 
 self.addEventListener("message", (event: any) => {
-  console.log(event.data)
-  const senderID = event.source.id
   event.waitUntil(self.clients.matchAll().then((clients: any) => {
     clients.forEach((client: any) => {
-      if(client.id === senderID) {
-        return
-      } else {
-        client.postMessage({
-          client: senderID,
-          message: event.data
-        })
+      if(client.id !== event.source.id) {
+        client.postMessage(event.data)
       }
     })
   }))
@@ -31,8 +24,8 @@ self.addEventListener("message", (event: any) => {
 
 // Service Worker Active
 self.addEventListener("activate", (event: any) => {
-  console.log("#SW Activated", event)
-  return self.clients.claim()
+  console.log("#SW Activated")
+  event.waitUntil(self.clients.claim())
 })
 
 /*self.addEventListener("fetch", (event: any) => {

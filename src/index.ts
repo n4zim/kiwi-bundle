@@ -8,7 +8,7 @@ import * as React from "react"
 import Repository from "./client/storage/Repository"
 import Route from "./client/routes/Route"
 import Router from "./client/routes/Router"
-import Storage from "./client/storage/Storage"
+import Database from "./client/storage/Database"
 import Store from "./client/stores/Store"
 import WebComponent from "./client/components/WebComponent"
 import WebPage from "./client/components/WebPage"
@@ -16,6 +16,7 @@ import WebPage from "./client/components/WebPage"
 export {
   action,
   Client,
+  Database,
   Entity,
   EntityParams,
   Link,
@@ -27,7 +28,6 @@ export {
   Repository,
   Route,
   Router,
-  Storage,
   Store,
   WebComponent,
   WebPage,
