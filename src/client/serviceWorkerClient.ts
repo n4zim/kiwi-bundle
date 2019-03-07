@@ -1,5 +1,5 @@
-import Entity from "./storage/Entity"
 import Repository from "./storage/Repository"
+import logger from "./logger"
 
 interface WindowKiwi extends Window {
   kiwi: { sw: string }
@@ -7,28 +7,24 @@ interface WindowKiwi extends Window {
 
 const W = window as WindowKiwi
 
-export enum WorkerMessageType {
-  CHANGE = "c",
-}
+export enum WorkerMessageType { CHANGE, CACHE }
+export enum WorkerMessageChangeType { CREATE, UPDATE, DELETE }
 
-export enum WorkerMessageChangeType {
-  CREATE = "c",
-  UPDATE = "u",
-  DELETE = "d",
-}
-
-export interface WorkerMessage<Entity> {
+interface WorkerMessage {
   type: WorkerMessageType,
+}
+
+interface WorkerChangeMessage<Entity = any> extends WorkerMessage {
   change: WorkerMessageChangeType,
   database: string,
   store: string,
-  entity: Entity
+  entity: Entity,
 }
 
 type Hook<Entity> = { [databaseAndStore: string]: (entity: Entity) => void }
 
 class ServiceWorkerClient {
-  // queue: (() => void)[] = []
+  queue: any[] = []
   changesHooks: Hook<any> = {}
 
   constructor() {
@@ -36,7 +32,7 @@ class ServiceWorkerClient {
       window.addEventListener("load", () => {
 
         navigator.serviceWorker.onmessage = (event: any) => {
-          const message: WorkerMessage<any> = event.data
+          const message: WorkerChangeMessage = event.data
           if(message.type === WorkerMessageType.CHANGE) {
             const hook = this.changesHooks[`${message.database}-${message.store}`]
             if(typeof hook !== "undefined") {
@@ -48,25 +44,33 @@ class ServiceWorkerClient {
         navigator.serviceWorker.register(W.kiwi.sw).then(() => {
           return navigator.serviceWorker.ready
         }).then(() => {
-          console.log("#CLIENT READY")
-          // TODO : handle queue
+          logger.logSuccess("ServiceWorker", "Ready")
+
+          this.postMessage({
+            type: WorkerMessageType.CACHE,
+          })
         })
       })
     }
   }
 
-  propagateChanges<Entity, EntityData>(type: WorkerMessageChangeType, repository: Repository<Entity, EntityData>, entity: Entity) {
+  private postMessage<Type>(message: Type) {
     const controller = navigator.serviceWorker.controller
-    if(controller !== null && typeof repository.database !== "undefined") {
-      controller.postMessage({
-        type: WorkerMessageType.CHANGE,
-        change: type,
-        database: repository.database.name,
-        store: repository.name,
-        entity
-      } as WorkerMessage<Entity>)
+    if(controller !== null) {
+      return controller.postMessage(message)
+    } else {
+      return null
     }
-    // TODO : create queue
+  }
+
+  propagateChanges<Entity>(type: WorkerMessageChangeType, databaseName: string, storeName: string, entity: Entity) {
+    this.postMessage<WorkerChangeMessage>({
+      type: WorkerMessageType.CHANGE,
+      change: type,
+      database: databaseName,
+      store: storeName,
+      entity,
+    })
   }
 
   addChangesHook<Entity>(database: string, store: string, action: (entity: Entity) => void) {

@@ -7,6 +7,10 @@ export interface WebComponentInterface {
 
 export default class WebComponent<Props = {}, S = {}, SS = any> extends Component<Props, S, SS> {
 
+  constructor(props: Props) {
+    super(props)
+  }
+
   componentDidMount() {
     logger.logView(this, "Mounted")
   }

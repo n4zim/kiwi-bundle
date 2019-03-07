@@ -16,9 +16,10 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
   name: string
   version: number
   generateEntity: (params: EntityParams<EntityData>) => Entity
-  callsQueue: (() => void)[] = []
-  hooksQueue: Callback<Entity>[] = []
-  database?: IDBDatabase
+  private localCallsQueue: (() => void)[] = []
+  private hooksQueue: Callback<Entity>[] = []
+  private swCallsQueue: any = []
+  private database?: IDBDatabase
 
   constructor(params: RepositoryParams<Entity, EntityData>) {
     this.name = params.name
@@ -48,11 +49,41 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
       if(typeof this.database !== "undefined") {
         resolve(this.generateRequest(this.database, requestCall))
       } else {
-        this.callsQueue.push(() => {
+        this.localCallsQueue.push(() => {
           resolve(this.execute(requestCall))
         })
       }
     })
+  }
+
+  private propagateToServiceWorker(type: WorkerMessageChangeType, entity: Entity) {
+    if(typeof this.database !== "undefined") {
+      serviceWorkerClient.propagateChanges<Entity>(type, this.database.name, this.name, entity)
+    } else {
+      this.swCallsQueue({ type, entity })
+    }
+  }
+
+  init(database: IDBDatabase) {
+      // Link Repository to Database
+      this.database = database
+
+      // Handle queued local requests for IndexedDB
+      this.localCallsQueue.map(execute => {
+        execute()
+      })
+
+      // Handle queued Service Worker changes
+      this.swCallsQueue.map((call: any) => {
+        this.propagateToServiceWorker(call.type, call.entity)
+      })
+
+      // Handle queued hook to listen for new updates
+      this.hooksQueue.map(hook => {
+        serviceWorkerClient.addChangesHook(database.name, this.name, (entity: Entity) => {
+          hook(entity)
+        })
+      })
   }
 
   findAll(): Promise<Entity[]> {
@@ -71,10 +102,9 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
     return new Promise(resolve => {
       const entity = this.generateEntity({ data })
       resolve(entity)
-
       this.execute(store => store.put(entity)).then(() => {
         logger.logSuccess(this, `New ${this.name} record`, entity)
-        serviceWorkerClient.propagateChanges<Entity, EntityData>(WorkerMessageChangeType.CREATE, this, entity)
+        this.propagateToServiceWorker(WorkerMessageChangeType.CREATE, entity)
       }).catch(error => {
         logger.logError(this, `Record ${this.name} not saved`, error, entity)
       })
