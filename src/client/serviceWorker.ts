@@ -10,26 +10,6 @@ const log = (title: string, ...args: any) => {
   }
 }
 
-self.addEventListener("install", (event: any) => {
-  log("install", event)
-  event.waitUntil(self.skipWaiting())
-})
-
-self.addEventListener("activate", (event: any) => {
-  log("activate")
-  event.waitUntil(self.clients.claim())
-})
-
-self.addEventListener("message", (event: any) => {
-  event.waitUntil(self.clients.matchAll().then((clients: any) => {
-    clients.forEach((client: any) => {
-      if(client.id !== event.source.id) {
-        client.postMessage(event.data)
-      }
-    })
-  }))
-})
-
 const getSplitedPath = (request: Request|Response) => {
   const path = /^https?\:\/\/(?:.*?)\/(.*)$/.exec(request.url)
   if(path !== null && path.length === 2) {
@@ -39,7 +19,7 @@ const getSplitedPath = (request: Request|Response) => {
   }
 }
 
-const fetchIsAccepted = (splitedPath: string[]) => {
+const isRessourceAcceptedOnFetch = (splitedPath: string[]) => {
   return splitedPath.length >= 1
     && splitedPath[0] !== "sockjs-node"
     && !/^.*\.hot-update.js(on)?$/.test(splitedPath[0])
@@ -75,60 +55,79 @@ const cleanCache = (cache: Cache, splitedPath: string[]) => {
   }
 }
 
+const informClientIfUpdated = (original: Response, latest: Response|undefined) => {
+  if(typeof latest !== "undefined" && latest.headers.get("ETag") !== original.headers.get("ETag")) {
+    self.clients.matchAll().then((clients: any) => {
+      clients.forEach((client: any) => {
+        client.postMessage({ type: WorkerMessageType.CACHE })
+      })
+    })
+  }
+}
+
+const onNotCachedRessource = (event: any, cache: Cache) => {
+  const networkFetch = fetch(event.request)
+  event.waitUntil( // Cache ressource on backgroud
+    networkFetch.then(networkResponse => {
+      return cache.put(event.request, networkResponse.clone())
+    })
+  )
+  return networkFetch // Network ressource
+}
+
+const onCachedRessource = (event: any, cache: Cache, cacheResponse: Response, splitedPath: string[]) => {
+  event.waitUntil( // Check new version on background
+    fetch(event.request).then(networkResponse => {
+      return cache.put(event.request, networkResponse.clone()).then(() => {
+        return cache.match(event.request)
+          .then(newCacheResponse => informClientIfUpdated(cacheResponse, newCacheResponse))
+          .then(() => cleanCache(cache, splitedPath))
+      })
+    })
+  )
+  return cacheResponse // Cache ressource
+}
+
+// -------------------------------------------------------------------------------------
+
+self.addEventListener("install", (event: any) => {
+  log("install", event)
+  event.waitUntil(self.skipWaiting())
+})
+
+self.addEventListener("activate", (event: any) => {
+  log("activate")
+  event.waitUntil(self.clients.claim())
+})
+
 self.addEventListener("fetch", (event: any) => {
   if(event.request.method === "GET") {
     const splitedPath = getSplitedPath(event.request)
-    if(fetchIsAccepted(splitedPath)) {
+    if(isRessourceAcceptedOnFetch(splitedPath)) {
       log("fetch", event.request.url)
       event.respondWith(
         caches.open("offline").then(cache => {
           return cache.match(event.request).then(cacheResponse => {
-
-            // Ressource not yet cached
             if(typeof cacheResponse === "undefined") {
-              const networkFetch = fetch(event.request)
-              event.waitUntil( // Cache ressource in the backgroud
-                networkFetch.then(networkResponse => {
-                  return cache.put(event.request, networkResponse.clone())
-                })
-              )
-              return networkFetch // Return network ressource
-
-            // Ressource already cached
+              return onNotCachedRessource(event, cache)
             } else {
-              event.waitUntil( // Check new ressource version in the background
-                fetch(event.request).then(networkResponse => {
-                  return cache.put(event.request, networkResponse.clone()).then(() => {
-                    return cache.match(event.request)
-
-                      // Inform client for potential updates
-                      .then(newCacheResponse => {
-                        if(
-                          typeof newCacheResponse !== "undefined"
-                          && newCacheResponse.headers.get("ETag") !== cacheResponse.headers.get("ETag")
-                        ) {
-                          self.clients.matchAll().then((clients: any) => {
-                            clients.forEach((client: any) => {
-                              client.postMessage({ type: WorkerMessageType.CACHE })
-                            })
-                          })
-                        }
-                      })
-
-                      // Remove old ressources
-                      .then(() => {
-                        cleanCache(cache, splitedPath)
-                      })
-
-                  })
-                })
-              )
-              return cacheResponse // Return cache ressource
+              return onCachedRessource(event, cache, cacheResponse, splitedPath)
             }
-
           })
         })
       )
     }
   }
+})
+
+self.addEventListener("message", (event: any) => {
+  log("message", `FROM ${event.source.id} :`, event.data)
+  // Echo messages for all clients (except the emitter)
+  event.waitUntil(self.clients.matchAll().then((clients: any) => {
+    clients.forEach((client: any) => {
+      if(client.id !== event.source.id) {
+        client.postMessage(event.data)
+      }
+    })
+  }))
 })
