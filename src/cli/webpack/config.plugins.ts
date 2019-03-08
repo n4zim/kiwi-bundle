@@ -6,14 +6,13 @@ import AppManifestWebpackPlugin from "app-manifest-webpack-plugin"
 import Webpack from "webpack"
 import WebpackConfig from "./core"
 
-const generateIconsAndManifest = (kiwiConfig: any, path: string, cache: boolean) => {
+const generateIconsAndManifest = (kiwiConfig: any, path: string, cacheEnabled: boolean) => {
   return new AppManifestWebpackPlugin({
     logo: pathLib.join(path, "assets", "logo.png"),
     prefix: "/static/icons/",
     output: "static/icons/",
+    persistentCache: cacheEnabled,
     inject: true,
-    emitStats: false,
-    persistentCache: cache,
     config: {
       appName: kiwiConfig.project.title,
       appDescription: kiwiConfig.project.description,
@@ -58,8 +57,8 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
       },
       excludeChunks: [ "sw" ],
       minify: {
+        preserveLineBreaks: true,
         collapseWhitespace: true,
-        minifyJS: true,
       },
     }),
   ],

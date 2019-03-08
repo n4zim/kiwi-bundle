@@ -1,4 +1,4 @@
-import Repository from "./storage/Repository"
+import { WorkerChangeMessage, WorkerMessageType, WorkerMessageChangeType } from "./serviceWorkerTypes"
 import logger from "./logger"
 
 interface WindowKiwi extends Window {
@@ -6,20 +6,6 @@ interface WindowKiwi extends Window {
 }
 
 const W = window as WindowKiwi
-
-export enum WorkerMessageType { CHANGE, CACHE }
-export enum WorkerMessageChangeType { CREATE, UPDATE, DELETE }
-
-interface WorkerMessage {
-  type: WorkerMessageType,
-}
-
-interface WorkerChangeMessage<Entity = any> extends WorkerMessage {
-  change: WorkerMessageChangeType,
-  database: string,
-  store: string,
-  entity: Entity,
-}
 
 type Hook<Entity> = { [databaseAndStore: string]: (entity: Entity) => void }
 
@@ -33,11 +19,17 @@ class ServiceWorkerClient {
 
         navigator.serviceWorker.onmessage = (event: any) => {
           const message: WorkerChangeMessage = event.data
+
+          // Change
           if(message.type === WorkerMessageType.CHANGE) {
             const hook = this.changesHooks[`${message.database}-${message.store}`]
             if(typeof hook !== "undefined") {
               hook(message.entity)
             }
+
+          // Cache
+          } else if(message.type === WorkerMessageType.CACHE) {
+            console.log("REFRESH", message)
           }
         }
 

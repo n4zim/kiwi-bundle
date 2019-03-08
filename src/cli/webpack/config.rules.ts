@@ -3,12 +3,12 @@ import WebpackConfig from "./core"
 const rules = new WebpackConfig([
   {
     test: /\.js$/,
-    use: [ "babel-loader", "source-map-loader" ],
+    use: [ "babel-loader?cacheDirectory", "source-map-loader" ],
     exclude: /node_modules/,
   },
   {
     test: /\.tsx?$/,
-    use: [ "babel-loader", "awesome-typescript-loader" ],
+    use: [ "babel-loader?cacheDirectory", "awesome-typescript-loader" ],
     exclude: /node_modules/,
   },
   {

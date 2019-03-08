@@ -1,4 +1,5 @@
 import logger from "./logger"
+import { WorkerMessageType } from "./serviceWorkerTypes"
 
 declare var self: any
 declare var window: any
@@ -8,18 +9,17 @@ const log = (title: string, ...args: any) => {
 }
 
 self.addEventListener("install", (event: any) => {
-  self.skipWaiting()
+  console.log("INSTALL")
+  event.waitUntil(self.skipWaiting())
+})
 
-  /*event.waitUntil(
-    caches.open("offline").then(function(cache) {
-      return cache.addAll([
-        "/",
-      ])
-    })
-  )*/
+self.addEventListener("activate", (event: any) => {
+  console.log("ACTIVATE")
+  event.waitUntil(self.clients.claim())
 })
 
 self.addEventListener("message", (event: any) => {
+  console.log("MESSAGE")
   event.waitUntil(self.clients.matchAll().then((clients: any) => {
     clients.forEach((client: any) => {
       if(client.id !== event.source.id) {
@@ -29,31 +29,83 @@ self.addEventListener("message", (event: any) => {
   }))
 })
 
-// ******************************************
+const getSplitedPath = (request: Request|Response) => {
+  const path = /^https?\:\/\/(?:.*?)\/(.*)$/.exec(request.url)
+  if(path !== null && path.length === 2) {
+    return path[1].split("/")
+  } else {
+    return []
+  }
+}
 
-// Service Worker Active
-self.addEventListener("activate", (event: any) => {
-  log("Activation")
-  event.waitUntil(self.clients.claim())
-})
+const fetchIsAccepted = (splitedPath: string[]) => {
+  return splitedPath.length >= 1
+    && splitedPath[0] !== "sockjs-node"
+    && !/^.*\.hot-update.js(on)?$/.test(splitedPath[0])
+}
 
-self.addEventListener("fetch", (event: any) => {
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request)
-    })
-  )
-})
+const getAssetNameWithHash = (splitedPath: string[]) => {
+  const data = /^(.*?)\.[0-9a-z]+\.js$/.exec(splitedPath[1])
+  if(data !== null && data.length === 2) {
+    return data[1]
+  } else {
+    return null
+  }
+}
 
-self.addEventListener("fetch", (event: any) => {
-  event.respondWith(
-    caches.open("offline").then(cache => {
-      return cache.match(event.request).then(response => {
-        return response || fetch(event.request).then(response => {
-          cache.put(event.request, response.clone())
-          return response
+const cleanCache = (cache: Cache, splitedPath: string[]) => {
+  if(splitedPath.length === 2 && splitedPath[0] === "static") {
+    const hashAssetName = getAssetNameWithHash(splitedPath)
+    if(hashAssetName !== null) {
+      cache.matchAll().then(results => {
+        results.forEach(result => {
+          const resultSplitedPath = getSplitedPath(result)
+          if(
+            resultSplitedPath.length === 2
+            && splitedPath[1] !== resultSplitedPath[1]
+            && resultSplitedPath[0] === "static"
+            && new RegExp(`^${hashAssetName}\.[0-9a-z]+\.js$`).test(resultSplitedPath[1])
+          ) {
+            cache.delete(result.url)
+          }
         })
       })
-    })
-  )
+    }
+  }
+}
+
+self.addEventListener("fetch", (event: any) => {
+  if(event.request.method === "GET") {
+    const splitedPath = getSplitedPath(event.request)
+    if(fetchIsAccepted(splitedPath)) {
+      // console.log("FETCH", event.request.url)
+
+      // Response from cache
+      event.respondWith(caches.open("offline").then(cache => {
+        return cache.match(event.request)
+      }))
+
+      // Updating cache from network
+      event.waitUntil(
+        caches.open("offline").then(cache => {
+          return fetch(event.request).then(response => {
+            return cache.put(event.request, response.clone()).then(() => {
+              if(response.ok) cleanCache(cache, splitedPath)
+              return response
+            })
+          })
+        }).then(response => {
+          return self.clients.matchAll().then((clients: any) => {
+            clients.forEach((client: any) => {
+              client.postMessage(JSON.stringify({
+                type: WorkerMessageType.CACHE,
+                url: response.url,
+                eTag: response.headers.get("ETag")
+              }))
+            })
+          })
+        })
+      )
+    }
+  }
 })
