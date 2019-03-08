@@ -88,6 +88,30 @@ const onCachedRessource = (event: any, cache: Cache, cacheResponse: Response, sp
   return cacheResponse // Cache ressource
 }
 
+const fetchResponse = (request: Request, event: any, splitedPath: string[]) => {
+  return caches.open("offline").then(cache => {
+    return cache.match(request).then(cacheResponse => {
+      if(typeof cacheResponse === "undefined") {
+        return onNotCachedRessource(event, cache)
+      } else {
+        return onCachedRessource(event, cache, cacheResponse, splitedPath)
+      }
+    })
+  })
+}
+
+const convertToRootDocument = (request: Request) => {
+  const splitedUrl = request.url.split("/")
+  console.log(request)
+  return new Request(`${splitedUrl[0]}//${splitedUrl[2]}/`, {
+    method: "GET",
+    headers: request.headers,
+    mode: request.mode,
+    credentials: request.credentials,
+    redirect: request.redirect,
+  })
+}
+
 // -------------------------------------------------------------------------------------
 
 self.addEventListener("install", (event: any) => {
@@ -104,24 +128,19 @@ self.addEventListener("fetch", (event: any) => {
   if(event.request.method === "GET") {
     const splitedPath = getSplitedPath(event.request)
     if(isRessourceAcceptedOnFetch(splitedPath)) {
-      log("fetch", event.request.url)
-      event.respondWith(
-        caches.open("offline").then(cache => {
-          return cache.match(event.request).then(cacheResponse => {
-            if(typeof cacheResponse === "undefined") {
-              return onNotCachedRessource(event, cache)
-            } else {
-              return onCachedRessource(event, cache, cacheResponse, splitedPath)
-            }
-          })
-        })
-      )
+      if(event.request.destination === "document" && splitedPath[0].length > 0) {
+        log("fetch forwarded", event.request.url)
+        event.respondWith(fetchResponse(convertToRootDocument(event.request), event, splitedPath))
+      } else {
+        log("fetch", event.request.url)
+        event.respondWith(fetchResponse(event.request, event, splitedPath))
+      }
     }
   }
 })
 
 self.addEventListener("message", (event: any) => {
-  log("message", `FROM ${event.source.id} :`, event.data)
+  log("message", `FROM ${event.source.id} :`)
   // Echo messages for all clients (except the emitter)
   event.waitUntil(self.clients.matchAll().then((clients: any) => {
     clients.forEach((client: any) => {

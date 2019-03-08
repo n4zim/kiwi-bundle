@@ -38,10 +38,6 @@ class ServiceWorkerClient {
           return navigator.serviceWorker.ready
         }).then(() => {
           logger.logSuccess("ServiceWorker", "Ready")
-
-          this.postMessage({
-            type: WorkerMessageType.CACHE,
-          })
         })
       })
     }
