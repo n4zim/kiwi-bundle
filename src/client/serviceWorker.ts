@@ -1,25 +1,26 @@
-import logger from "./logger"
 import { WorkerMessageType } from "./serviceWorkerTypes"
 
 declare var self: any
-declare var window: any
+
+const ENABLE_LOGGER = true
 
 const log = (title: string, ...args: any) => {
-  logger.logInfo("ServiceWorker", title, ...args)
+  if(ENABLE_LOGGER) {
+    console.log(`ServiceWorker (${title})`, ...args)
+  }
 }
 
 self.addEventListener("install", (event: any) => {
-  console.log("INSTALL")
+  log("install", event)
   event.waitUntil(self.skipWaiting())
 })
 
 self.addEventListener("activate", (event: any) => {
-  console.log("ACTIVATE")
+  log("activate")
   event.waitUntil(self.clients.claim())
 })
 
 self.addEventListener("message", (event: any) => {
-  console.log("MESSAGE")
   event.waitUntil(self.clients.matchAll().then((clients: any) => {
     clients.forEach((client: any) => {
       if(client.id !== event.source.id) {
@@ -78,31 +79,53 @@ self.addEventListener("fetch", (event: any) => {
   if(event.request.method === "GET") {
     const splitedPath = getSplitedPath(event.request)
     if(fetchIsAccepted(splitedPath)) {
-      // console.log("FETCH", event.request.url)
-
-      // Response from cache
-      event.respondWith(caches.open("offline").then(cache => {
-        return cache.match(event.request)
-      }))
-
-      // Updating cache from network
-      event.waitUntil(
+      log("fetch", event.request.url)
+      event.respondWith(
         caches.open("offline").then(cache => {
-          return fetch(event.request).then(response => {
-            return cache.put(event.request, response.clone()).then(() => {
-              if(response.ok) cleanCache(cache, splitedPath)
-              return response
-            })
-          })
-        }).then(response => {
-          return self.clients.matchAll().then((clients: any) => {
-            clients.forEach((client: any) => {
-              client.postMessage(JSON.stringify({
-                type: WorkerMessageType.CACHE,
-                url: response.url,
-                eTag: response.headers.get("ETag")
-              }))
-            })
+          return cache.match(event.request).then(cacheResponse => {
+
+            // Ressource not yet cached
+            if(typeof cacheResponse === "undefined") {
+              const networkFetch = fetch(event.request)
+              event.waitUntil( // Cache ressource in the backgroud
+                networkFetch.then(networkResponse => {
+                  return cache.put(event.request, networkResponse.clone())
+                })
+              )
+              return networkFetch // Return network ressource
+
+            // Ressource already cached
+            } else {
+              event.waitUntil( // Check new ressource version in the background
+                fetch(event.request).then(networkResponse => {
+                  return cache.put(event.request, networkResponse.clone()).then(() => {
+                    return cache.match(event.request)
+
+                      // Inform client for potential updates
+                      .then(newCacheResponse => {
+                        if(
+                          typeof newCacheResponse !== "undefined"
+                          && newCacheResponse.headers.get("ETag") !== cacheResponse.headers.get("ETag")
+                        ) {
+                          self.clients.matchAll().then((clients: any) => {
+                            clients.forEach((client: any) => {
+                              client.postMessage({ type: WorkerMessageType.CACHE })
+                            })
+                          })
+                        }
+                      })
+
+                      // Remove old ressources
+                      .then(() => {
+                        cleanCache(cache, splitedPath)
+                      })
+
+                  })
+                })
+              )
+              return cacheResponse // Return cache ressource
+            }
+
           })
         })
       )

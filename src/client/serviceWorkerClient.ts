@@ -29,7 +29,8 @@ class ServiceWorkerClient {
 
           // Cache
           } else if(message.type === WorkerMessageType.CACHE) {
-            console.log("REFRESH", message)
+            console.log("RELOAD")
+            window.location.reload()
           }
         }
 
