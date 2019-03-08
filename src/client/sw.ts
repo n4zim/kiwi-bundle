@@ -1,4 +1,4 @@
-import { WorkerChangeMessage, WorkerMessageType, WorkerMessageChangeType } from "./serviceWorkerTypes"
+import { WorkerChangeMessage, WorkerMessageType, WorkerMessageChangeType } from "../sw/types"
 import logger from "./logger"
 
 interface WindowKiwi extends Window {

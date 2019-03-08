@@ -1,7 +1,7 @@
 import { EntityParams } from "./Entity"
 import logger from "../logger"
-import serviceWorkerClient from "../serviceWorkerClient"
-import { WorkerMessageChangeType } from "../serviceWorkerTypes"
+import serviceWorkerClient from "../sw"
+import { WorkerMessageChangeType } from "../../sw/types"
 
 interface RepositoryParams<Entity, EntityData> {
   name: string

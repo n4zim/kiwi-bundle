@@ -1,4 +1,4 @@
-import { WebpackMode } from "../cli/webpack/core"
+import { WebpackMode } from "../webpack/core"
 
 const generateCss = (color: string) => [
 //  "border: 1px solid black",

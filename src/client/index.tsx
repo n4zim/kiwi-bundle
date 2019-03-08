@@ -1,7 +1,7 @@
 import { render } from "react-dom"
 import logger from "./logger"
 import Router from "./routes/Router"
-import "./serviceWorkerClient"
+import "./sw"
 
 let STARTED = false
 

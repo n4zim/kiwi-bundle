@@ -19,7 +19,6 @@ const generateJsOutputPath = (mode: WebpackMode, data?: any) => {
 
 export default (path: string, outputPath: string, kiwiConfig: any, mode: WebpackMode): WebpackConfig => {
   const bundlePath = pathLib.join(path, "node_modules", "kiwi-bundle")
-  const clientPath = pathLib.join(path, "src", "client")
 
   // Common config
   const config: WebpackConfig = {
@@ -36,8 +35,8 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
     },
 
     entry: {
-      main: [ pathLib.join(clientPath, "index.ts") ],
-      sw: pathLib.join(bundlePath, "src", "client", "serviceWorker.ts"),
+      main: [ pathLib.join(path, "src", "client", "index.ts") ],
+      sw: pathLib.join(bundlePath, "src", "sw", "index.ts"),
     },
 
     output: {
@@ -76,7 +75,6 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
   if(mode === WebpackMode.DEVELOPMENT) {
 
     // DEV SERVER & HOT RELOADER ENTRIES
-    // config.entry.main.unshift(pathLib.join(bundlePath, "lib/cli/webpack/server.js"))
     config.entry.main.unshift("webpack/hot/only-dev-server")
     config.entry.main.unshift(
       "webpack-dev-server/client"

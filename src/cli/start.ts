@@ -2,10 +2,10 @@ import WebpackDevServer from "webpack-dev-server"
 import pathLib from "path"
 import Webpack from "webpack"
 import { readConfig } from "./config"
-import generateWebpackConfig from "./webpack/config"
+import generateWebpackConfig from "../webpack/config"
 import { webpackConsoleLog } from "./utils"
 import chalk from "chalk"
-import { WebpackMode } from "./webpack/core"
+import { WebpackMode } from "../webpack/core"
 
 export default (path: string) => {
   readConfig(path).then((kiwiConfig: any) => {

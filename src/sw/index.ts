@@ -1,4 +1,4 @@
-import { WorkerMessageType } from "./serviceWorkerTypes"
+import { WorkerMessageType } from "./types"
 
 declare var self: any
 

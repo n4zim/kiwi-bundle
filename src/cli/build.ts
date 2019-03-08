@@ -3,8 +3,8 @@ import pathLib from "path"
 import rimraf from "rimraf"
 import { webpackConsoleLog } from "./utils"
 import Webpack from "webpack"
-import generateWebpackConfig from "./webpack/config"
-import { WebpackMode } from "./webpack/core"
+import generateWebpackConfig from "../webpack/config"
+import { WebpackMode } from "../webpack/core"
 
 export default (path: string) => {
   readConfig(path).then((kiwiConfig: any) => {
