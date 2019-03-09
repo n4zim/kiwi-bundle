@@ -27,11 +27,18 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
     resolve: {
       extensions: [ ".ts", ".tsx", ".js" ],
       modules: [
-        pathLib.join(bundlePath, "node_modules")
+        pathLib.join(bundlePath, "node_modules"),
       ],
       alias: {
         "kiwi-bundle": bundlePath,
       },
+    },
+
+    resolveLoader: {
+      extensions: [ ".ts", ".tsx", ".js" ],
+      modules: [
+        pathLib.join(bundlePath, "node_modules"),
+      ],
     },
 
     entry: {

@@ -22,7 +22,13 @@ class ServiceWorkerClient {
       }
 
       navigator.serviceWorker.oncontrollerchange = () => {
-        this.forceCacheUpdate()
+        caches.open("offline").then(cache => {
+          cache.keys().then(keys => {
+            if(keys.length === 0) {
+              this.forceCacheUpdate()
+            }
+          })
+        })
       }
     }
 
@@ -31,7 +37,7 @@ class ServiceWorkerClient {
 
   load() {
     if(this.isCompatible) {
-      navigator.serviceWorker.register((window as any).kiwi.sw, { scope: "/" }).then(() => {
+      navigator.serviceWorker.register((window as any).kiwi.sw).then(() => {
         navigator.serviceWorker.ready.then(() => {
           logger.logSuccess("ServiceWorker", "Ready")
         })
@@ -46,7 +52,7 @@ class ServiceWorkerClient {
     })
     this.postMessage<WorkerCacheMessage>({
       type: WorkerMessageType.CACHE,
-      files: scripts,
+      scripts,
     })
   }
 

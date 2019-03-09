@@ -6,7 +6,7 @@ interface WorkerMessage {
 }
 
 export interface WorkerCacheMessage extends WorkerMessage {
-  files?: string[]
+  scripts?: string[]
 }
 
 export enum WorkerMessageChangeType { CREATE, UPDATE, DELETE }

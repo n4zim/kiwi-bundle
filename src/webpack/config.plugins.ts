@@ -44,6 +44,7 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
     new StyleLintPlugin(),
     new HtmlWebpackPlugin({
       template: pathLib.join(bundlePath, "opt", "index.html.ejs"),
+      lang: kiwiConfig.project.lang,
       title: kiwiConfig.project.title,
       description: kiwiConfig.project.description,
       generatekiwiConfig: (webpack: any) => {
