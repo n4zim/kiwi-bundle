@@ -1,46 +1,53 @@
-import { WorkerChangeMessage, WorkerMessageType, WorkerMessageChangeType } from "../sw/types"
+import { WorkerChangeMessage, WorkerMessageType, WorkerMessageChangeType, WorkerCacheMessage } from "../sw/types"
 import logger from "./logger"
-
-interface WindowKiwi extends Window {
-  kiwi: { sw: string }
-}
-
-const W = window as WindowKiwi
 
 type Hook<Entity> = { [databaseAndStore: string]: (entity: Entity) => void }
 
 class ServiceWorkerClient {
-  queue: any[] = []
-  changesHooks: Hook<any> = {}
+  private isCompatible: boolean = "serviceWorker" in navigator
+  private changesHooks: Hook<any> = {}
 
   constructor() {
-    if("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
+    if(this.isCompatible) {
+      navigator.serviceWorker.onmessage = (event: any) => {
+        const message: WorkerChangeMessage = event.data
 
-        navigator.serviceWorker.onmessage = (event: any) => {
-          const message: WorkerChangeMessage = event.data
+        if(message.type === WorkerMessageType.CACHE) {
+          // window.location.reload() // TODO : soft reload
 
-          // Change
-          if(message.type === WorkerMessageType.CHANGE) {
-            const hook = this.changesHooks[`${message.database}-${message.store}`]
-            if(typeof hook !== "undefined") {
-              hook(message.entity)
-            }
-
-          // Cache
-          } else if(message.type === WorkerMessageType.CACHE) {
-            console.log("RELOAD")
-            window.location.reload()
-          }
+        } else if(message.type === WorkerMessageType.CHANGE) {
+          const hook = this.changesHooks[`${message.database}-${message.store}`]
+          if(typeof hook !== "undefined") hook(message.entity)
         }
+      }
 
-        navigator.serviceWorker.register(W.kiwi.sw).then(() => {
-          return navigator.serviceWorker.ready
-        }).then(() => {
+      navigator.serviceWorker.oncontrollerchange = () => {
+        this.forceCacheUpdate()
+      }
+    }
+
+    this.load()
+  }
+
+  load() {
+    if(this.isCompatible) {
+      navigator.serviceWorker.register((window as any).kiwi.sw, { scope: "/" }).then(() => {
+        navigator.serviceWorker.ready.then(() => {
           logger.logSuccess("ServiceWorker", "Ready")
         })
       })
     }
+  }
+
+  forceCacheUpdate() {
+    const scripts: string[] = []
+    document.querySelectorAll("script").forEach(script => {
+      if(script.src.length !== 0) scripts.push(script.src)
+    })
+    this.postMessage<WorkerCacheMessage>({
+      type: WorkerMessageType.CACHE,
+      files: scripts,
+    })
   }
 
   private postMessage<Type>(message: Type) {
@@ -68,4 +75,4 @@ class ServiceWorkerClient {
 
 }
 
-export default new ServiceWorkerClient
+export default new ServiceWorkerClient()

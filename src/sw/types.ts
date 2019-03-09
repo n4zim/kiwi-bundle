@@ -1,10 +1,15 @@
 
-export enum WorkerMessageType { CHANGE, CACHE }
-export enum WorkerMessageChangeType { CREATE, UPDATE, DELETE }
+export enum WorkerMessageType { CACHE, CHANGE }
 
-export interface WorkerMessage {
+interface WorkerMessage {
   type: WorkerMessageType,
 }
+
+export interface WorkerCacheMessage extends WorkerMessage {
+  files?: string[]
+}
+
+export enum WorkerMessageChangeType { CREATE, UPDATE, DELETE }
 
 export interface WorkerChangeMessage<Entity = any> extends WorkerMessage {
   change: WorkerMessageChangeType,
