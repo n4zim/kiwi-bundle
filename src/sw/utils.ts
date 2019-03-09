@@ -1,5 +1,5 @@
 
-const ENABLE_LOGGER = true
+const ENABLE_LOGGER = false
 
 export const log = (title: string, ...args: any) => {
   if(ENABLE_LOGGER) {
@@ -35,6 +35,7 @@ export const cleanCache = (cache: Cache, splitedPath: string[]) => {
   if(splitedPath.length === 2 && splitedPath[0] === "static") {
     const hashAssetName = getAssetNameWithHash(splitedPath)
     if(hashAssetName !== null) {
+      log("clear cache", hashAssetName)
       cache.matchAll().then(results => {
         results.forEach(result => {
           const resultSplitedPath = getSplitedPath(result.url)

@@ -10,25 +10,24 @@ class ServiceWorkerClient {
   constructor() {
     if(this.isCompatible) {
       navigator.serviceWorker.onmessage = (event: any) => {
-        const message: WorkerChangeMessage = event.data
-
-        if(message.type === WorkerMessageType.CACHE) {
-          // window.location.reload() // TODO : soft reload
-
-        } else if(message.type === WorkerMessageType.CHANGE) {
-          const hook = this.changesHooks[`${message.database}-${message.store}`]
-          if(typeof hook !== "undefined") hook(message.entity)
+        if(event.data.type === WorkerMessageType.CACHE) {
+          this.onCacheMessage(event.data)
+        } else if(event.data.type === WorkerMessageType.CHANGE) {
+          this.onChangeMessage(event.data)
         }
       }
 
-      navigator.serviceWorker.oncontrollerchange = () => {
-        caches.open("offline").then(cache => {
-          cache.keys().then(keys => {
-            if(keys.length === 0) {
-              this.forceCacheUpdate()
-            }
+      if("caches" in window) {
+        navigator.serviceWorker.oncontrollerchange = () => {
+          logger.logSuccess("ServiceWorker", "Changed controller")
+          caches.open("offline").then(cache => {
+            cache.keys().then(keys => {
+              if(keys.length === 0) {
+                this.forceCacheUpdate()
+              }
+            })
           })
-        })
+        }
       }
     }
 
@@ -39,7 +38,7 @@ class ServiceWorkerClient {
     if(this.isCompatible) {
       navigator.serviceWorker.register((window as any).kiwi.sw).then(() => {
         navigator.serviceWorker.ready.then(() => {
-          logger.logSuccess("ServiceWorker", "Ready")
+          logger.logSuccess("ServiceWorker", "Loaded")
         })
       })
     }
@@ -63,6 +62,17 @@ class ServiceWorkerClient {
     } else {
       return null
     }
+  }
+
+  private onCacheMessage(message: WorkerCacheMessage) {
+    if(typeof module.hot === "undefined") {
+      window.location.reload() // TODO : soft reload
+    }
+  }
+
+  private onChangeMessage(message: WorkerChangeMessage) {
+    const hook = this.changesHooks[`${message.database}-${message.store}`]
+    if(typeof hook !== "undefined") hook(message.entity)
   }
 
   propagateChanges<Entity>(type: WorkerMessageChangeType, databaseName: string, storeName: string, entity: Entity) {

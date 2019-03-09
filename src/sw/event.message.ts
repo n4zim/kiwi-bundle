@@ -17,7 +17,7 @@ const onCacheMessage = (event: any) => {
     event.data.scripts.forEach((file: string) => {
       const split = getSplitedPath(file)
       if(isRessourceAccepted(split)) {
-        log("message - cache", file)
+        log("message - force cache", file)
         cache.add(file).then(() => {
           cleanCache(cache, split)
         })

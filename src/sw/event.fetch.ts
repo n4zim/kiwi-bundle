@@ -3,39 +3,50 @@ import { getSplitedPath, isRessourceAccepted, log, cleanCache } from "./utils"
 
 declare var self: any
 
-const onNotCachedRessource = (event: any, request: Request, cache: Cache) => {
+const onNotCachedRessource = (event: any, request: Request, cache: Cache, splitedPath: string[]) => {
   const networkFetch = fetch(request)
   event.waitUntil( // Cache ressource on backgroud
     networkFetch.then(networkResponse => {
-      return cache.put(request, networkResponse.clone())
+      log("onNotCachedRessource - put", request.url)
+      return cache.put(request, networkResponse.clone()).then(() => {
+        cleanCache(cache, splitedPath)
+      })
     })
   )
   return networkFetch // Network ressource
 }
 
 const informClientIfUpdated = (original: Response, latest: Response|undefined) => {
-  if(typeof latest !== "undefined" && latest.headers.get("ETag") !== original.headers.get("ETag")) {
-    return self.clients.matchAll().then((clients: any) => {
-      log("asked for client update")
-      return clients.forEach((client: any) => {
-        return client.postMessage({ type: WorkerMessageType.CACHE })
+  return new Promise(resolve => {
+    if(typeof latest !== "undefined" && latest.headers.get("ETag") !== original.headers.get("ETag")) {
+      self.clients.matchAll().then((clients: any) => {
+        log("asked for client update")
+        clients.forEach((client: any) => {
+          client.postMessage({ type: WorkerMessageType.CACHE })
+        })
+        resolve()
       })
-    })
-  }
+    } else {
+      resolve()
+    }
+  })
 }
 
 const onCachedRessource = (event: any, request: Request, cache: Cache, cacheResponse: Response, splitedPath: string[]) => {
   event.waitUntil( // Check new version on background
     fetch(request)
       .then(networkResponse => {
+        log("onCachedRessource - put", request.url)
         return cache.put(request, networkResponse.clone()).then(() => {
-          return cache.match(request)
-            .then(newCacheResponse => informClientIfUpdated(cacheResponse, newCacheResponse))
-            .then(() => cleanCache(cache, splitedPath))
+          return cache.match(request).then(newCacheResponse => {
+            return informClientIfUpdated(cacheResponse, newCacheResponse).then(() => {
+              cleanCache(cache, splitedPath)
+            })
+          })
         })
       })
       .catch(() => {
-        log("offline")
+        log("offline mode")
       })
   )
   return cacheResponse // Cache ressource
@@ -46,7 +57,7 @@ const fetchResponse = (event: any, request: Request, splitedPath: string[]) => {
     return cache.match(request).then(cacheResponse => {
       if(typeof cacheResponse === "undefined") {
         log("load - network first", request.url)
-        return onNotCachedRessource(event, request, cache)
+        return onNotCachedRessource(event, request, cache, splitedPath)
       } else {
         log("load - cache first", request.url)
         return onCachedRessource(event, request, cache, cacheResponse, splitedPath)

@@ -1,7 +1,7 @@
 import { render } from "react-dom"
 import logger from "./logger"
 import Router from "./routes/Router"
-import serviceWorkerClient from "./sw"
+import "./sw"
 
 let STARTED = false
 
@@ -18,7 +18,7 @@ export default class Client {
     // Service Worker
     // serviceWorkerClient.load()
 
-    // Hot loading
+    // Hot reloading
     if(this.hotModuleEnabled) {
       this.loadHotModule()
     }
