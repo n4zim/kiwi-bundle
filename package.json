@@ -1,6 +1,6 @@
 {
   "name": "kiwi-bundle",
-  "version": "1.4.0",
+  "version": "1.2.0",
   "description": "A simple and clean framework for creating cross-platform applications",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
   "author": "Nazim Lachter <nazim@blueforest.fr>",
@@ -12,13 +12,13 @@
   "scripts": {
     "start": "tsc -w -p .",
     "build": "rm -r lib/ && tsc -p . && chmod +x lib/cli/*.js",
-    "test": "echo SKIPPED",
     "cli": "./lib/cli/index.js",
-    "preversion": "git pull && (test $(git rev-parse --abbrev-ref HEAD) != master && echo '/!\\ YOU MUST CHECKOUT ON MASTER' && exit 1 || npm test)",
+    "test": "echo SKIPPED",
+    "preversion": "git pull && (test $(git rev-parse --abbrev-ref HEAD) != master && echo '/!\\ YOU MUST CHECKOUT ON MASTER' && exit 1 || npm test) && npm run build",
     "version:major": "npm version major -m 'Major upgrade from ${npm_package_version} to %s'",
     "version:minor": "npm version minor -m 'Minor upgrade from ${npm_package_version} to %s'",
     "version:patch": "npm version patch -m 'Patch upgrade from ${npm_package_version} to %s'",
-    "postversion": "git push --follow-tags"
+    "postversion": "git push --follow-tags && npm publish"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
