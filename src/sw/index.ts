@@ -1,19 +1,12 @@
-import { log } from "./utils"
-import eventFetch from "./event.fetch"
-import eventMessage from "./event.message"
+import eventInstallV1 from "./event.install.v1"
+// import eventInstallV2 from "./event.install.v2"
+import eventActivate from "./event.activate"
+import eventFetchV1 from "./event.fetch.v1"
+// import eventFetchV2 from "./event.fetch.v2"
+import eventMessageV1 from "./event.message.v1"
+// import eventMessageV2 from "./event.message.v2"
 
-declare var self: any
-
-self.addEventListener("install", (event: any) => {
-  event.waitUntil(self.skipWaiting())
-  log("install")
-})
-
-self.addEventListener("activate", (event: any) => {
-  event.waitUntil(self.clients.claim())
-  log("activate")
-})
-
-self.addEventListener("fetch", eventFetch)
-
-self.addEventListener("message", eventMessage)
+self.addEventListener("install", eventInstallV1)
+self.addEventListener("activate", eventActivate)
+self.addEventListener("fetch", eventFetchV1)
+self.addEventListener("message", eventMessageV1)

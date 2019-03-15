@@ -1,5 +1,5 @@
 import { WorkerMessageType } from "./types"
-import { getSplitedPath, isRessourceAccepted, log, cleanCache } from "./utils"
+import { getSplitedPath, isRessourceAccepted, log, convertRequestToRootDocument, cleanCache } from "./utils"
 
 declare var self: any
 
@@ -66,22 +66,12 @@ const fetchResponse = (event: any, request: Request, splitedPath: string[]) => {
   })
 }
 
-const convertToRootDocument = (request: Request) => {
-  const splitedUrl = request.url.split("/")
-  return new Request(`${splitedUrl[0]}//${splitedUrl[2]}/`, {
-    cache: request.cache, credentials: request.credentials, headers: request.headers,
-    integrity: request.integrity, keepalive: request.keepalive, method: "GET",
-    redirect: request.redirect, referrer: request.referrer,
-    referrerPolicy: request.referrerPolicy, signal: request.signal,
-  })
-}
-
 export default (event: any) => {
   if(event.request.method === "GET") {
     const splitedPath = getSplitedPath(event.request.url)
     if(isRessourceAccepted(splitedPath)) {
       if(event.request.destination === "document" && splitedPath[0].length !== 0) {
-        event.respondWith(fetchResponse(event, convertToRootDocument(event.request), [ "" ]))
+        event.respondWith(fetchResponse(event, convertRequestToRootDocument(event.request), [ "" ]))
         log("fetch forward", event.request.url)
       } else {
         event.respondWith(fetchResponse(event, event.request, splitedPath))

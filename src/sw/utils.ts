@@ -22,6 +22,16 @@ export const isRessourceAccepted = (splitedPath: string[]) => {
     && !/^.*\.hot-update.js(on)?$/.test(splitedPath[0])
 }
 
+export const convertRequestToRootDocument = (request: Request) => {
+  const splitedUrl = request.url.split("/")
+  return new Request(`${splitedUrl[0]}//${splitedUrl[2]}/`, {
+    cache: request.cache, credentials: request.credentials, headers: request.headers,
+    integrity: request.integrity, keepalive: request.keepalive, method: "GET",
+    redirect: request.redirect, referrer: request.referrer,
+    referrerPolicy: request.referrerPolicy, signal: request.signal,
+  })
+}
+
 const getAssetNameWithHash = (splitedPath: string[]) => {
   const data = /^(.*?)\.[0-9a-z]+\.js$/.exec(splitedPath[1])
   if(data !== null && data.length === 2) {

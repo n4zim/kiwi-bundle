@@ -5,13 +5,14 @@ import HtmlWebpackPlugin from "html-webpack-plugin"
 import AppManifestWebpackPlugin from "app-manifest-webpack-plugin"
 import Webpack from "webpack"
 import WebpackConfig from "./core"
+import etag from "etag"
 
-const generateIconsAndManifest = (kiwiConfig: any, path: string, cacheEnabled: boolean) => {
+const generateIconsAndManifest = (kiwiConfig: any, path: string, dev: boolean) => {
   return new AppManifestWebpackPlugin({
     logo: pathLib.join(path, "assets", "logo.png"),
     prefix: "/static/icons/",
     output: "static/icons/",
-    persistentCache: cacheEnabled,
+    persistentCache: dev,
     inject: true,
     config: {
       appName: kiwiConfig.project.title,
@@ -23,12 +24,12 @@ const generateIconsAndManifest = (kiwiConfig: any, path: string, cacheEnabled: b
       start_url: "/?homescreen=1",
       icons: {
         favicons: true,
-        android: true,
-        appleIcon: true,
-        appleStartup: true,
-        firefox: true,
-        twitter: true,
-        windows: true,
+        android: !dev,
+        appleIcon: !dev,
+        appleStartup: !dev,
+        firefox: !dev,
+        twitter: !dev,
+        windows: !dev,
         yandex: false,
         coast: false,
         opengraph: false,
@@ -36,6 +37,27 @@ const generateIconsAndManifest = (kiwiConfig: any, path: string, cacheEnabled: b
     }
   })
 }
+
+const generateKiwiJson = (buildDir: string) => ({
+  apply: (compiler: Webpack.Compiler) => {
+    compiler.hooks.emit.tap("kiwi-json", compilation => {
+      let json: any = {}
+
+      Object.keys(compilation.assets).forEach(assetPath => {
+        if(!/^.cache|(sw.[a-z0-9]+.js)|(.*.hot-update.js(on)?)$/.test(assetPath)) {
+          const key = `/${assetPath === "index.html" ? "" : assetPath}`
+          json[key] = etag(compilation.assets[assetPath].source())
+        }
+      })
+
+      json = JSON.stringify(json)
+      compilation.assets["static/kiwi.json"] = {
+        source: () => json,
+        size: () => json.length,
+      }
+    })
+  },
+})
 
 const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new WebpackConfig({
 
@@ -67,10 +89,12 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
   development: () => [
     new Webpack.HotModuleReplacementPlugin(),
     generateIconsAndManifest(kiwiConfig, path, true),
+    generateKiwiJson(kiwiConfig.platforms.web.buildDir),
   ],
 
   production: () => [
     generateIconsAndManifest(kiwiConfig, path, false),
+    generateKiwiJson(kiwiConfig.platforms.web.buildDir),
   ],
 
 })
