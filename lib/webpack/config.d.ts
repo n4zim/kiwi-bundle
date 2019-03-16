@@ -7,5 +7,5 @@ interface WebpackConfig extends Webpack.Configuration {
     devServer?: any;
     optimization: any;
 }
-declare const _default: (path: string, outputPath: string, kiwiConfig: any, mode: WebpackMode) => WebpackConfig;
+declare const _default: (rootPath: string, outputPath: string, kiwiConfig: any, mode: WebpackMode) => WebpackConfig;
 export default _default;

@@ -17,8 +17,8 @@ const generateJsOutputPath = (mode: WebpackMode, data?: any) => {
   return `${isSw ? "" : "static/"}[name].${isProd ? "[contenthash].min" : "[hash]"}.js`
 }
 
-export default (path: string, outputPath: string, kiwiConfig: any, mode: WebpackMode): WebpackConfig => {
-  const bundlePath = pathLib.join(path, "node_modules", "kiwi-bundle")
+export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: WebpackMode): WebpackConfig => {
+  const bundlePath = pathLib.join(rootPath, "node_modules", "kiwi-bundle")
 
   // Common config
   const config: WebpackConfig = {
@@ -27,7 +27,7 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
     resolve: {
       extensions: [ ".ts", ".tsx", ".js" ],
       modules: [
-        pathLib.join(bundlePath, "node_modules"),
+        pathLib.join(rootPath, "node_modules"),
       ],
       alias: {
         "kiwi-bundle": bundlePath,
@@ -37,12 +37,12 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
     resolveLoader: {
       extensions: [ ".ts", ".tsx", ".js" ],
       modules: [
-        pathLib.join(bundlePath, "node_modules"),
+        pathLib.join(rootPath, "node_modules"),
       ],
     },
 
     entry: {
-      main: [ pathLib.join(path, "src", "client", "index.ts") ],
+      main: [ pathLib.join(rootPath, "src", "client", "index.ts") ],
       sw: pathLib.join(bundlePath, "src", "sw", "index.ts"),
     },
 
@@ -57,7 +57,7 @@ export default (path: string, outputPath: string, kiwiConfig: any, mode: Webpack
       rules: configRules.generate(mode),
     },
 
-    plugins: configPlugins(path, bundlePath, kiwiConfig).generate(mode),
+    plugins: configPlugins(rootPath, bundlePath, kiwiConfig).generate(mode),
 
     devtool: mode === WebpackMode.PRODUCTION ? "source-map" : "eval",
 
