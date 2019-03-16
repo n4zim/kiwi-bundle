@@ -9,7 +9,6 @@ const rules = new WebpackConfig([
   {
     test: /\.tsx?$/,
     use: [ "babel-loader?cacheDirectory", "awesome-typescript-loader" ],
-    exclude: /node_modules/,
   },
   {
     test: /\.css$/,
