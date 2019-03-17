@@ -38,7 +38,7 @@ const generateIconsAndManifest = (kiwiConfig: any, path: string, dev: boolean) =
   })
 }
 
-const generateKiwiJson = (buildDir: string) => ({
+const generateKiwiJson = () => ({
   apply: (compiler: Webpack.Compiler) => {
     compiler.hooks.emit.tap("kiwi-json", compilation => {
       let json: any = {}
@@ -89,12 +89,12 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
   development: () => [
     new Webpack.HotModuleReplacementPlugin(),
     generateIconsAndManifest(kiwiConfig, path, true),
-    generateKiwiJson(kiwiConfig.platforms.web.buildDir),
+    generateKiwiJson(),
   ],
 
   production: () => [
     generateIconsAndManifest(kiwiConfig, path, false),
-    generateKiwiJson(kiwiConfig.platforms.web.buildDir),
+    generateKiwiJson(),
   ],
 
 })

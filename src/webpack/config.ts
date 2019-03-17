@@ -28,16 +28,18 @@ export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: Web
       extensions: [ ".ts", ".tsx", ".js" ],
       modules: [
         pathLib.join(rootPath, "node_modules"),
+        pathLib.join(bundlePath, "node_modules"),
       ],
-      alias: {
+      /*alias: {
         "kiwi-bundle": bundlePath,
-      },
+      },*/
     },
 
     resolveLoader: {
       extensions: [ ".ts", ".tsx", ".js" ],
       modules: [
         pathLib.join(rootPath, "node_modules"),
+        pathLib.join(bundlePath, "node_modules"),
       ],
     },
 
@@ -49,6 +51,7 @@ export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: Web
     output: {
       filename: (data: any) => generateJsOutputPath(mode, data),
       chunkFilename: generateJsOutputPath(mode),
+      globalObject: "(typeof self !== 'undefined' ? self : this)",
       publicPath: "/",
       path: outputPath,
     },
@@ -69,9 +72,9 @@ export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: Web
       splitChunks: {
         cacheGroups: {
           vendors: {
-            name: "vendors",
-            test: /[\\/]node_modules[\\/]/,
             chunks: "all",
+            test: /[\\/]node_modules[\\/]/,
+            name: "vendors",
           },
         },
       },
@@ -98,9 +101,6 @@ export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: Web
       progress: true,
       hot: true,
     }
-
-    // GLOBAL VARS
-    config.output.globalObject = "(typeof self !== 'undefined' ? self : this)"
 
   }
 
