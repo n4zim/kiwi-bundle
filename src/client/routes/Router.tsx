@@ -1,6 +1,6 @@
 import * as React from "react"
 import { createBrowserHistory } from "history"
-import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
+import { HashRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
 import { LinkAction } from "./Link"
 import Route from "./Route"
 
@@ -13,15 +13,16 @@ export default class Router {
     this.routes = routes
   }
 
-  private redirect(path: string) {
-    HISTORY.push(path)
-  }
-
   getLinkAction(path: string): LinkAction {
-    return { path, call: () => { this.redirect(path) } }
+    return {
+      path,
+      call: () => {
+        window.location.hash = path
+      }
+    }
   }
 
-  private getReactRouterRoutes() {
+  private getReactRoutes() {
     return this.routes.map((route: Route, index: number) => {
       return <ReactRoute exact
         key={`route${index}`}
@@ -32,12 +33,12 @@ export default class Router {
   }
 
   render() {
-    return <ReactRouter history={HISTORY}>
+    return <HashRouter>
       <Switch>
-        {this.getReactRouterRoutes()}
+        {this.getReactRoutes()}
         <ReactRedirect from="*" to="/"/>
       </Switch>
-    </ReactRouter>
+    </HashRouter>
   }
 
 }

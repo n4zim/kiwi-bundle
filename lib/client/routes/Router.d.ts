@@ -7,8 +7,7 @@ export default class Router {
         [name: string]: number;
     };
     constructor(routes?: Route[]);
-    private redirect;
     getLinkAction(path: string): LinkAction;
-    private getReactRouterRoutes;
+    private getReactRoutes;
     render(): JSX.Element;
 }
