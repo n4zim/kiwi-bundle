@@ -6,7 +6,7 @@ FROM node:latest as builder
 WORKDIR /build
 
 # Install
-ONBUILD ADD package.json ./
+ONBUILD ADD package.json yarn.lock ./
 ONBUILD RUN yarn install
 ONBUILD COPY . .
 
