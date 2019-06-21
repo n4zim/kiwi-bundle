@@ -12,11 +12,13 @@ export default (path: string) => {
     rimraf(outputPath, (error) => {
       if(error) {
         console.error(error)
+        process.exit(1)
       } else {
         webpackConsoleLog("Webpack launched for production build...")
         Webpack(generateWebpackConfig(path, outputPath, kiwiConfig, WebpackMode.PRODUCTION), (err, stats) => {
           if(err) {
             console.error("Webpack error :", err)
+            process.exit(1)
           } else {
             console.log(stats.toString({ colors: true }))
           }

@@ -3,7 +3,7 @@ import { CheckerPlugin } from "awesome-typescript-loader"
 import StyleLintPlugin from "stylelint-webpack-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import AppManifestWebpackPlugin from "app-manifest-webpack-plugin"
-import Webpack from "webpack"
+import Webpack, { Compiler } from "webpack"
 import WebpackConfig from "./core"
 import etag from "etag"
 
@@ -59,6 +59,17 @@ const generateKiwiJson = () => ({
   },
 })
 
+const generateStatsCheck = (exitOnError = false) => {
+  return (compiler: Compiler) => {
+    compiler.hooks.done.tap("KiwiBundleStatsCheck", stats => {
+      if(stats.compilation.errors && stats.compilation.errors.length) {
+        console.error(stats.compilation.errors)
+        if(exitOnError) process.exit(1)
+      }
+    })
+  }
+}
+
 const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new WebpackConfig({
 
   common: () => [
@@ -95,6 +106,7 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
   production: () => [
     generateIconsAndManifest(kiwiConfig, path, false),
     generateKiwiJson(),
+    generateStatsCheck(true),
   ],
 
 })

@@ -102,6 +102,11 @@ export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: Web
       hot: true,
     }
 
+  } else {
+
+    // Fail out on first error
+    config.bail = true
+
   }
 
   return config
