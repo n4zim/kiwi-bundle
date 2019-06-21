@@ -11,14 +11,14 @@
   },
   "scripts": {
     "start": "tsc -w -p .",
-    "build": "rm -r lib/ && tsc -p . && chmod +x lib/cli/*.js",
+    "build": "rm -rf lib/ && tsc -p . && chmod +x lib/cli/*.js",
     "cli": "./lib/cli/index.js",
     "test": "echo SKIPPED",
-    "preversion": "git pull && (test $(git rev-parse --abbrev-ref HEAD) != master && echo '/!\\ YOU MUST CHECKOUT ON MASTER' && exit 1 || npm test) && npm run build",
+    "preversion": "git pull && (test $(git rev-parse --abbrev-ref HEAD) != master && echo '/!\\ YOU MUST CHECKOUT ON MASTER' && exit 1 || npm test) && npm run build && git add --all",
     "version:major": "npm version major -m 'Major upgrade from ${npm_package_version} to %s'",
     "version:minor": "npm version minor -m 'Minor upgrade from ${npm_package_version} to %s'",
     "version:patch": "npm version patch -m 'Patch upgrade from ${npm_package_version} to %s'",
-    "postversion": "git push --follow-tags && echo '=> You can now publish the module to NPM'"
+    "postversion": "git push --follow-tags && echo '=> You can now run `npm publish`'"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
