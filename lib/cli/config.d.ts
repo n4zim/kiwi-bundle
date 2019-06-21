@@ -16,5 +16,5 @@ declare class Config implements ConfigParams {
     constructor(json?: ConfigParams);
     write(projectDir: string): void;
 }
-declare const readConfig: (path: string) => Promise<{}>;
+declare const readConfig: (path: string) => Promise<unknown>;
 export { Config as default, ConfigParams, Platform, readConfig, };

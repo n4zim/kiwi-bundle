@@ -44,7 +44,7 @@ export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: Web
     },
 
     entry: {
-      main: [ pathLib.join(rootPath, "src", "client", "index.ts") ],
+      main: [ pathLib.join(rootPath, "src", "index.ts") ],
       sw: pathLib.join(bundlePath, "src", "sw", "index.ts"),
     },
 

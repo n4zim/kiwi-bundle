@@ -53,7 +53,7 @@ const promptDataForConfig = (path: string) => {
         return true
       },
     },
-  ]).then(answers => {
+  ]).then((answers: any) => {
     createConfigFile(path, answers)
     console.log(`\n    ${chalk.bgGreenBright.black("Your project is now ready !")}\n`)
   })

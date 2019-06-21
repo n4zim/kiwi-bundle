@@ -7,10 +7,12 @@ interface WebPageType {
   render: () => ReactNode
 }
 
-export default class WebPage extends Component implements WebPageType {
+export default class WebPage<Params = {}> extends Component implements WebPageType {
+  params: Params
 
   constructor(props: any) {
     super(props)
+    this.params = props.match.params
   }
 
   componentDidMount() {
