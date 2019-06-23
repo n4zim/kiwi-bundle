@@ -16,3 +16,4 @@ export default class WebpackConfig implements WebpackConfigParams {
     generate(mode: WebpackMode): any[];
 }
 export {};
+//# sourceMappingURL=core.d.ts.map

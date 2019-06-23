@@ -18,3 +18,4 @@ declare class Config implements ConfigParams {
 }
 declare const readConfig: (path: string) => Promise<unknown>;
 export { Config as default, ConfigParams, Platform, readConfig, };
+//# sourceMappingURL=config.d.ts.map

@@ -25,3 +25,4 @@ export default class Repository<Entity = {}, EntityData = {}> implements Reposit
     watchForNewEntries(action: Callback<Entity>): void;
 }
 export {};
+//# sourceMappingURL=Repository.d.ts.map

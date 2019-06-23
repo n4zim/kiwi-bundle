@@ -13,3 +13,4 @@ export interface WebPageConstructor {
     new (props?: any): WebPage;
 }
 export {};
+//# sourceMappingURL=WebPage.d.ts.map

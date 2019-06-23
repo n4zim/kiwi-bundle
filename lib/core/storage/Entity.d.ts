@@ -14,3 +14,4 @@ export default class Entity<Data = {}> implements EntityParams<Data> {
 export interface EntityConstructor<Entity = {}, Data = {}> {
     new (params: EntityParams<Data>): Entity;
 }
+//# sourceMappingURL=Entity.d.ts.map

@@ -11,3 +11,4 @@ export default class Router {
     private getReactRoutes;
     render(): JSX.Element;
 }
+//# sourceMappingURL=Router.d.ts.map

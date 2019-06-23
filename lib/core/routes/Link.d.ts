@@ -13,3 +13,4 @@ export default class Link extends WebComponent<Props> {
     render(): JSX.Element;
 }
 export {};
+//# sourceMappingURL=Link.d.ts.map

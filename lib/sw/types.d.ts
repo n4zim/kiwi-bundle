@@ -20,3 +20,4 @@ export interface WorkerChangeMessage<Entity = any> extends WorkerMessage {
     entity: Entity;
 }
 export {};
+//# sourceMappingURL=types.d.ts.map

@@ -9,3 +9,4 @@ export declare class Request {
     static getDocument(recipe: RecipeId, document: DocumentId): Promise<any>;
     static getLines(recipe: RecipeId, collection: CollectionId, filters?: any): Promise<Lines>;
 }
+//# sourceMappingURL=DROPin.d.ts.map

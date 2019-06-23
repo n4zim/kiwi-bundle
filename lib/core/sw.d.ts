@@ -13,3 +13,4 @@ declare class ServiceWorkerClient {
 }
 declare const _default: ServiceWorkerClient;
 export default _default;
+//# sourceMappingURL=sw.d.ts.map

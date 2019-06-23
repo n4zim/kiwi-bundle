@@ -7,3 +7,4 @@ export default class Store {
     addCurrentItem(): void;
     reset(): void;
 }
+//# sourceMappingURL=Store.d.ts.map

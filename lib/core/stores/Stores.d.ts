@@ -6,3 +6,4 @@ export default class Stores {
     };
     constructor(stores: Store[]);
 }
+//# sourceMappingURL=Stores.d.ts.map

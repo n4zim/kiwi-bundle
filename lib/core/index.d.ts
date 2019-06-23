@@ -5,3 +5,4 @@ export default class Client {
     constructor(router: Router);
     private loadHotModule;
 }
+//# sourceMappingURL=index.d.ts.map

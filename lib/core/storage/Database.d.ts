@@ -7,3 +7,4 @@ declare class Database {
     onSuccess(database: IDBDatabase): void;
 }
 export default Database;
+//# sourceMappingURL=Database.d.ts.map

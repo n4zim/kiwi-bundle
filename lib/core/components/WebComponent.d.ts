@@ -10,3 +10,4 @@ export default class WebComponent<Props = {}, S = {}, SS = any> extends Componen
 export interface WebComponentConstructor {
     new (props?: any): WebComponent;
 }
+//# sourceMappingURL=WebComponent.d.ts.map

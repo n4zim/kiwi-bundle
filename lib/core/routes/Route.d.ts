@@ -4,3 +4,4 @@ export default class Route {
     component: WebPageConstructor;
     constructor(path: string, component: WebPageConstructor);
 }
+//# sourceMappingURL=Route.d.ts.map

@@ -9,3 +9,4 @@ interface WebpackConfig extends Webpack.Configuration {
 }
 declare const _default: (rootPath: string, outputPath: string, kiwiConfig: any, mode: WebpackMode) => WebpackConfig;
 export default _default;
+//# sourceMappingURL=config.d.ts.map
