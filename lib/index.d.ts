@@ -12,6 +12,5 @@ import Database from "./core/storage/Database";
 import Store from "./core/stores/Store";
 import WebComponent from "./core/components/WebComponent";
 import WebPage from "./core/components/WebPage";
-import * as DROPin from "./core/DROPin";
-export { action, Client, Database, DROPin, Entity, EntityParams, Link, LinkAction, logger, observable, observer, React, Repository, Route, Router, Store, WebComponent, WebPage, };
+export { action, Client, Database, Entity, EntityParams, Link, LinkAction, logger, observable, observer, React, Repository, Route, Router, Store, WebComponent, WebPage, };
 //# sourceMappingURL=index.d.ts.map
