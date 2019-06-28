@@ -8,6 +8,9 @@ export default class Router {
     };
     constructor(routes?: Route[]);
     getLinkAction(path: string): LinkAction;
+    getParamsAsStrings(prefix?: string | string[]): string[];
+    getParamsAsArray(prefix?: string | string[]): any;
+    getParamsAsObject(prefix?: string | string[]): any;
     private getReactRoutes;
     render(): JSX.Element;
 }
