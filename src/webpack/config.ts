@@ -95,7 +95,7 @@ export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: Web
     config.devServer = {
       host: kiwiConfig.platforms.web.devHost,
       port: kiwiConfig.platforms.web.devPort,
-      // historyApiFallback: true, // Disable if HashRouter is used
+      historyApiFallback: true, // Disable if HashRouter is used
       clientLogLevel: "warning",
       inline: true,
       progress: true,

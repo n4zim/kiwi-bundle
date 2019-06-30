@@ -7,6 +7,7 @@ import { observer } from "mobx-react"
 import * as React from "react"
 import Repository from "./core/storage/Repository"
 import Route from "./core/routes/Route"
+import Redirect from "./core/routes/Redirect"
 import Router from "./core/routes/Router"
 import Database from "./core/storage/Database"
 import Store from "./core/stores/Store"
@@ -25,6 +26,7 @@ export {
   observable,
   observer,
   React,
+  Redirect,
   Repository,
   Route,
   Router,

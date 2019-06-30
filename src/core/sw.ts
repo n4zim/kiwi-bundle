@@ -36,7 +36,9 @@ class ServiceWorkerClient {
 
   load() {
     if(this.isCompatible) {
-      navigator.serviceWorker.register((window as any).kiwi.sw).then(() => {
+      navigator.serviceWorker.register(`/${(window as any).kiwi.sw}`, {
+        scope: window.location.origin,
+      }).then(() => {
         navigator.serviceWorker.ready.then(() => {
           logger.logSuccess("ServiceWorker", "Loaded")
         })

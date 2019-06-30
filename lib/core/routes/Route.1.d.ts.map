@@ -1,0 +1,1 @@
+{"version":3,"file":"Route.1.d.ts","sourceRoot":"","sources":["../../../src/core/routes/Route.1.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,kBAAkB,EAAE,MAAM,uBAAuB,CAAA;AAE1D,MAAM,CAAC,OAAO,OAAO,KAAK;IACxB,IAAI,EAAE,MAAM,CAAA;IACZ,SAAS,EAAE,kBAAkB,CAAA;gBAEjB,IAAI,EAAE,MAAM,EAAE,SAAS,EAAE,kBAAkB;CAKxD"}

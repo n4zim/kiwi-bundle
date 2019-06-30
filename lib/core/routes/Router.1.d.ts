@@ -1,13 +1,12 @@
 /// <reference types="react" />
 import { LinkAction } from "./Link";
-import Redirect from "./Redirect";
 import Route from "./Route";
 export default class Router {
-    routes: (Route | Redirect)[];
+    routes: Route[];
     indexes: {
         [name: string]: number;
     };
-    constructor(routes?: (Route | Redirect)[]);
+    constructor(routes?: Route[]);
     getLinkAction(path: string): LinkAction;
     getParamsAsStrings(prefix?: string | string[]): string[];
     getParamsAsArray(prefix?: string | string[]): any;
@@ -15,4 +14,4 @@ export default class Router {
     private getReactRoutes;
     render(): JSX.Element;
 }
-//# sourceMappingURL=Router.d.ts.map
+//# sourceMappingURL=Router.1.d.ts.map

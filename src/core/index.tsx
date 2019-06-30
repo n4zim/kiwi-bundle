@@ -15,7 +15,7 @@ export default class Client {
       STARTED = true
     })
 
-    // Service Worker
+    // Service Worker activation (now done by Webpack)
     // serviceWorkerClient.load()
 
     // Hot reloading
