@@ -9,9 +9,14 @@ export default class Router {
     };
     constructor(routes?: (Route | Redirect)[]);
     getLinkAction(path: string): LinkAction;
-    getParamsAsStrings(prefix?: string | string[]): string[];
-    getParamsAsArray(prefix?: string | string[]): any;
-    getParamsAsObject(prefix?: string | string[]): any;
+    getParamsAsString(prefix?: string | string[]): string[];
+    getParametersAsObject(prefix?: string | string[]): {
+        [key: string]: string[];
+    };
+    getParametersAsArray(prefix?: string | string[]): {
+        key: string;
+        values: string[];
+    }[];
     private getReactRoutes;
     render(): JSX.Element;
 }

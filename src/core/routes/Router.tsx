@@ -32,43 +32,43 @@ export default class Router {
     }
   }
 
-  getParamsAsStrings(prefix: string | string[] = "") {
+  getParamsAsString(prefix: string | string[] = ""): string[] {
     if(Array.isArray(prefix)) prefix = prefix.join("|")
     const matches = window.location.href.match(regexParameter(prefix))
     if(matches === null) return []
     return matches.map(match => match.slice(1))
   }
 
-  getParamsAsArray(prefix: string | string[] = "") {
-    let params: any = []
-    let indexes: any = {}
+  getParametersAsObject(prefix: string | string[] = ""): { [key: string]: string[] } {
+    let params: any = {}
 
-    this.getParamsAsStrings(prefix).forEach(match => {
-      const split = match.slice(prefix.length + 1).split("=")
-      const field = split[0]
+    this.getParamsAsString(prefix).forEach(match => {
+      const split = match.slice(prefix.length).split("=")
+      const key = split[0]
       const values = split[1].split("|")
 
-      if(typeof indexes[field] === "undefined") {
-        indexes[field] = params.length
-        params.push({ field, values })
-      } else {
-        params[indexes[field]].values = params[indexes[field]].values.concat(values)
-      }
+      if(typeof params[key] === "undefined") params[key] = []
+      params[key] = params[key].concat(values)
     })
 
     return params
   }
 
-  getParamsAsObject(prefix: string | string[] = "") {
-    let params: any = {}
+  getParametersAsArray(prefix: string | string[] = ""): { key: string, values: string[] }[] {
+    let params: any = []
+    let indexes: any = {}
 
-    this.getParamsAsStrings(prefix).forEach(match => {
-      const split = match.slice(prefix.length + 1).split("=")
-      const field = split[0]
+    this.getParamsAsString(prefix).forEach(match => {
+      const split = match.slice(prefix.length).split("=")
+      const key = split[0]
       const values = split[1].split("|")
 
-      if(typeof params[field] === "undefined") params[field] = []
-      params[field] = params[field].concat(values)
+      if(typeof indexes[key] === "undefined") {
+        indexes[key] = params.length
+        params.push({ key, values })
+      } else {
+        params[indexes[key]].values = params[indexes[key]].values.concat(values)
+      }
     })
 
     return params
