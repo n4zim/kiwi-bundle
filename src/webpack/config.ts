@@ -84,7 +84,7 @@ export default (rootPath: string, outputPath: string, kiwiConfig: any, mode: Web
   // Mode options
   if(mode === WebpackMode.DEVELOPMENT) {
 
-    // DEV SERVER & HOT RELOADER ENTRIES
+    // DEV SERVER & HOT RELOADER ENTRIES
     config.entry.main.unshift("webpack/hot/only-dev-server")
     config.entry.main.unshift(
       "webpack-dev-server/client"

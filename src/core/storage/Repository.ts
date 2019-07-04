@@ -9,7 +9,7 @@ interface RepositoryParams<Entity, EntityData> {
   generateEntity: (params: EntityParams<EntityData>) => Entity
 }
 
-type RequestCall = (store: IDBObjectStore) => IDBRequest
+type RequestCall = (store: IDBObjectStore) => IDBRequest
 
 type Callback<Entity> = (entity: Entity) => void
 

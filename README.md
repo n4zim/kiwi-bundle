@@ -8,7 +8,7 @@ Kiwi Bundle is a Javascript stack that is designed to make your life as easy as 
 - an all-in-one NPM package, no versions to manage
 - hot reloading, to develop and view your changes in real time
 - a built-in router and logger, simplified to the limit
-- a sidekick CLI (start, build)
+- a sidekick CLI (start, build)
 
 A demo app is available here : https://github.com/theblueforest/kiwi-demo
 

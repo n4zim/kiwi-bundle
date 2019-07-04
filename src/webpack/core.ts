@@ -1,6 +1,6 @@
 
 export enum WebpackMode {
-  PRODUCTION = "production",
+  PRODUCTION = "production",
   DEVELOPMENT = "development",
 }
 
@@ -18,13 +18,13 @@ export default class WebpackConfig implements WebpackConfigParams {
   development?: WebpackCallback
   production?: WebpackCallback
 
-  constructor(commmonOrParams: any[]|WebpackConfigParams) {
-    if(Array.isArray(commmonOrParams)) {
-      this.common = commmonOrParams
+  constructor(commonOrParams: any[]|WebpackConfigParams) {
+    if(Array.isArray(commonOrParams)) {
+      this.common = commonOrParams
     } else {
-      this.common = commmonOrParams.common
-      this.development = commmonOrParams.development
-      this.production = commmonOrParams.production
+      this.common = commonOrParams.common
+      this.development = commonOrParams.development
+      this.production = commonOrParams.production
     }
   }
 
