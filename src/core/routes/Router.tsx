@@ -11,7 +11,7 @@ import Route from "./Route"
 
 const HISTORY = createBrowserHistory()
 
-const regexParameter = (prefix: string) => new RegExp(`(?:\\?|\\&)(?:${prefix})([^=&]+)=([^&]*)`, "g")
+const regexParameter = (prefix: string = "") => new RegExp(`(\\?|\\&)(${prefix})([^=&]*)=([^&]*)`, "g")
 
 export default class Router {
   routes: (Route|Redirect)[] = []
@@ -32,18 +32,18 @@ export default class Router {
     }
   }
 
-  getParamsAsString(prefix: string | string[] = ""): string[] {
+  getParamsAsString(prefix?: string | string[]): string[] {
     if(Array.isArray(prefix)) prefix = prefix.join("|")
     const matches = window.location.href.match(regexParameter(prefix))
     if(matches === null) return []
     return matches.map(match => match.slice(1))
   }
 
-  getParametersAsObject(prefix: string | string[] = ""): { [key: string]: string[] } {
+  getParametersAsObject(prefix?: string | string[]): { [key: string]: string[] } {
     let params: any = {}
 
     this.getParamsAsString(prefix).forEach(match => {
-      const split = match.slice(prefix.length).split("=")
+      const split = match.split(/=(.+)/)
       const key = split[0]
       const values = split[1].split("|")
 
@@ -54,12 +54,12 @@ export default class Router {
     return params
   }
 
-  getParametersAsArray(prefix: string | string[] = ""): { key: string, values: string[] }[] {
+  getParametersAsArray(prefix?: string | string[]): { key: string, values: string[] }[] {
     let params: any = []
     let indexes: any = {}
 
     this.getParamsAsString(prefix).forEach(match => {
-      const split = match.slice(prefix.length).split("=")
+      const split = match.split(/=(.+)/)
       const key = split[0]
       const values = split[1].split("|")
 
