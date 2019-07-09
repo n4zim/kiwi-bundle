@@ -90,7 +90,7 @@ export default class Router {
 
       if(this.options.routeAuthentifier
           && !this.options.routeAuthentifier.currentUserHasAccessToRoute(route)) {
-
+        
         return <ReactRoute exact
           key={`route${index}`}
           path={route.path}
