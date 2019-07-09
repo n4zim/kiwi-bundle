@@ -34,7 +34,8 @@ export default class Router {
     return {
       path,
       call: () => {
-        window.location.hash = path
+        //window.location.hash = path
+        HISTORY.push(path)
       }
     }
   }
