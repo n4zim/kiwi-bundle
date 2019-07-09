@@ -5,9 +5,15 @@ import { LinkAction } from "./Link"
 import Redirect from "./Redirect"
 import Route from "./Route"
 
-/*interface RouterOptions {
-  defaultPage?: string
-}*/
+interface RouteAuthentifier {
+  unauthRedirectPathForRoute: (route: Route) => string
+  currentUserHasAccessToRoute: (route: Route) => boolean
+}
+
+interface RouterOptions {
+  //defaultPage?: string
+  routeAuthentifier?: RouteAuthentifier
+}
 
 const HISTORY = createBrowserHistory()
 
@@ -15,12 +21,13 @@ const regexParameter = (prefix: string = "") => new RegExp(`(\\?|\\&)(${prefix})
 
 export default class Router {
   routes: (Route|Redirect)[] = []
-  // options: RouterOptions
+  options: RouterOptions
+  
   indexes: { [name: string]: number } = {}
 
-  constructor(routes: (Route|Redirect)[] = []/*, options: RouterOptions = {}*/) {
+  constructor(routes: (Route|Redirect)[] = [], options: RouterOptions = {}) {
     this.routes = routes
-    // this.options = options
+    this.options = options
   }
 
   getLinkAction(path: string): LinkAction {
@@ -79,6 +86,20 @@ export default class Router {
       if(route instanceof Redirect) {
         return <ReactRedirect exact key={`route${index}`} to={route.path}/>
       }
+
+      if(this.options.routeAuthentifier
+          && !this.options.routeAuthentifier.currentUserHasAccessToRoute(route)) {
+
+        return <ReactRoute exact
+          key={`route${index}`}
+          path={route.path}
+          render={() => { return <ReactRedirect exact key={`route${index}`} to={{
+            pathname: this.options.routeAuthentifier!.unauthRedirectPathForRoute(route),
+            state: { unauthRedirect: true },
+          }} }}
+        />
+      }
+
       return <ReactRoute exact
         key={`route${index}`}
         path={route.path}
