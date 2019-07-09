@@ -13,6 +13,7 @@ import Database from "./core/storage/Database"
 import Store from "./core/stores/Store"
 import WebComponent from "./core/components/WebComponent"
 import WebPage from "./core/components/WebPage"
+import { withRouter } from "react-router-dom"
 
 export {
   action,
@@ -33,4 +34,5 @@ export {
   Store,
   WebComponent,
   WebPage,
+  withRouter
 }
