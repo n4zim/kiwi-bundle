@@ -1,5 +1,5 @@
-import * as React from "react"
 import { Component, ReactNode } from "react"
+import { RouteComponentProps } from "react-router-dom"
 import logger from "../logger"
 
 interface WebPageType {
@@ -7,7 +7,7 @@ interface WebPageType {
   render: () => ReactNode
 }
 
-export default class WebPage<Params = {}> extends Component implements WebPageType {
+export default class WebPage<Params = {}> extends Component<RouteComponentProps> implements WebPageType {
   params: Params
 
   constructor(props: any) {
