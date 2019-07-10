@@ -88,23 +88,21 @@ export default class Router {
         return <ReactRedirect exact key={`route${index}`} to={route.path}/>
       }
 
-      if(this.options.routeAuthentifier
-          && !this.options.routeAuthentifier.currentUserHasAccessToRoute(route)) {
-        
-        return <ReactRoute exact
-          key={`route${index}`}
-          path={route.path}
-          render={() => { return <ReactRedirect exact key={`route${index}`} to={{
-            pathname: this.options.routeAuthentifier!.unauthRedirectPathForRoute(route),
-            state: { unauthRedirect: true },
-          }} /> }}
-        />
-      }
-
       return <ReactRoute exact
         key={`route${index}`}
         path={route.path}
-        component={route.component}
+        render={(props) => { 
+          if(this.options.routeAuthentifier
+            && !this.options.routeAuthentifier.currentUserHasAccessToRoute(route)) {
+            
+            return <ReactRedirect exact key={`route${index}`} to={{
+              pathname: this.options.routeAuthentifier!.unauthRedirectPathForRoute(route),
+              state: { unauthRedirect: true },
+            }} /> 
+          }
+
+          return <route.component {...props} />
+        }}
       />
     })
   }
