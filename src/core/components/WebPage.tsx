@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react"
 import { RouteComponentProps } from "react-router-dom"
-import logger from "../logger"
+import logger from "../client/logger"
 
 interface WebPageType {
   getTitle?: () => string

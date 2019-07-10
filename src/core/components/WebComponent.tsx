@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Component, ReactFragment } from "react"
-import logger from "../logger"
+import logger from "../client/logger"
 
 export interface WebComponentInterface {
   render: ReactFragment

@@ -1,4 +1,4 @@
-import { WorkerChangeMessage, WorkerMessageType, WorkerMessageChangeType, WorkerCacheMessage } from "../sw/types"
+import { WorkerChangeMessage, WorkerMessageType, WorkerMessageChangeType, WorkerCacheMessage } from "../../sw/types"
 import logger from "./logger"
 
 type Hook<Entity> = { [databaseAndStore: string]: (entity: Entity) => void }

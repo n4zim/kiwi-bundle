@@ -1,4 +1,4 @@
-import { WebpackMode } from "../webpack/core"
+import { WebpackMode } from "../../webpack/core"
 
 const generateCss = (color: string) => [
 //  "border: 1px solid black",
@@ -39,8 +39,8 @@ class Logger {
       + " " + date.getMilliseconds()
   }
 
-  private log(context: ContextType, color: string, title: string, ...data: any) {
-    if(this.enabled) {
+  private log(context: ContextType, force: boolean, color: string, title: string, ...data: any) {
+    if(force || this.enabled) {
       const isObject = typeof context !== "string"
 
       const label = `%c${isObject ? context.constructor.name : context}`
@@ -74,19 +74,19 @@ class Logger {
   }
 
   logSuccess(context: ContextType, title: string, ...data: any) {
-    this.log(context, "#a4f6a5", title, ...data)
+    this.log(context, false, "#a4f6a5", title, ...data)
   }
 
   logError(context: ContextType, title: string,  ...data: any) {
-    this.log(context, "#f68787", title, ...data)
+    this.log(context, true, "#f68787", title, ...data)
   }
 
   logInfo(context: ContextType, title: string,  ...data: any) {
-    this.log(context, "#f1eb9a", title, ...data)
+    this.log(context, false, "#f1eb9a", title, ...data)
   }
 
   logView(context: ContextType, title: string,  ...data: any) {
-    this.log(context, "#f8a978", title, ...data)
+    this.log(context, false, "#f8a978", title, ...data)
   }
 
 }

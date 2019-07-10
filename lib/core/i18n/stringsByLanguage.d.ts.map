@@ -1,0 +1,1 @@
+{"version":3,"file":"stringsByLanguage.d.ts","sourceRoot":"","sources":["../../../src/core/i18n/stringsByLanguage.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,SAAS,CAAA;AAEzC,aAAK,SAAS,GAAG;IAAE,CAAC,QAAQ,EAAE,MAAM,GAAG,GAAG,CAAA;CAAE,CAAA;AAE5C,MAAM,CAAC,OAAO,UAAU,iBAAiB,CAAC,SAAS,EAAE,SAAS,GAAG,eAAe,CAY/E"}

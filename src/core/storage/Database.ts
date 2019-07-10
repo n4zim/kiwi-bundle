@@ -1,5 +1,5 @@
 import Repository from "./Repository"
-import logger from "../logger"
+import logger from "../client/logger"
 
 class Database {
   name: string

@@ -1,0 +1,1 @@
+//# sourceMappingURL=NameByLanguage.d.ts.map
