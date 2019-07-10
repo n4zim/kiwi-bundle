@@ -1,1 +1,1 @@
-{"version":3,"file":"stringsByCount.d.ts","sourceRoot":"","sources":["../../../src/core/i18n/stringsByCount.ts"],"names":[],"mappings":""}
+{"version":3,"file":"stringsByCount.d.ts","sourceRoot":"","sources":["../../../src/core/i18n/stringsByCount.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,SAAS,CAAA;AAGzC,UAAU,QAAQ;IAChB,OAAO,CAAC,EAAE,MAAM,CAAA;IAChB,GAAG,CAAC,EAAE,MAAM,CAAA;IACZ,IAAI,CAAC,EAAE,MAAM,CAAA;CACd;AAED,MAAM,CAAC,OAAO,UAAU,cAAc,CAAC,IAAI,EAAE,QAAQ,GAAG,eAAe,CAetE"}

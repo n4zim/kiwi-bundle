@@ -1,15 +1,12 @@
 import { render } from "react-dom"
 import logger from "./logger"
 import Router from "../routes/Router"
-import { stringsFunction } from "../i18n/types"
-import i18nExecuteString from "../i18n/ExecuteString"
 import "./sw"
 
 let STARTED = false
 
 export default class Client {
   private hotModuleEnabled: boolean = typeof module.hot !== "undefined"
-  private language = navigator.language.slice(0, 2)
 
   constructor(router: Router) {
     // Render
@@ -41,14 +38,6 @@ export default class Client {
     const httpRequest = new XMLHttpRequest()
     httpRequest.open("GET", "/")
     httpRequest.send()
-  }
-
-  i18n(data: string|object|stringsFunction, count = 1, vars = {}): string {
-    if(typeof data === "string") return data
-    if(typeof data === "object") return i18nExecuteString(data)
-    if(typeof data === "function") return data(this.language, count)
-    logger.logError("i18n", "Unknown i18n data type")
-    return ""
   }
 
 }

@@ -13,6 +13,10 @@ import Database from "./core/storage/Database"
 import Store from "./core/stores/Store"
 import WebComponent from "./core/components/WebComponent"
 import WebPage from "./core/components/WebPage"
+import Languages from "./core/i18n/Languages"
+import stringsByCount from "./core/i18n/stringsByCount"
+import stringsByLanguage from "./core/i18n/stringsByLanguage"
+import i18n from "./core/i18n"
 
 export {
   action,
@@ -20,6 +24,8 @@ export {
   Database,
   Entity,
   EntityParams,
+  i18n,
+  Languages,
   Link,
   LinkAction,
   logger,
@@ -31,6 +37,8 @@ export {
   Route,
   Router,
   Store,
+  stringsByCount,
+  stringsByLanguage,
   WebComponent,
   WebPage
 }

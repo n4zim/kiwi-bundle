@@ -1,4 +1,5 @@
 import { stringsFunction } from "./types"
+import logger from "../client/logger"
 
 type Languages = { [language: string]: any }
 
@@ -12,6 +13,7 @@ export default function stringsByLanguage(languages: Languages): stringsFunction
       return languages[language](language, count)
     }
 
+    logger.logError("i18n", "Unknown stringsByLanguage data type")
     return ""
   }
 }

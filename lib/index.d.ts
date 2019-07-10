@@ -13,5 +13,9 @@ import Database from "./core/storage/Database";
 import Store from "./core/stores/Store";
 import WebComponent from "./core/components/WebComponent";
 import WebPage from "./core/components/WebPage";
-export { action, Client, Database, Entity, EntityParams, Link, LinkAction, logger, observable, observer, React, Redirect, Repository, Route, Router, Store, WebComponent, WebPage };
+import Languages from "./core/i18n/Languages";
+import stringsByCount from "./core/i18n/stringsByCount";
+import stringsByLanguage from "./core/i18n/stringsByLanguage";
+import i18n from "./core/i18n";
+export { action, Client, Database, Entity, EntityParams, i18n, Languages, Link, LinkAction, logger, observable, observer, React, Redirect, Repository, Route, Router, Store, stringsByCount, stringsByLanguage, WebComponent, WebPage };
 //# sourceMappingURL=index.d.ts.map

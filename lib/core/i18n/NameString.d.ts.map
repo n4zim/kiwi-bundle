@@ -1,1 +1,0 @@
-{"version":3,"file":"NameString.d.ts","sourceRoot":"","sources":["../../../src/core/i18n/NameString.ts"],"names":[],"mappings":"AAAA,OAAO,YAAY,MAAM,gBAAgB,CAAA;AAEzC,oBAAY,sBAAsB,GAAG,MAAM,CAAA;AAE3C,MAAM,CAAC,OAAO,OAAO,kBAAmB,YAAW,YAAY;IAC7D,OAAO,CAAC,MAAM,CAAK;gBAEP,IAAI,EAAE,MAAM;IAIxB,GAAG;CAGJ"}
