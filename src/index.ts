@@ -32,5 +32,5 @@ export {
   Router,
   Store,
   WebComponent,
-  WebPage,
+  WebPage
 }
