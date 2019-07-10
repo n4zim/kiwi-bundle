@@ -13,6 +13,5 @@ import Database from "./core/storage/Database";
 import Store from "./core/stores/Store";
 import WebComponent from "./core/components/WebComponent";
 import WebPage from "./core/components/WebPage";
-import { withRouter } from "react-router-dom";
-export { action, Client, Database, Entity, EntityParams, Link, LinkAction, logger, observable, observer, React, Redirect, Repository, Route, Router, Store, WebComponent, WebPage, withRouter };
+export { action, Client, Database, Entity, EntityParams, Link, LinkAction, logger, observable, observer, React, Redirect, Repository, Route, Router, Store, WebComponent, WebPage };
 //# sourceMappingURL=index.d.ts.map
