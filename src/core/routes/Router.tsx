@@ -98,10 +98,10 @@ export default class Router {
             return <ReactRedirect exact key={`route${index}`} to={{
               pathname: this.options.routeAuthentifier!.unauthRedirectPathForRoute(route),
               state: { unauthRedirect: true },
-            }} /> 
+            }}/> 
           }
 
-          return <route.component {...props} />
+          return <route.component {...props}/>
         }}
       />
     })

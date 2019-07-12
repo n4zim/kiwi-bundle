@@ -3,7 +3,7 @@ import pathLib from "path"
 import Webpack from "webpack"
 import { readConfig } from "./config"
 import generateWebpackConfig from "../webpack/config"
-import { webpackConsoleLog, createModuleSymbolicLinks } from "./utils"
+import { webpackConsoleLog } from "./utils"
 import chalk from "chalk"
 import { WebpackMode } from "../webpack/core"
 
