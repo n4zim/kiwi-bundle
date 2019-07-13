@@ -1,5 +1,5 @@
 import * as React from "react"
-import WebComponent from "../components/WebComponent"
+import { WebComponent } from "../components/WebComponent"
 
 export interface LinkAction {
   path: string
@@ -11,7 +11,7 @@ interface Props {
   className?: string
 }
 
-export default class Link extends WebComponent<Props> {
+export class Link extends WebComponent<Props> {
 
   onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     event.preventDefault()

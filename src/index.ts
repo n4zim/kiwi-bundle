@@ -1,44 +1,4 @@
-import * as React from "react"
-import { action, observable } from "mobx"
-import Client from "./core/client"
-import Entity, { EntityParams } from "./core/storage/Entity"
-import Link, { LinkAction } from "./core/routes/Link"
-import logger from "./core/client/logger"
-import { observer } from "mobx-react"
-import Repository from "./core/storage/Repository"
-import Route from "./core/routes/Route"
-import Redirect from "./core/routes/Redirect"
-import Router from "./core/routes/Router"
-import Database from "./core/storage/Database"
-import Store from "./core/stores/Store"
-import WebComponent from "./core/components/WebComponent"
-import WebPage from "./core/components/WebPage"
-import Languages from "./core/i18n/Languages"
-import stringsByCount from "./core/i18n/stringsByCount"
-import stringsByLanguage from "./core/i18n/stringsByLanguage"
-import i18n from "./core/i18n"
 
-export {
-  action,
-  Client,
-  Database,
-  Entity,
-  EntityParams,
-  i18n,
-  Languages,
-  Link,
-  LinkAction,
-  logger,
-  observable,
-  observer,
-  React,
-  Redirect,
-  Repository,
-  Route,
-  Router,
-  Store,
-  stringsByCount,
-  stringsByLanguage,
-  WebComponent,
-  WebPage
-}
+export { action, observable } from "mobx"
+export { observer } from "mobx-react"
+export * from "./core"

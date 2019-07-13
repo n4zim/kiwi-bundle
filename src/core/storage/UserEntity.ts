@@ -1,4 +1,4 @@
-import Entity, { EntityParams } from "./Entity"
+import { Entity, EntityParams } from "./Entity"
 
 // Right level for shares
 enum UserEntityShareLevel {

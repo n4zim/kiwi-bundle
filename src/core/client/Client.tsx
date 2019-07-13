@@ -1,11 +1,11 @@
 import { render } from "react-dom"
-import logger from "./logger"
-import Router from "../routes/Router"
+import { logger } from "./logger"
+import { Router } from "../routes/Router"
 import "./sw"
 
 let STARTED = false
 
-export default class Client {
+export class Client {
   private hotModuleEnabled: boolean = typeof module.hot !== "undefined"
 
   constructor(router: Router) {

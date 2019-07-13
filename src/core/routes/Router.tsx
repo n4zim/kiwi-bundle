@@ -2,8 +2,8 @@ import * as React from "react"
 import { createBrowserHistory } from "history"
 import { Router as ReactRouter, Switch, Route as ReactRoute, Redirect as ReactRedirect } from "react-router-dom"
 import { LinkAction } from "./Link"
-import Redirect from "./Redirect"
-import Route from "./Route"
+import { Redirect } from "./Redirect"
+import { Route } from "./Route"
 
 interface RouteAuthentifier {
   unauthRedirectPathForRoute: (route: Route) => string
@@ -11,7 +11,7 @@ interface RouteAuthentifier {
 }
 
 interface RouterOptions {
-  //defaultPage?: string
+  // defaultPage?: string
   routeAuthentifier?: RouteAuthentifier
 }
 
@@ -19,10 +19,10 @@ const HISTORY = createBrowserHistory()
 
 const regexParameter = (prefix: string = "") => new RegExp(`(\\?|\\&)(${prefix})([^=&]*)=([^&]*)`, "g")
 
-export default class Router {
+export class Router {
   routes: (Route|Redirect)[] = []
   options: RouterOptions
-  
+
   indexes: { [name: string]: number } = {}
 
   constructor(routes: (Route|Redirect)[] = [], options: RouterOptions = {}) {
@@ -34,7 +34,7 @@ export default class Router {
     return {
       path,
       call: () => {
-        //window.location.hash = path
+        // window.location.hash = path
         HISTORY.push(path)
       }
     }
@@ -91,14 +91,14 @@ export default class Router {
       return <ReactRoute exact
         key={`route${index}`}
         path={route.path}
-        render={(props) => { 
+        render={(props) => {
           if(this.options.routeAuthentifier
             && !this.options.routeAuthentifier.currentUserHasAccessToRoute(route)) {
-            
+
             return <ReactRedirect exact key={`route${index}`} to={{
               pathname: this.options.routeAuthentifier!.unauthRedirectPathForRoute(route),
               state: { unauthRedirect: true },
-            }}/> 
+            }}/>
           }
 
           return <route.component {...props}/>

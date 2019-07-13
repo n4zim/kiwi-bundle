@@ -1,6 +1,6 @@
-import Store from "./Store"
+import { Store } from "./Store"
 
-export default class Stores {
+export class Stores {
   list: Store[]
   indexes: { [name: string]: number } = {}
 
@@ -10,5 +10,4 @@ export default class Stores {
       this.indexes[store.name] = index
     })
   }
-
 }

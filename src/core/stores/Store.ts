@@ -1,6 +1,6 @@
 import { observable, action } from "mobx"
 
-export default class Store {
+export class Store {
   name: number
 
   constructor(name: number) {

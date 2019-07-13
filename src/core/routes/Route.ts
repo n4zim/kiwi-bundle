@@ -4,7 +4,7 @@ interface RouteOptions {
   authLevels?: Array<string>
 }
 
-export default class Route {
+export class Route {
   path: string
   component: WebPageConstructor
 

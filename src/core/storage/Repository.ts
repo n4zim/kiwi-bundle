@@ -1,6 +1,6 @@
 import { EntityParams } from "./Entity"
-import logger from "../client/logger"
-import serviceWorkerClient from "../client/sw"
+import { logger } from "../client/logger"
+import { serviceWorkerClient } from "../client/sw"
 import { WorkerMessageChangeType } from "../../sw/types"
 
 interface RepositoryParams<Entity, EntityData> {
@@ -13,7 +13,7 @@ type RequestCall = (store: IDBObjectStore) => IDBRequest
 
 type Callback<Entity> = (entity: Entity) => void
 
-export default class Repository<Entity = {}, EntityData = {}> implements RepositoryParams<Entity, EntityData> {
+export class Repository<Entity = {}, EntityData = {}> implements RepositoryParams<Entity, EntityData> {
   name: string
   version: number
   generateEntity: (params: EntityParams<EntityData>) => Entity

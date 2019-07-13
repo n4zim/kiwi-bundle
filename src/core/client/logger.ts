@@ -91,4 +91,4 @@ class Logger {
 
 }
 
-export default new Logger()
+export const logger = new Logger()

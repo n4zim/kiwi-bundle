@@ -11,7 +11,7 @@ export interface EntityParams<Data> {
   data: Data
 }
 
-export default class Entity<Data = {}> implements EntityParams<Data> {
+export class Entity<Data = {}> implements EntityParams<Data> {
   id?: string
   createdAt?: Date
   updatedAt?: Date

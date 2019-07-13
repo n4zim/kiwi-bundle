@@ -1,5 +1,5 @@
 import { WorkerChangeMessage, WorkerMessageType, WorkerMessageChangeType, WorkerCacheMessage } from "../../sw/types"
-import logger from "./logger"
+import { logger } from "./logger"
 
 type Hook<Entity> = { [databaseAndStore: string]: (entity: Entity) => void }
 
@@ -93,4 +93,4 @@ class ServiceWorkerClient {
 
 }
 
-export default new ServiceWorkerClient()
+export const serviceWorkerClient = new ServiceWorkerClient()

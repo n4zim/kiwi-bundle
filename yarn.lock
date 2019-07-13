@@ -3252,6 +3252,11 @@ download@^7.1.0:
     p-event "^2.1.0"
     pify "^3.0.0"
 
+dropin-recipes@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/dropin-recipes/-/dropin-recipes-1.1.0.tgz#9e8c7bf0c51d8013a12ebd2f9c8e302fed25a727"
+  integrity sha512-5q0hC0eX3761fG6nE0CqeMRG0MFps0jai8DZY2MtA9IGYhjb5Sb9VlytE3uYFUDcv2wP7tXaDdxgsMBt3BFHWA==
+
 duplexer3@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"

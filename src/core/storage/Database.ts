@@ -1,7 +1,7 @@
-import Repository from "./Repository"
-import logger from "../client/logger"
+import { Repository } from "./Repository"
+import { logger } from "../client/logger"
 
-class Database {
+export class Database {
   name: string
   private repositories: Repository[]
 
@@ -53,5 +53,3 @@ class Database {
   }
 
 }
-
-export default Database
