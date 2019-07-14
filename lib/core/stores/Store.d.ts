@@ -1,0 +1,10 @@
+export declare class Store {
+    name: number;
+    constructor(name: number);
+    items: string[];
+    currentItem: string;
+    changeCurrentItem(value: string): void;
+    addCurrentItem(): void;
+    reset(): void;
+}
+//# sourceMappingURL=Store.d.ts.map

@@ -1,7 +1,7 @@
 {
   "name": "kiwi-bundle",
   "description": "A simple and clean framework for creating cross-platform applications",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "author": "Nazim Lachter <nazim@blueforest.fr>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
   "license": "Apache-2.0",
