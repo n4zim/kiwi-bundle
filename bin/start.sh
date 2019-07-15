@@ -2,7 +2,7 @@
 
 set -e
 
-rm -rf lib/
+#rm -rf lib/
 
 mkdir -p lib/bin
 touch lib/bin/index.js
