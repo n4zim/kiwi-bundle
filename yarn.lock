@@ -3247,10 +3247,10 @@ download@^7.1.0:
     p-event "^2.1.0"
     pify "^3.0.0"
 
-dropin-recipes@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/dropin-recipes/-/dropin-recipes-1.1.1.tgz#01ce7f953f4966e50378df16ccd9fe972a35d05b"
-  integrity sha512-6uDyI8n03+NnPKiRjHl1Qvaxd4rlBmfAk/9tiXn/E5+/SDCmCHErlVfQ8JjfM8hXIEomgZbL2qtg7LEjXbIWrw==
+dropin-recipes@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/dropin-recipes/-/dropin-recipes-1.1.2.tgz#9fd0cdc32092f2c51192b32ab590481d770144ce"
+  integrity sha512-8OAwZR3GtGku+g54wEMaszpb9DM2tWMk1ORDZw8a9c/95tn/Jq83SXRNoO+A9e47hE0LXusmuOVKo3s2kcXT/Q==
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -5347,6 +5347,11 @@ json-buffer@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.0.tgz#5b1f397afc75d677bde8bcfc0e47e1f9a3d9a898"
   integrity sha1-Wx85evx11ne96Lz8Dkfh+aPZqJg=
+
+json-loader@^0.5.7:
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/json-loader/-/json-loader-0.5.7.tgz#dca14a70235ff82f0ac9a3abeb60d337a365185d"
+  integrity sha512-QLPs8Dj7lnf3e3QYS1zkCo+4ZwqOiF9d/nZnYozTISxXWCfNs9yuky5rJw4/W34s7POaNlbZmQGaB5NiXCbP4w==
 
 json-parse-better-errors@^1.0.1, json-parse-better-errors@^1.0.2:
   version "1.0.2"

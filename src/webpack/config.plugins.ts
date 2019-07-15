@@ -3,7 +3,7 @@ import { CheckerPlugin } from "awesome-typescript-loader"
 import StyleLintPlugin from "stylelint-webpack-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import AppManifestWebpackPlugin from "app-manifest-webpack-plugin"
-import Webpack, { Compiler } from "webpack"
+import Webpack, { Compiler, IgnorePlugin } from "webpack"
 import WebpackConfig from "./core"
 import etag from "etag"
 
@@ -80,7 +80,7 @@ const plugins = (path: string, bundlePath: string, kiwiConfig: any) => new Webpa
       lang: kiwiConfig.project.lang,
       title: kiwiConfig.project.title,
       description: kiwiConfig.project.description,
-      generatekiwiConfig: (webpack: any) => {
+      generateKiwiConfig: (webpack: any) => {
         const config: any = {}
         if(Array.isArray(webpack.assetsByChunkName.sw)) {
           config.sw = webpack.assetsByChunkName.sw[0]
