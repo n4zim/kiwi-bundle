@@ -1,7 +1,7 @@
 import { Router } from "../routes/Router";
 import "./sw";
+export declare function onDevEnv(callback: () => void): void;
 export declare class Client {
-    private hotModuleEnabled;
     constructor(router: Router);
     private loadHotModule;
 }

@@ -1,3 +1,4 @@
+import { DROPinAPI } from "dropin-recipes"
 import { render } from "react-dom"
 import { logger } from "./logger"
 import { Router } from "../routes/Router"
@@ -5,8 +6,13 @@ import "./sw"
 
 let STARTED = false
 
+export function onDevEnv(callback: () => void) {
+  if(typeof module.hot !== "undefined") {
+    callback()
+  }
+}
+
 export class Client {
-  private hotModuleEnabled: boolean = typeof module.hot !== "undefined"
 
   constructor(router: Router) {
     // Render
@@ -18,10 +24,10 @@ export class Client {
     // Service Worker activation (now done by Webpack)
     // serviceWorkerClient.load()
 
-    // Hot reloading
-    if(this.hotModuleEnabled) {
+    onDevEnv(() => {
+      // Hot reloading
       this.loadHotModule()
-    }
+    })
   }
 
   private loadHotModule() {
