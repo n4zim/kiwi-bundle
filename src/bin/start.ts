@@ -19,5 +19,9 @@ export default (path: string) => {
         chalk.bold(`http://${webpackConfig.devServer.host}:${webpackConfig.devServer.port}`)
       )
     })
+    /*process.on("exit", () => {
+      webpackConsoleLog("Webpack server stopped")
+      server.close()
+    })*/
   })
 }
