@@ -1,6 +1,7 @@
 
 import * as React from "react"
-export { React }
+import * as ReactDOM from "react-dom"
+export { React, ReactDOM }
 
 export { action, observable, IObservableValue } from "mobx"
 export { observer } from "mobx-react"
