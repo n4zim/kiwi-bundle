@@ -1,6 +1,6 @@
-import { Name, stringToLanguageSelector, nameToString, MultipleNamesByLanguage } from "dropin-recipes"
+import { stringToLanguageSelector, Name, nameToString } from "dropin-recipes"
 
-export type i18nStrings = { [name: string]: MultipleNamesByLanguage }
+export type i18nStrings = { [name: string]: Name }
 
 export const currentLanguage = stringToLanguageSelector(navigator.language.slice(0, 2))
 

@@ -1,7 +1,7 @@
-import { Name, MultipleNamesByLanguage } from "dropin-recipes";
+import { Name } from "dropin-recipes";
 export declare type i18nStrings = {
-    [name: string]: MultipleNamesByLanguage;
+    [name: string]: Name;
 };
-export declare const currentLanguage: import("dropin-recipes").LanguageSelector;
+export declare const currentLanguage: any;
 export declare function i18n(name: Name, count?: number, vars?: {}): string;
 //# sourceMappingURL=i18n.d.ts.map
