@@ -1,4 +1,4 @@
-import { setCurrentLocale } from "dropin-recipes"
+import { setCurrentLanguage } from "dropin-recipes"
 import { render } from "react-dom"
 import { logger } from "./logger"
 import { Router } from "../routes/Router"
@@ -16,7 +16,7 @@ export class Client {
 
   constructor(router: Router) {
     // Locale
-    setCurrentLocale(navigator.language.slice(0, 2))
+    setCurrentLanguage(navigator.language.slice(0, 2))
 
     // Render
     render(router.render(), document.getElementById("render"), () => {
