@@ -1,4 +1,4 @@
-import { DROPinAPI } from "dropin-recipes"
+import { setCurrentLocale } from "dropin-recipes"
 import { render } from "react-dom"
 import { logger } from "./logger"
 import { Router } from "../routes/Router"
@@ -15,6 +15,9 @@ export function onDevEnv(callback: () => void) {
 export class Client {
 
   constructor(router: Router) {
+    // Locale
+    setCurrentLocale(navigator.language.slice(0, 2))
+
     // Render
     render(router.render(), document.getElementById("render"), () => {
       logger.logSuccess(this, STARTED ? "Restarted" : "Started")
