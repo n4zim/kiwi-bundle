@@ -1,9 +1,31 @@
+#!/usr/bin/env node
 
-import * as React from "react"
-import * as ReactDOM from "react-dom"
-export { React, ReactDOM }
+import { Start } from "./commands/start"
+import { Build } from "./commands/build"
+import { Test } from "./commands/test"
 
-export { action, observable, IObservableValue } from "mobx"
-export { observer } from "mobx-react"
+if(process.argv.length === 2) {
+  console.error("No command argument")
+  process.exit(1)
+}
 
-export * from "./core"
+if(process.argv.length !== 3) {
+  console.error(`Too much arguments (${process.argv.length - 2} instead of 1)`)
+  process.exit(1)
+}
+
+const path = process.cwd()
+switch(process.argv[2]) {
+  case "start":
+    Start(path)
+    break
+  case "build":
+    Build(path)
+    break
+  case "test":
+    Test(path)
+    break
+  default:
+    console.error(`The command "${process.argv[2]}" does not exist`)
+    process.exit(1)
+}

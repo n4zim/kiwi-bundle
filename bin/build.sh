@@ -6,4 +6,4 @@ rm -rf lib/
 
 tsc -p .
 
-chmod +x lib/bin/index.js
+chmod +x lib/index.js

@@ -1,9 +1,10 @@
-{
+
+const config = {
   "rootDir": "..",
   "roots": [
     "<rootDir>/src"
   ],
-  "moduleFileExtensions": [ "ts", "tsx", "js", "jsx" ],
+  "moduleFileExtensions": [ "ts", "tsx" ],
   "transform": {
     "^.+\\.(ts|tsx)$": "<rootDir>/.jest/preprocessor.js"
   },
