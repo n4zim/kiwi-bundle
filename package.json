@@ -1,7 +1,7 @@
 {
   "name": "kiwi-bundle",
   "description": "A simple and clean TypeScript environment for all your cross-platform applications",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
   "license": "Apache-2.0",
