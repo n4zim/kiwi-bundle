@@ -10,14 +10,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tsc = __importStar(require("typescript"));
 var context_1 = require("./context");
 module.exports = {
-    process: (src, path) => {
-        const ts = path.endsWith(".ts");
-        const tsx = path.endsWith(".tsx");
+    process: function (src, path) {
+        var ts = path.endsWith(".ts");
+        var tsx = path.endsWith(".tsx");
         if (ts || tsx) {
-            const context = new context_1.KiwiBundleContext(process.env.PWD);
+            var context = new context_1.KiwiBundleContext(process.env.PWD);
             src = tsc.transpileModule(src, {
                 compilerOptions: context.compilerOptions,
-                fileName: path
+                fileName: path,
             }).outputText;
             path = path.substr(0, path.lastIndexOf(".")) + (ts ? ".js" : ".jsx") || path;
         }

@@ -14,41 +14,43 @@ var tsc = __importStar(require("typescript"));
 var path_1 = require("path");
 var chalk_1 = __importDefault(require("chalk"));
 var fs_1 = require("fs");
-class TypeScriptComplier {
-    static reportDiagnostic(diagnostic) {
-        console.error(`[ERROR] error ${diagnostic.code}`, typeof diagnostic.file !== "undefined"
-            ? ` - ./${path_1.relative(TypeScriptComplier.formatHost.getCurrentDirectory(), diagnostic.file.fileName)}`
-            : "", TypeScriptComplier.formatHost.getNewLine(), chalk_1.default.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptComplier.formatHost.getNewLine())), TypeScriptComplier.formatHost.getNewLine());
+var TypeScriptComplier = /** @class */ (function () {
+    function TypeScriptComplier() {
     }
-    static fsGetAllFiles(dir) {
-        return fs_1.readdirSync(dir).reduce((list, element) => {
-            const elementPath = path_1.join(dir, element);
-            const elementStat = fs_1.statSync(elementPath);
+    TypeScriptComplier.reportDiagnostic = function (diagnostic) {
+        console.error("[ERROR] error " + diagnostic.code, typeof diagnostic.file !== "undefined"
+            ? " - ./" + path_1.relative(TypeScriptComplier.formatHost.getCurrentDirectory(), diagnostic.file.fileName)
+            : "", TypeScriptComplier.formatHost.getNewLine(), chalk_1.default.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptComplier.formatHost.getNewLine())), TypeScriptComplier.formatHost.getNewLine());
+    };
+    TypeScriptComplier.fsGetAllFiles = function (dir) {
+        return fs_1.readdirSync(dir).reduce(function (list, element) {
+            var elementPath = path_1.join(dir, element);
+            var elementStat = fs_1.statSync(elementPath);
             if (elementStat.isDirectory()) {
                 list.unshift.apply(list, TypeScriptComplier.fsGetAllFiles(elementPath));
             }
             else if (elementStat.isFile()) {
-                const elementExtension = path_1.extname(element);
+                var elementExtension = path_1.extname(element);
                 if (elementExtension === ".ts" || elementExtension === ".tsx") {
                     list.unshift(elementPath);
                 }
             }
             return list;
         }, []);
-    }
-    static fsChmodBinaries(context) {
+    };
+    TypeScriptComplier.fsChmodBinaries = function (context) {
         if (typeof context.package.bin !== "undefined") {
-            Object.values(context.package.bin).forEach(binPath => {
+            Object.values(context.package.bin).forEach(function (binPath) {
                 fs_1.chmodSync(path_1.join(context.path, binPath), "755");
             });
         }
-    }
-    static build(context) {
-        const files = TypeScriptComplier.fsGetAllFiles(path_1.join(context.path, context.compilerOptions.rootDir));
-        console.log(`Files to compile :\n${files.map(file => `- ./${path_1.relative(context.path, file)}`).join("\n")}\n`);
-        const program = tsc.createProgram(files, context.compilerOptions);
-        const emitResult = program.emit();
-        const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+    };
+    TypeScriptComplier.build = function (context) {
+        var files = TypeScriptComplier.fsGetAllFiles(path_1.join(context.path, context.compilerOptions.rootDir));
+        console.log("Files to compile :\n" + files.map(function (file) { return "- ./" + path_1.relative(context.path, file); }).join("\n") + "\n");
+        var program = tsc.createProgram(files, context.compilerOptions);
+        var emitResult = program.emit();
+        var allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
         allDiagnostics.forEach(TypeScriptComplier.reportDiagnostic);
         if (emitResult.emitSkipped) {
             process.exit(1);
@@ -57,9 +59,9 @@ class TypeScriptComplier {
             TypeScriptComplier.fsChmodBinaries(context);
             process.exit(0);
         }
-    }
-    static reportWatchStatusChanged(diagnostic) {
-        let tag = "[STATUS]";
+    };
+    TypeScriptComplier.reportWatchStatusChanged = function (diagnostic) {
+        var tag = "[STATUS]";
         switch (diagnostic.code) {
             case 6031:
             case 6032:
@@ -73,26 +75,27 @@ class TypeScriptComplier {
                 break;
         }
         console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost));
-    }
-    static watch(context) {
-        const configPath = tsc.findConfigFile(context.path, tsc.sys.fileExists, "tsconfig.json");
+    };
+    TypeScriptComplier.watch = function (context) {
+        var configPath = tsc.findConfigFile(context.path, tsc.sys.fileExists, "tsconfig.json");
         if (typeof configPath !== "undefined") {
-            const createProgram = tsc.createSemanticDiagnosticsBuilderProgram;
-            const host = tsc.createWatchCompilerHost(configPath, {}, tsc.sys, createProgram, TypeScriptComplier.reportDiagnostic, TypeScriptComplier.reportWatchStatusChanged);
-            const origCreateProgram = host.createProgram;
-            host.createProgram = (rootNames, options, host, oldProgram) => origCreateProgram(rootNames, options, host, oldProgram);
-            const origPostProgramCreate = host.afterProgramCreate;
-            host.afterProgramCreate = program => {
-                origPostProgramCreate(program);
+            var createProgram = tsc.createSemanticDiagnosticsBuilderProgram;
+            var host = tsc.createWatchCompilerHost(configPath, {}, tsc.sys, createProgram, TypeScriptComplier.reportDiagnostic, TypeScriptComplier.reportWatchStatusChanged);
+            var origCreateProgram_1 = host.createProgram;
+            host.createProgram = function (rootNames, options, host, oldProgram) { return origCreateProgram_1(rootNames, options, host, oldProgram); };
+            var origPostProgramCreate_1 = host.afterProgramCreate;
+            host.afterProgramCreate = function (program) {
+                origPostProgramCreate_1(program);
                 TypeScriptComplier.fsChmodBinaries(context);
             };
             tsc.createWatchProgram(host);
         }
-    }
-}
+    };
+    TypeScriptComplier.formatHost = {
+        getCanonicalFileName: function (path) { return path; },
+        getCurrentDirectory: tsc.sys.getCurrentDirectory,
+        getNewLine: function () { return tsc.sys.newLine; },
+    };
+    return TypeScriptComplier;
+}());
 exports.TypeScriptComplier = TypeScriptComplier;
-TypeScriptComplier.formatHost = {
-    getCanonicalFileName: path => path,
-    getCurrentDirectory: tsc.sys.getCurrentDirectory,
-    getNewLine: () => tsc.sys.newLine
-};
