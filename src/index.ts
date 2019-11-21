@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { Start } from "./commands/start"
-import { Build } from "./commands/build"
 import { Test } from "./commands/test"
+import { Build } from "./commands/build"
 
 if(process.argv.length === 2) {
   console.error("No command argument")
@@ -19,11 +19,11 @@ switch(process.argv[2]) {
   case "start":
     Start(path)
     break
-  case "build":
-    Build(path)
-    break
   case "test":
     Test(path)
+    break
+  case "build":
+    Build(path)
     break
   default:
     console.error(`The command "${process.argv[2]}" does not exist`)

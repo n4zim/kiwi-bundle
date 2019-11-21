@@ -1,21 +1,14 @@
 {
+  "extends": "./models/tsconfigs/commonjs.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "module": "commonjs",
-    "target": "es5",
-    "jsx": "react",
-    "lib": [ "es6", "dom" ],
     "rootDir": "src",
-    "outDir": "lib",
-    "paths": { "*": [ "./typings/*" ] },
-    "strict": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "removeComments": true,
-    "experimentalDecorators": true,
-    "declarationMap": true
+    "outDir": "dist"
   },
-  "include": [ "./src/**/*" ],
-  "exclude": [ "node_modules" ]
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

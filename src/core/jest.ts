@@ -1,41 +1,21 @@
-import * as ts from "typescript"
+import * as tsc from "typescript"
+import { KiwiBundleContext } from "./context"
 
-/*export const process = (src, path) => {
-  const ts = path.endsWith(".ts")
-  const tsx = path.endsWith(".tsx")
+module.exports = {
+  process: (src: string, path: string) => {
+    const ts = path.endsWith(".ts")
+    const tsx = path.endsWith(".tsx")
 
-  if(ts || tsx) {
-    src = ts.transpileModule(src, {
-      compilerOptions: tsConfig.compilerOptions,
-      fileName: path,
-    }).outputText
+    if(ts || tsx) {
+      const context = new KiwiBundleContext(process.env.PWD as string)
+      src = tsc.transpileModule(src, {
+        compilerOptions: context.compilerOptions,
+        fileName: path,
+      }).outputText
 
-    path = path.substr(0, path.lastIndexOf(".")) + (ts ? ".js" : ".jsx") || path;
+      path = path.substr(0, path.lastIndexOf(".")) + (ts ? ".js" : ".jsx") || path
+    }
+
+    return src
   }
-
-  return src
 }
-
-
-
-const config = {
-  "rootDir": "..",
-  "roots": [
-    "<rootDir>/src"
-  ],
-  "moduleFileExtensions": [ "ts", "tsx" ],
-  "transform": {
-    "^.+\\.(ts|tsx)$": "<rootDir>/.jest/preprocessor.js"
-  },
-  "testRegex": "\\.test\\.(?:ts|tsx)$",
-  "transformIgnorePatterns": [
-    "/node_modules/"
-  ],
-  "moduleDirectories": [
-    "node_modules"
-  ],
-  "globals": {
-    "DEVELOPMENT": false,
-    "FAKE_SERVER": false
-  }
-}*/

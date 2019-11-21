@@ -1,70 +1,95 @@
-import * as ts from "typescript"
-import { relative } from "path"
-import chalk = require("chalk")
-import { readFileSync } from "fs"
+import * as tsc from "typescript"
+import { relative, join, extname } from "path"
+import chalk from "chalk"
+import { readdirSync, statSync, chmodSync } from "fs"
 import { KiwiBundleContext } from "./context"
 
 export class TypeScriptComplier {
 
-  private static formatHost: ts.FormatDiagnosticsHost = {
+  private static formatHost: tsc.FormatDiagnosticsHost = {
     getCanonicalFileName: path => path,
-    getCurrentDirectory: ts.sys.getCurrentDirectory,
-    getNewLine: () => ts.sys.newLine,
+    getCurrentDirectory: tsc.sys.getCurrentDirectory,
+    getNewLine: () => tsc.sys.newLine,
   }
 
-  private static reportDiagnostic(diagnostic: ts.Diagnostic) {
+  private static reportDiagnostic(diagnostic: tsc.Diagnostic) {
     console.error(
       `[ERROR] error ${diagnostic.code}`,
-      typeof diagnostic.file !== "undefined" ? ` - ./${relative(this.formatHost.getCurrentDirectory(), diagnostic.file.fileName)}` : "",
-      this.formatHost.getNewLine(),
-      chalk.red(ts.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        this.formatHost.getNewLine(),
-      )),
-      this.formatHost.getNewLine(),
+      typeof diagnostic.file !== "undefined"
+        ? ` - ./${relative(TypeScriptComplier.formatHost.getCurrentDirectory(), diagnostic.file.fileName)}`
+        : "",
+      TypeScriptComplier.formatHost.getNewLine(),
+      chalk.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptComplier.formatHost.getNewLine())),
+      TypeScriptComplier.formatHost.getNewLine(),
     )
   }
 
-  static build(context: KiwiBundleContext) {
-    const configPath = ts.findConfigFile(context.path, ts.sys.fileExists, "tsconfig.json")
-    if(typeof configPath !== "undefined") {
-      const options = JSON.parse(readFileSync(configPath, "utf8")).compilerOptions
-      const program = ts.createProgram([ "./src/**/*" ], options)
-      const emitResult = program.emit()
-      const allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
-      allDiagnostics.forEach(this.reportDiagnostic)
-      process.exit(emitResult.emitSkipped ? 1 : 0)
+  private static fsGetAllFiles(dir: string): string[] {
+    return readdirSync(dir).reduce<string[]>((list, element) => {
+      const elementPath = join(dir, element)
+      const elementStat = statSync(elementPath)
+      if(elementStat.isDirectory()) {
+        list.unshift.apply(list, TypeScriptComplier.fsGetAllFiles(elementPath))
+      } else if(elementStat.isFile()) {
+        const elementExtension = extname(element)
+        if(elementExtension === ".ts" || elementExtension === ".tsx") {
+          list.unshift(elementPath)
+        }
+      }
+      return list
+    }, [])
+  }
+
+  private static fsChmodBinaries(context: KiwiBundleContext) {
+    if(typeof context.package.bin !== "undefined") {
+      (Object.values(context.package.bin) as string[]).forEach(binPath => {
+        chmodSync(join(context.path, binPath), "755")
+      })
     }
   }
 
-  private static reportWatchStatusChanged(diagnostic: ts.Diagnostic) {
-    console.info("[STATUS]", chalk(ts.formatDiagnostic(diagnostic, this.formatHost)))
+  static build(context: KiwiBundleContext) {
+    const files = TypeScriptComplier.fsGetAllFiles(join(context.path, context.compilerOptions.rootDir))
+    console.log(`Files to compile :\n${files.map(file => `- ./${relative(context.path, file)}`).join("\n")}\n`)
+    const program = tsc.createProgram(files, context.compilerOptions)
+    const emitResult = program.emit()
+    const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
+    allDiagnostics.forEach(TypeScriptComplier.reportDiagnostic)
+    if(emitResult.emitSkipped) {
+      process.exit(1)
+    } else {
+      TypeScriptComplier.fsChmodBinaries(context)
+      process.exit(0)
+    }
+  }
+
+  private static reportWatchStatusChanged(diagnostic: tsc.Diagnostic) {
+    console.info("[STATUS]", chalk(tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost)))
   }
 
   static watch(context: KiwiBundleContext) {
-    const configPath = ts.findConfigFile(context.path, ts.sys.fileExists, "tsconfig.json")
+    const configPath = tsc.findConfigFile(context.path, tsc.sys.fileExists, "tsconfig.json")
     if(typeof configPath !== "undefined") {
-      const createProgram = ts.createSemanticDiagnosticsBuilderProgram
-      const host = ts.createWatchCompilerHost(
+      const createProgram = tsc.createSemanticDiagnosticsBuilderProgram
+      const host = tsc.createWatchCompilerHost(
         configPath,
         {},
-        ts.sys,
+        tsc.sys,
         createProgram,
-        this.reportDiagnostic,
-        this.reportWatchStatusChanged,
+        TypeScriptComplier.reportDiagnostic,
+        TypeScriptComplier.reportWatchStatusChanged,
       )
 
       const origCreateProgram = host.createProgram
-      host.createProgram = (rootNames, options, host, oldProgram) => {
-        return origCreateProgram(rootNames, options, host, oldProgram)
-      }
+      host.createProgram = (rootNames, options, host, oldProgram) => origCreateProgram(rootNames, options, host, oldProgram)
 
       const origPostProgramCreate = host.afterProgramCreate
       host.afterProgramCreate = program => {
         origPostProgramCreate!(program)
+        TypeScriptComplier.fsChmodBinaries(context)
       }
 
-      ts.createWatchProgram(host)
+      tsc.createWatchProgram(host)
     }
   }
 

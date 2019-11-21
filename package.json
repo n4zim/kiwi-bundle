@@ -5,19 +5,14 @@
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
   "license": "Apache-2.0",
-  "main": "./lib/index.js",
+  "main": "./dist/index.js",
   "bin": {
-    "kiwi": "./lib/index.js"
+    "kiwi": "./dist/index.js"
   },
   "scripts": {
-    "start": "./bin/start.sh",
-    "build": "./bin/build.sh",
-    "test": "jest -c .jest/config.json --passWithNoTests",
-    "preversion": "./bin/npm-pre-version.sh",
-    "version:major": "npm version major -m 'Major upgrade from ${npm_package_version} to %s'",
-    "version:minor": "npm version minor -m 'Minor upgrade from ${npm_package_version} to %s'",
-    "version:patch": "npm version patch -m 'Patch upgrade from ${npm_package_version} to %s'",
-    "postversion": "git push --follow-tags && echo '=> You can now run `npm publish`'"
+    "start": "kiwi start",
+    "test": "kiwi test",
+    "build": "kiwi build"
   },
   "dependencies": {
     "chalk": "^3.0.0",
@@ -27,6 +22,7 @@
     "typescript": "^3.7.2"
   },
   "devDependencies": {
-    "@types/node": "^12.12.8"
+    "@types/node": "^12.12.8",
+    "kiwi-bundle": "^3.0.0"
   }
 }

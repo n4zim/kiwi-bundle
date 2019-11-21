@@ -1,6 +1,7 @@
 import { join } from "path"
 import { existsSync, readFileSync } from "fs"
 import { Environment } from "dropin-recipes"
+import * as tsc from "typescript"
 import chalk from "chalk"
 
 export class KiwiBundleContext {
@@ -31,7 +32,21 @@ export class KiwiBundleContext {
     }
     const tsConfigPath = join(this.path, "tsconfig.json")
     if(existsSync(tsConfigPath)) {
-      this.compilerOptions = JSON.parse(readFileSync(tsConfigPath, "utf8")).compilerOptions
+      const tsConfig = JSON.parse(readFileSync(tsConfigPath, "utf8"))
+      if(typeof tsConfig.extends !== "undefined") {
+        const extendsConfig = JSON.parse(readFileSync(join(this.path, tsConfig.extends), "utf8")).compilerOptions
+        if(typeof tsConfig.compilerOptions !== "undefined") {
+          this.compilerOptions = Object.assign(extendsConfig, tsConfig.compilerOptions)
+        } else {
+          this.compilerOptions = tsConfig.compilerOptions
+        }
+      }
+      if(typeof this.compilerOptions.target === "string") {
+        this.compilerOptions.target = `lib.${this.compilerOptions.target}.d.ts`
+      }
+      if(typeof this.compilerOptions.lib === "object") {
+        this.compilerOptions.lib = this.compilerOptions.lib.map((lib: string) => `lib.${lib}.d.ts`)
+      }
     }
   }
 

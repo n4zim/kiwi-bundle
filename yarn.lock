@@ -313,9 +313,9 @@
     "@babel/types" "^7.0.0"
 
 "@types/babel__traverse@*", "@types/babel__traverse@^7.0.6":
-  version "7.0.7"
-  resolved "https://registry.yarnpkg.com/@types/babel__traverse/-/babel__traverse-7.0.7.tgz#2496e9ff56196cc1429c72034e07eab6121b6f3f"
-  integrity sha512-CeBpmX1J8kWLcDEnI3Cl2Eo6RfbGvzUctA+CjZUhOKDFbLfcr7fc4usEqLNWetrlJd7RhAkyYe2czXop4fICpw==
+  version "7.0.8"
+  resolved "https://registry.yarnpkg.com/@types/babel__traverse/-/babel__traverse-7.0.8.tgz#479a4ee3e291a403a1096106013ec22cf9b64012"
+  integrity sha512-yGeB2dHEdvxjP0y4UbRtQaSkXJ9649fYCmIdRoul5kfAoGCwxuCbMhag0k3RPfnuh9kPGm8x89btcfDEXdVWGw==
   dependencies:
     "@babel/types" "^7.3.0"
 
@@ -345,9 +345,9 @@
     "@types/istanbul-lib-report" "*"
 
 "@types/node@^12.12.8":
-  version "12.12.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.8.tgz#dab418655af39ce2fa99286a0bed21ef8072ac9d"
-  integrity sha512-XLla8N+iyfjvsa0KKV+BP/iGSoTmwxsu5Ci5sM33z9TjohF72DEz95iNvD6pPmemvbQgxAv/909G73gUn8QR7w==
+  version "12.12.11"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.11.tgz#bec2961975888d964196bf0016a2f984d793d3ce"
+  integrity sha512-O+x6uIpa6oMNTkPuHDa9MhMMehlxLAd5QcOvKRjAFsBVpeFWTOPnXbDvILvFgFFZfQ1xh1EZi1FbXxUix+zpsQ==
 
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
@@ -958,11 +958,12 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
-dropin-recipes@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/dropin-recipes/-/dropin-recipes-1.6.2.tgz#0e965317e843f3375f920f0579582d13208d4ee5"
-  integrity sha512-yUPPPu72/CfQ00zRRDCxbEY47Z9M7wesq5BkrAhH/QPBPzGh2cwL3JHc+a3Jif+eVHpKABxAHpcw+Bny+6XRzg==
+dropin-recipes@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/dropin-recipes/-/dropin-recipes-1.7.0.tgz#451dd3c76aee10b2c162a1e5fea0c4ee38d69fda"
+  integrity sha512-xF7yCbTnbQHD3K9kBb76BoZdnExaHR64ieq1d6nHVBMbaep3bAjpd5Sl7GxaPARQ02E9npususeNO4OOdf/unQ==
   dependencies:
+    kiwi-bundle "^3.0.0"
     node-fetch "^2.6.0"
 
 ecc-jsbn@~0.1.1:
@@ -2139,6 +2140,17 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
   integrity sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==
+
+kiwi-bundle@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/kiwi-bundle/-/kiwi-bundle-3.0.0.tgz#21928ab473e492748b04643e2986c0369e83c265"
+  integrity sha512-r1ONJSUjTJNTgc8Is4fcJ0v4n+ASdmby6Lhcp06FlQ7oP0LsK6AC9j1ws4tynzBYyV/aYeqPiOjk4F+Ozwrctg==
+  dependencies:
+    chalk "^3.0.0"
+    dropin-recipes "^1.7.0"
+    jest "^24.9.0"
+    path "^0.12.7"
+    typescript "^3.7.2"
 
 kleur@^3.0.3:
   version "3.0.3"
