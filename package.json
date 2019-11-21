@@ -15,6 +15,7 @@
     "build": "kiwi build"
   },
   "dependencies": {
+    "@types/jest": "^24.0.23",
     "chalk": "^3.0.0",
     "dropin-recipes": "^1.7.0",
     "jest": "^24.9.0",

@@ -1,8 +1,31 @@
+import * as tsc from "typescript"
 import { join } from "path"
 import { existsSync, readFileSync } from "fs"
 import { Environment } from "dropin-recipes"
-import * as tsc from "typescript"
 import chalk from "chalk"
+
+const ModuleKinds: any = {
+  none: tsc.ModuleKind.None,
+  commonjs: tsc.ModuleKind.CommonJS,
+  amd: tsc.ModuleKind.AMD,
+  system: tsc.ModuleKind.System,
+  umd: tsc.ModuleKind.UMD,
+  es6: tsc.ModuleKind.ES2015,
+  es2015: tsc.ModuleKind.ES2015,
+  esnext: tsc.ModuleKind.ESNext
+}
+
+const ScriptTargets: any = {
+  es3: tsc.ScriptTarget.ES3,
+  es5: tsc.ScriptTarget.ES5,
+  es2015: tsc.ScriptTarget.ES2015,
+  es2016: tsc.ScriptTarget.ES2016,
+  es2017: tsc.ScriptTarget.ES2017,
+  es2018: tsc.ScriptTarget.ES2018,
+  es2019: tsc.ScriptTarget.ES2019,
+  es2020: tsc.ScriptTarget.ES2020,
+  esnext: tsc.ScriptTarget.ESNext,
+}
 
 export class KiwiBundleContext {
   env: Environment
@@ -34,15 +57,18 @@ export class KiwiBundleContext {
     if(existsSync(tsConfigPath)) {
       const tsConfig = JSON.parse(readFileSync(tsConfigPath, "utf8"))
       if(typeof tsConfig.extends !== "undefined") {
-        const extendsConfig = JSON.parse(readFileSync(join(this.path, tsConfig.extends), "utf8")).compilerOptions
+        const extendsConfig = JSON.parse(readFileSync(join(this.path, tsConfig.extends), "utf8"))
         if(typeof tsConfig.compilerOptions !== "undefined") {
-          this.compilerOptions = Object.assign(extendsConfig, tsConfig.compilerOptions)
+          this.compilerOptions = Object.assign(extendsConfig.compilerOptions, tsConfig.compilerOptions)
         } else {
-          this.compilerOptions = tsConfig.compilerOptions
+          this.compilerOptions = extendsConfig.compilerOptions
         }
       }
+      if(typeof this.compilerOptions.module === "string") {
+        this.compilerOptions.module = ModuleKinds[this.compilerOptions.module]
+      }
       if(typeof this.compilerOptions.target === "string") {
-        this.compilerOptions.target = `lib.${this.compilerOptions.target}.d.ts`
+        this.compilerOptions.target = ScriptTargets[this.compilerOptions.target]
       }
       if(typeof this.compilerOptions.lib === "object") {
         this.compilerOptions.lib = this.compilerOptions.lib.map((lib: string) => `lib.${lib}.d.ts`)
