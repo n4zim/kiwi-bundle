@@ -59,7 +59,20 @@ class TypeScriptComplier {
         }
     }
     static reportWatchStatusChanged(diagnostic) {
-        console.info("[STATUS]", chalk_1.default(tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost)));
+        let tag = "[STATUS]";
+        switch (diagnostic.code) {
+            case 6031:
+            case 6032:
+                tag = chalk_1.default.bgYellowBright(chalk_1.default.black(" WORKING "));
+                break;
+            case 6193:
+                tag = chalk_1.default.bgRedBright(chalk_1.default.black(" ERRORS "));
+                break;
+            case 6194:
+                tag = chalk_1.default.bgGreenBright(chalk_1.default.black(" READY "));
+                break;
+        }
+        console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost));
     }
     static watch(context) {
         const configPath = tsc.findConfigFile(context.path, tsc.sys.fileExists, "tsconfig.json");

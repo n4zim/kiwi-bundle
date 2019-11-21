@@ -19,7 +19,6 @@ exports.Test = (path) => {
         transformIgnorePatterns: ["/node_modules/"],
         moduleDirectories: ["node_modules"],
         testRegex: "\\.test\\.(?:ts|tsx)$",
-        bail: true,
         globals: JSON.stringify({
             "DEVELOPMENT": false,
             "FAKE_SERVER": false

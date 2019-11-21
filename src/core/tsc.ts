@@ -64,7 +64,20 @@ export class TypeScriptComplier {
   }
 
   private static reportWatchStatusChanged(diagnostic: tsc.Diagnostic) {
-    console.info("[STATUS]", chalk(tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost)))
+    let tag = "[STATUS]"
+    switch(diagnostic.code) {
+      case 6031:
+      case 6032:
+        tag = chalk.bgYellowBright(chalk.black(" WORKING "))
+        break
+      case 6193:
+        tag = chalk.bgRedBright(chalk.black(" ERRORS "))
+        break
+      case 6194:
+        tag = chalk.bgGreenBright(chalk.black(" READY "))
+        break
+    }
+    console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost))
   }
 
   static watch(context: KiwiBundleContext) {
