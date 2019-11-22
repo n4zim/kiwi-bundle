@@ -16,7 +16,7 @@ export class TypeScriptComplier {
     console.error(
       `[ERROR] error ${diagnostic.code}`,
       typeof diagnostic.file !== "undefined"
-        ? ` - ./${relative(TypeScriptComplier.formatHost.getCurrentDirectory(), diagnostic.file.fileName)}`
+        ? ` - ./${relative(join(TypeScriptComplier.formatHost.getCurrentDirectory(), ".."), diagnostic.file.fileName)}`
         : "",
       TypeScriptComplier.formatHost.getNewLine(),
       chalk.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptComplier.formatHost.getNewLine())),

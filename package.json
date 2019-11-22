@@ -1,29 +1,29 @@
 {
   "name": "kiwi-bundle",
-  "description": "A simple and clean TypeScript environment for all your cross-platform applications",
   "version": "3.0.1",
+  "description": "A simple and clean TypeScript environment for all your cross-platform applications",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
   "license": "Apache-2.0",
-  "main": "./dist/index.js",
-  "bin": {
-    "kiwi": "./dist/index.js"
-  },
   "scripts": {
     "start": "kiwi start",
     "test": "kiwi test",
     "build": "kiwi build"
   },
+  "bin": {
+    "kiwi": "./dist/index.js"
+  },
   "dependencies": {
     "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.8",
     "chalk": "^3.0.0",
     "dropin-recipes": "^1.7.0",
     "jest": "^24.9.0",
     "path": "^0.12.7",
+    "tslint": "^5.20.1",
     "typescript": "^3.7.2"
   },
   "devDependencies": {
-    "@types/node": "^12.12.8",
-    "kiwi-bundle": "^3.0.0"
+    "kiwi-bundle": "^3.0.1"
   }
 }

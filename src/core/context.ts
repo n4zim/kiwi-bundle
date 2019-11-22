@@ -39,13 +39,14 @@ export class KiwiBundleContext {
     electron?: any
   } = {}
 
-  constructor(path: string, env: Environment = Environment.PRODUCTION) {
+  constructor(path: string, env: Environment = Environment.DEVELOPMENT) {
     this.path = path
     this.env = env
-    this.load()
+    this.loadData()
+    this.loadBundles()
   }
 
-  load() {
+  private loadData() {
     const packageJsonPath = join(this.path, "package.json")
     const bundlePath = join(this.path, "node_modules", "kiwi-bundle")
     const bundleJsonPath = join(bundlePath, "package.json")
@@ -73,6 +74,13 @@ export class KiwiBundleContext {
       if(typeof this.compilerOptions.lib === "object") {
         this.compilerOptions.lib = this.compilerOptions.lib.map((lib: string) => `lib.${lib}.d.ts`)
       }
+    }
+  }
+
+  private loadBundles() {
+    if(Object.keys(this.package.dependencies).indexOf("kiwi-bundle-react") !== -1) {
+      const kiwiModule = require(join(this.path, "node_modules", "kiwi-bundle-react", "lib", "handlers", "KiwiBundle.js"))
+      this.bundles.react = kiwiModule.KiwiBundle
     }
   }
 
