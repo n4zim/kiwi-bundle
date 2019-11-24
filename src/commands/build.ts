@@ -18,6 +18,16 @@ const clearDirectory = (dir: string) => {
 export const Build = (path: string) => {
   const context = new KiwiBundleContext(path, Environment.PRODUCTION)
   context.display()
-  clearDirectory(join(context.path, context.compilerOptions.outDir))
-  TypeScriptComplier.build(context)
+
+  clearDirectory(join(context.path, context.options.compiler.outDir))
+
+  if(typeof context.handlers.react !== "undefined") {
+    context.handlers.react.build(
+      path,
+      context.options.compiler.outDir,
+      context.getPackageJson().bundles["kiwi-bundle"]
+    )
+  } else {
+    TypeScriptComplier.build(context)
+  }
 }

@@ -9,7 +9,7 @@ module.exports = {
     if(ts || tsx) {
       const context = new KiwiBundleContext(process.env.PWD as string)
       src = tsc.transpileModule(src, {
-        compilerOptions: context.compilerOptions,
+        compilerOptions: context.options.compiler,
         fileName: path,
       }).outputText
 

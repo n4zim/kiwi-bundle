@@ -1,8 +1,9 @@
 import * as tsc from "typescript"
 import { join } from "path"
 import { existsSync, readFileSync } from "fs"
-import { Environment } from "dropin-recipes"
+import { Environment, b5r } from "dropin-recipes"
 import chalk from "chalk"
+import { KiwiBundleHandlers } from "../.bundles/kiwi-bundle/handlers"
 
 const ModuleKinds: any = {
   none: tsc.ModuleKind.None,
@@ -27,61 +28,107 @@ const ScriptTargets: any = {
   esnext: tsc.ScriptTarget.ESNext,
 }
 
+enum KiwiBundlePackage {
+  CORE = "core",
+  REACT = "react",
+  REACT_NATIVE = "react-native",
+  ELECTRON = "electron",
+  VSCODE = "vscode",
+}
+
 export class KiwiBundleContext {
   env: Environment
   path: string
-  package: any
-  compilerOptions: any
-  bundles: {
-    core?: any
-    react?: any
-    reactNative?: any
-    electron?: any
-  } = {}
+  name: string
+  packages: any
+  handlers: { [name in KiwiBundlePackage]?: any }
+  options: { compiler: any }
 
   constructor(path: string, env: Environment = Environment.DEVELOPMENT) {
-    this.path = path
     this.env = env
-    this.loadData()
-    this.loadBundles()
+    this.path = path
+
+    const packageJson = this.extractPackageJson(this.path)
+    this.name = packageJson.name
+    this.packages = this.extractPackages(packageJson)
+
+    this.handlers = this.extractHandlers(packageJson)
+    this.options = { compiler: this.extractTSConfig() }
   }
 
-  private loadData() {
-    const packageJsonPath = join(this.path, "package.json")
-    const bundlePath = join(this.path, "node_modules", "kiwi-bundle")
-    const bundleJsonPath = join(bundlePath, "package.json")
-    if(existsSync(packageJsonPath) && existsSync(bundleJsonPath)) {
-      this.package = JSON.parse(readFileSync(packageJsonPath, "utf8"))
-      this.bundles.core = JSON.parse(readFileSync(bundleJsonPath, "utf8"))
-    }
+  private getModuleName(name: KiwiBundlePackage) {
+    if(name === KiwiBundlePackage.CORE) return "kiwi-bundle"
+    return `kiwi-bundle-${name}`
+  }
+
+  private extractPackageJson(modulePath: string) {
+    return JSON.parse(readFileSync(join(modulePath, "package.json"), "utf8"))
+  }
+
+  private extractPackages(packageJson: any) {
+    let packages = { [this.name]: packageJson }
+    Object.values(KiwiBundlePackage).forEach(name => {
+      const moduleName = this.getModuleName(name)
+      if(
+        Object.keys(packageJson.dependencies).indexOf(moduleName) !== -1
+        || Object.keys(packageJson.devDependencies).indexOf(moduleName) !== -1
+      ) {
+        const path = join(this.path, "node_modules", moduleName)
+        packages[moduleName] = this.extractPackageJson(path)
+      }
+    })
+    return packages
+  }
+
+  private extractHandlers(packageJson: any) {
+    return Object.values(KiwiBundlePackage).reduce((handlers, name) => {
+      const moduleName = this.getModuleName(name)
+      if(Object.keys(packageJson.dependencies).indexOf(moduleName) !== -1) {
+        const modulePackage = this.packages[moduleName]
+        if(typeof modulePackage.bundles !== "undefined") {
+          const moduleBundle = modulePackage.bundles["kiwi-bundle"]
+          if(typeof moduleBundle !== "undefined" && typeof moduleBundle.handlers === "string") {
+            const modulePath = join(this.path, "node_modules", moduleName)
+            const moduleHandlers = require(join(modulePath, moduleBundle.handlers)).default
+            handlers[name] = b5r.load<KiwiBundleHandlers>(moduleHandlers)
+          }
+        }
+      }
+      return handlers
+    }, {} as any)
+  }
+
+  private extractTSConfig(): any {
+    let options: any = {}
     const tsConfigPath = join(this.path, "tsconfig.json")
     if(existsSync(tsConfigPath)) {
       const tsConfig = JSON.parse(readFileSync(tsConfigPath, "utf8"))
       if(typeof tsConfig.extends !== "undefined") {
         const extendsConfig = JSON.parse(readFileSync(join(this.path, tsConfig.extends), "utf8"))
         if(typeof tsConfig.compilerOptions !== "undefined") {
-          this.compilerOptions = Object.assign(extendsConfig.compilerOptions, tsConfig.compilerOptions)
+          options = Object.assign(extendsConfig.compilerOptions, tsConfig.compilerOptions)
         } else {
-          this.compilerOptions = extendsConfig.compilerOptions
+          options = extendsConfig.compilerOptions
         }
       }
-      if(typeof this.compilerOptions.module === "string") {
-        this.compilerOptions.module = ModuleKinds[this.compilerOptions.module]
+      if(typeof options.module === "string") {
+        options.module = ModuleKinds[options.module]
       }
-      if(typeof this.compilerOptions.target === "string") {
-        this.compilerOptions.target = ScriptTargets[this.compilerOptions.target]
+      if(typeof options.target === "string") {
+        options.target = ScriptTargets[options.target]
       }
-      if(typeof this.compilerOptions.lib === "object") {
-        this.compilerOptions.lib = this.compilerOptions.lib.map((lib: string) => `lib.${lib}.d.ts`)
+      if(typeof options.lib === "object") {
+        options.lib = options.lib.map((lib: string) => `lib.${lib}.d.ts`)
       }
     }
+    return options
   }
 
-  private loadBundles() {
-    if(Object.keys(this.package.dependencies).indexOf("kiwi-bundle-react") !== -1) {
-      const kiwiModule = require(join(this.path, "node_modules", "kiwi-bundle-react", "lib", "handlers", "KiwiBundle.js"))
-      this.bundles.react = kiwiModule.KiwiBundle
+  getPackageJson(name?: KiwiBundlePackage) {
+    if(typeof name === "undefined") {
+      return this.packages[this.name]
     }
+    return this.packages[this.getModuleName(name)]
   }
 
   display() {
@@ -96,9 +143,19 @@ export class KiwiBundleContext {
       console.log("============ [DEVELOPMENT MODE] ============")
     }
 
-    console.log("Current package :", this.package.name)
-    console.log("Current version :", this.package.version)
-    console.log("Bundle version  :", this.bundles.core.version)
+    console.log("Current package :", this.name)
+    console.log("Current version :", this.packages[this.name].version)
+
+    const corePackage = this.getPackageJson(KiwiBundlePackage.CORE)
+    if(typeof corePackage !== "undefined") {
+      console.log("Core Bundle version  :", corePackage.version)
+    }
+
+    const reactBundle = this.getPackageJson(KiwiBundlePackage.REACT)
+    if(typeof reactBundle !== "undefined") {
+      console.log("React Bundle version  :", reactBundle.version)
+    }
+
     console.log("============================================\n")
   }
 

@@ -41,17 +41,18 @@ export class TypeScriptComplier {
   }
 
   private static fsChmodBinaries(context: KiwiBundleContext) {
-    if(typeof context.package.bin !== "undefined") {
-      (Object.values(context.package.bin) as string[]).forEach(binPath => {
+    const packageJson = context.getPackageJson()
+    if(typeof packageJson.bin !== "undefined") {
+      (Object.values(packageJson.bin) as string[]).forEach(binPath => {
         chmodSync(join(context.path, binPath), "755")
       })
     }
   }
 
   static build(context: KiwiBundleContext) {
-    const files = TypeScriptComplier.fsGetAllFiles(join(context.path, context.compilerOptions.rootDir))
+    const files = TypeScriptComplier.fsGetAllFiles(join(context.path, context.options.compiler.rootDir))
     console.log(`Files to compile :\n${files.map(file => `- ./${relative(context.path, file)}`).join("\n")}\n`)
-    const program = tsc.createProgram(files, context.compilerOptions)
+    const program = tsc.createProgram(files, context.options.compiler)
     const emitResult = program.emit()
     const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
     allDiagnostics.forEach(TypeScriptComplier.reportDiagnostic)

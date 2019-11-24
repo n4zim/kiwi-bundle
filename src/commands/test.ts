@@ -6,12 +6,12 @@ export const Test = (path: string) => {
   context.display()
 
   const options: any = {
-    projects: [ context.compilerOptions.rootDir ],
+    projects: [ context.options.compiler.rootDir ],
     rootDir: context.path,
-    roots: [ `<rootDir>/${context.compilerOptions.rootDir}` ],
-    moduleFileExtensions: [ "ts", "tsx", "js", "jsx" ],
+    roots: [ `<rootDir>/${context.options.compiler.rootDir}` ],
+    moduleFileExtensions: [ "ts", "tsx", "js" ],
     transform: JSON.stringify({
-      "^.+\\.(ts|tsx)$": `<rootDir>/${context.compilerOptions.outDir}/core/jest.js`,
+      "^.+\\.(ts|tsx)$": `<rootDir>/${context.options.compiler.outDir}/core/jest.js`,
     }),
     transformIgnorePatterns: [ "/node_modules/" ],
     moduleDirectories: [ "node_modules" ],
