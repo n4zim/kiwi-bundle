@@ -69,13 +69,13 @@ export class TypeScriptComplier {
     switch(diagnostic.code) {
       case 6031:
       case 6032:
-        tag = chalk.bgYellowBright(chalk.black(" WORKING "))
+        tag = chalk.bgYellow(chalk.white(" WORKING "))
         break
       case 6193:
-        tag = chalk.bgRedBright(chalk.black(" ERRORS "))
+        tag = chalk.bgRed(chalk.white(" ERRORS "))
         break
       case 6194:
-        tag = chalk.bgGreenBright(chalk.black(" READY "))
+        tag = chalk.bgGreen(chalk.white(" READY "))
         break
     }
     console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost))
