@@ -1,7 +1,6 @@
 {
   "extends": "./.models/ts/commonjs.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist"
   },

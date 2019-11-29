@@ -351,10 +351,10 @@
   dependencies:
     jest-diff "^24.3.0"
 
-"@types/node@^12.12.8":
-  version "12.12.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.11.tgz#bec2961975888d964196bf0016a2f984d793d3ce"
-  integrity sha512-O+x6uIpa6oMNTkPuHDa9MhMMehlxLAd5QcOvKRjAFsBVpeFWTOPnXbDvILvFgFFZfQ1xh1EZi1FbXxUix+zpsQ==
+"@types/node@^12.12.14":
+  version "12.12.14"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.14.tgz#1c1d6e3c75dba466e0326948d56e8bd72a1903d2"
+  integrity sha512-u/SJDyXwuihpwjXy7hOOghagLEV1KdAST6syfnOk6QZAMzZuWZqXy5aYYZbh8Jdpd4escVFP0MvftHNDb9pruA==
 
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
@@ -982,7 +982,7 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
-dropin-recipes@^1.7.0:
+dropin-recipes@^1.7.0, dropin-recipes@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/dropin-recipes/-/dropin-recipes-1.7.1.tgz#b943acd34185d32672111e244a39595488b0bbaf"
   integrity sha512-ANRUkGvxuC5OVMpT3vFj11GtXuMaQEs29qs9k/bzqHI2povf0EBghLglO/+CsFUCORNLXGKMUgxniyK+nEJgzw==

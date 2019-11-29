@@ -65,14 +65,25 @@ export class KiwiBundleContext {
     return JSON.parse(readFileSync(join(modulePath, "package.json"), "utf8"))
   }
 
+  private checkPackageModule(packageJson: any, packageName: KiwiBundlePackage): string | null {
+    const moduleName = this.getModuleName(packageName)
+    if((
+      typeof packageJson.devDependencies !== "undefined"
+      && Object.keys(packageJson.devDependencies).indexOf(moduleName) !== -1
+    ) || (
+      typeof packageJson.dependencies !== "undefined"
+      && Object.keys(packageJson.dependencies).indexOf(moduleName) !== -1
+    )) {
+      return moduleName
+    }
+    return null
+  }
+
   private extractPackages(packageJson: any) {
     let packages = { [this.name]: packageJson }
     Object.values(KiwiBundlePackage).forEach(name => {
-      const moduleName = this.getModuleName(name)
-      if(
-        Object.keys(packageJson.dependencies).indexOf(moduleName) !== -1
-        || Object.keys(packageJson.devDependencies).indexOf(moduleName) !== -1
-      ) {
+      const moduleName = this.checkPackageModule(packageJson, name)
+      if(moduleName !== null) {
         const path = join(this.path, "node_modules", moduleName)
         packages[moduleName] = this.extractPackageJson(path)
       }
@@ -82,8 +93,8 @@ export class KiwiBundleContext {
 
   private extractHandlers(packageJson: any) {
     return Object.values(KiwiBundlePackage).reduce((handlers, name) => {
-      const moduleName = this.getModuleName(name)
-      if(Object.keys(packageJson.dependencies).indexOf(moduleName) !== -1) {
+      const moduleName = this.checkPackageModule(packageJson, name)
+      if(moduleName !== null) {
         const modulePackage = this.packages[moduleName]
         if(typeof modulePackage.bundles !== "undefined") {
           const moduleBundle = modulePackage.bundles["kiwi-bundle"]
