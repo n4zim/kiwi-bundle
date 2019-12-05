@@ -21,7 +21,7 @@
     "jest": "^24.9.0",
     "path": "^0.12.7",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.3"
   },
   "devDependencies": {
     "kiwi-bundle": "^3.0.1"
