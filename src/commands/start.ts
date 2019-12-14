@@ -12,6 +12,14 @@ export const Start = (path: string) => {
       context.getPackageJson().bundles["kiwi-bundle"]
     )
   } else {
-    TypeScriptComplier.watch(context)
+    if(typeof context.handlers.kubeless !== "undefined") {
+      context.handlers.kubeless.start({
+        path,
+        outputDir: context.options.compiler.outDir,
+        options: context.getPackageJson().bundles["kiwi-bundle"],
+      })
+    }
+
+    // TypeScriptComplier.watch(context)
   }
 }

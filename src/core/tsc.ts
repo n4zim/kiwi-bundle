@@ -49,7 +49,7 @@ export class TypeScriptComplier {
     }
   }
 
-  static build(context: KiwiBundleContext) {
+  static build(context: KiwiBundleContext, callback?: (files: string[]) => void) {
     const files = TypeScriptComplier.fsGetAllFiles(join(context.path, context.options.compiler.rootDir))
     console.log(`Files to compile :\n${files.map(file => `- ./${relative(context.path, file)}`).join("\n")}\n`)
     const program = tsc.createProgram(files, context.options.compiler)
@@ -60,7 +60,11 @@ export class TypeScriptComplier {
       process.exit(1)
     } else {
       TypeScriptComplier.fsChmodBinaries(context)
-      process.exit(0)
+      if(typeof callback !== "undefined") {
+        callback(files)
+      } else {
+        process.exit(0)
+      }
     }
   }
 

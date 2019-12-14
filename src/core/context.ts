@@ -34,12 +34,13 @@ enum KiwiBundlePackage {
   REACT_NATIVE = "react-native",
   ELECTRON = "electron",
   VSCODE = "vscode",
+  KUBELESS = "kubeless",
 }
 
 export class KiwiBundleContext {
   env: Environment
   path: string
-  name: string
+  packageJson: any
   packages: any
   handlers: { [name in KiwiBundlePackage]?: any }
   options: { compiler: any }
@@ -48,11 +49,10 @@ export class KiwiBundleContext {
     this.env = env
     this.path = path
 
-    const packageJson = this.extractPackageJson(this.path)
-    this.name = packageJson.name
-    this.packages = this.extractPackages(packageJson)
+    this.packageJson = this.extractPackageJson(this.path)
+    this.packages = this.extractPackages(this.packageJson)
 
-    this.handlers = this.extractHandlers(packageJson)
+    this.handlers = this.extractHandlers(this.packageJson)
     this.options = { compiler: this.extractTSConfig() }
   }
 
@@ -80,7 +80,7 @@ export class KiwiBundleContext {
   }
 
   private extractPackages(packageJson: any) {
-    let packages = { [this.name]: packageJson }
+    let packages = { [this.packageJson.name as string]: packageJson }
     Object.values(KiwiBundlePackage).forEach(name => {
       const moduleName = this.checkPackageModule(packageJson, name)
       if(moduleName !== null) {
@@ -137,7 +137,7 @@ export class KiwiBundleContext {
 
   getPackageJson(name?: KiwiBundlePackage) {
     if(typeof name === "undefined") {
-      return this.packages[this.name]
+      return this.packages[this.packageJson.name]
     }
     return this.packages[this.getModuleName(name)]
   }
@@ -154,8 +154,8 @@ export class KiwiBundleContext {
       console.log("============ [DEVELOPMENT MODE] ============")
     }
 
-    console.log("Current package :", this.name)
-    console.log("Current version :", this.packages[this.name].version)
+    console.log("Current package :", this.packageJson.name)
+    console.log("Current version :", this.packages[this.packageJson.name].version)
 
     const corePackage = this.getPackageJson(KiwiBundlePackage.CORE)
     if(typeof corePackage !== "undefined") {
@@ -165,6 +165,11 @@ export class KiwiBundleContext {
     const reactBundle = this.getPackageJson(KiwiBundlePackage.REACT)
     if(typeof reactBundle !== "undefined") {
       console.log("React Bundle version  :", reactBundle.version)
+    }
+
+    const kubelessBundle = this.getPackageJson(KiwiBundlePackage.KUBELESS)
+    if(typeof kubelessBundle !== "undefined") {
+      console.log("Kubeless Bundle version  :", kubelessBundle.version)
     }
 
     console.log("============================================\n")

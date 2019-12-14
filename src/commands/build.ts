@@ -1,7 +1,7 @@
 import { readdirSync, lstatSync, unlinkSync } from "fs"
+import { Environment } from "dropin-recipes"
 import { join } from "path"
 import { KiwiBundleContext } from "../core/context"
-import { Environment } from "dropin-recipes"
 import { TypeScriptComplier } from "../core/tsc"
 
 const clearDirectory = (dir: string) => {
@@ -15,7 +15,7 @@ const clearDirectory = (dir: string) => {
   })
 }
 
-export const Build = (path: string) => {
+export const Build = (path: string, callback?: () => void) => {
   const context = new KiwiBundleContext(path, Environment.PRODUCTION)
   context.display()
 
