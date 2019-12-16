@@ -1,5 +1,5 @@
 import * as tsc from "typescript"
-import { KiwiBundleContext } from "./context"
+import { Bundle } from "./bundle"
 
 module.exports = {
   process: (src: string, path: string) => {
@@ -7,9 +7,9 @@ module.exports = {
     const tsx = path.endsWith(".tsx")
 
     if(ts || tsx) {
-      const context = new KiwiBundleContext(process.env.PWD as string)
+      const context = new Bundle(process.env.PWD as string)
       src = tsc.transpileModule(src, {
-        compilerOptions: context.options.compiler,
+        compilerOptions: context.compiler,
         fileName: path,
       }).outputText
 

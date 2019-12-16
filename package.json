@@ -3,12 +3,14 @@
   "version": "3.0.2",
   "description": "A simple and clean TypeScript environment for all your cross-platform applications",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
-  "repository": "git@github.com:theblueforest/kiwi-bundle.git",
+  "repository": "git@github.com:theblueforest/kiwi-bundle-typescript.git",
   "license": "Apache-2.0",
   "scripts": {
     "start": "kiwi start",
     "test": "kiwi test",
-    "build": "kiwi build"
+    "build": "kiwi build",
+    "deploy": "kiwi deploy",
+    "undeploy": "kiwi undeploy"
   },
   "bin": {
     "kiwi": "./dist/index.js"

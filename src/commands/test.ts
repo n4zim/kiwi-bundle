@@ -1,17 +1,17 @@
 import jest from "jest"
-import { KiwiBundleContext } from "../core/context"
+import { Bundle } from "../core/bundle"
 
 export const Test = (path: string) => {
-  const context = new KiwiBundleContext(path)
-  context.display()
+  const bundle = new Bundle(path)
+  bundle.display()
 
   const options: any = {
-    projects: [ context.options.compiler.rootDir ],
-    rootDir: context.path,
-    roots: [ `<rootDir>/${context.options.compiler.rootDir}` ],
+    projects: [ bundle.compiler.rootDir ],
+    rootDir: bundle.path,
+    roots: [ `<rootDir>/${bundle.compiler.rootDir}` ],
     moduleFileExtensions: [ "ts", "tsx", "js" ],
     transform: JSON.stringify({
-      "^.+\\.(ts|tsx)$": `<rootDir>/${context.options.compiler.outDir}/core/jest.js`,
+      "^.+\\.(ts|tsx)$": `<rootDir>/${bundle.compiler.outDir}/core/jest.js`,
     }),
     transformIgnorePatterns: [ "/node_modules/" ],
     moduleDirectories: [ "node_modules" ],

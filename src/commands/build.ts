@@ -1,7 +1,7 @@
 import { readdirSync, lstatSync, unlinkSync } from "fs"
 import { Environment } from "dropin-recipes"
 import { join } from "path"
-import { KiwiBundleContext } from "../core/context"
+import { Bundle, KiwiBundlePackage } from "../core/bundle"
 import { TypeScriptComplier } from "../core/tsc"
 
 const clearDirectory = (dir: string) => {
@@ -16,18 +16,20 @@ const clearDirectory = (dir: string) => {
 }
 
 export const Build = (path: string, callback?: () => void) => {
-  const context = new KiwiBundleContext(path, Environment.PRODUCTION)
-  context.display()
+  const bundle = new Bundle(path, Environment.PRODUCTION)
+  bundle.display()
 
-  clearDirectory(join(context.path, context.options.compiler.outDir))
+  clearDirectory(join(bundle.path, bundle.compiler.outDir))
 
-  if(typeof context.handlers.react !== "undefined") {
-    context.handlers.react.build(
+  const reactHandler = bundle.getPackageHandler(KiwiBundlePackage.REACT, "build")
+  if(typeof reactHandler !== "undefined") {
+    reactHandler({
       path,
-      context.options.compiler.outDir,
-      context.getPackageJson().bundles["kiwi-bundle"]
-    )
+      outDir: bundle.compiler.outDir,
+      options: bundle.getCurrentOptions(),
+      handlers: bundle.getCurrentHandlers(),
+    })
   } else {
-    TypeScriptComplier.build(context)
+    TypeScriptComplier.build(bundle)
   }
 }

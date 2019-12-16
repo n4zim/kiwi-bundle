@@ -1,7 +1,7 @@
 import * as tsc from "typescript"
-import { join } from "path"
+import { join, extname } from "path"
 import { existsSync, readFileSync } from "fs"
-import { Environment, b5r } from "dropin-recipes"
+import { Environment } from "dropin-recipes"
 import chalk from "chalk"
 import { KiwiBundleHandlers } from "../.bundles/kiwi-bundle/handlers"
 
@@ -28,35 +28,33 @@ const ScriptTargets: any = {
   esnext: tsc.ScriptTarget.ESNext,
 }
 
-enum KiwiBundlePackage {
-  CORE = "core",
+export enum KiwiBundlePackage {
+  TYPESCRIPT = "ts",
   REACT = "react",
   REACT_NATIVE = "react-native",
   ELECTRON = "electron",
+  DOCKER = "docker",
   VSCODE = "vscode",
 }
 
-export class KiwiBundleContext {
+export class Bundle {
   env: Environment
   path: string
-  packageJson: any
-  packages: any
-  handlers: { [name in KiwiBundlePackage]?: any }
-  options: { compiler: any }
+  name: string
+  dependencies: any
+  compiler: any
 
   constructor(path: string, env: Environment = Environment.DEVELOPMENT) {
     this.env = env
     this.path = path
-
-    this.packageJson = this.extractPackageJson(this.path)
-    this.packages = this.extractPackages(this.packageJson)
-
-    this.handlers = this.extractHandlers(this.packageJson)
-    this.options = { compiler: this.extractTSConfig() }
+    const packageJson = this.extractPackageJson(this.path)
+    this.name = packageJson.name
+    this.dependencies = this.extractPackages(packageJson)
+    this.compiler = this.extractTSConfig()
   }
 
   private getModuleName(name: KiwiBundlePackage) {
-    if(name === KiwiBundlePackage.CORE) return "kiwi-bundle"
+    if(name === KiwiBundlePackage.TYPESCRIPT) return "kiwi-bundle"
     return `kiwi-bundle-${name}`
   }
 
@@ -79,33 +77,15 @@ export class KiwiBundleContext {
   }
 
   private extractPackages(packageJson: any) {
-    let packages = { [this.packageJson.name as string]: packageJson }
-    Object.values(KiwiBundlePackage).forEach(name => {
-      const moduleName = this.checkPackageModule(packageJson, name)
+    let packages = { [this.name]: packageJson }
+    Object.values(KiwiBundlePackage).forEach(packageName => {
+      const moduleName = this.checkPackageModule(packageJson, packageName)
       if(moduleName !== null) {
         const path = join(this.path, "node_modules", moduleName)
         packages[moduleName] = this.extractPackageJson(path)
       }
     })
     return packages
-  }
-
-  private extractHandlers(packageJson: any) {
-    return Object.values(KiwiBundlePackage).reduce((handlers, name) => {
-      const moduleName = this.checkPackageModule(packageJson, name)
-      if(moduleName !== null) {
-        const modulePackage = this.packages[moduleName]
-        if(typeof modulePackage.bundles !== "undefined") {
-          const moduleBundle = modulePackage.bundles["kiwi-bundle"]
-          if(typeof moduleBundle !== "undefined" && typeof moduleBundle.handlers === "string") {
-            const modulePath = join(this.path, "node_modules", moduleName)
-            const moduleHandlers = require(join(modulePath, moduleBundle.handlers)).default
-            handlers[name] = b5r.load<KiwiBundleHandlers>(moduleHandlers)
-          }
-        }
-      }
-      return handlers
-    }, {} as any)
   }
 
   private extractTSConfig(): any {
@@ -136,9 +116,64 @@ export class KiwiBundleContext {
 
   getPackageJson(name?: KiwiBundlePackage) {
     if(typeof name === "undefined") {
-      return this.packages[this.packageJson.name]
+      return this.dependencies[this.name]
     }
-    return this.packages[this.getModuleName(name)]
+    return this.dependencies[this.getModuleName(name)]
+  }
+
+  getPackageHandlerPath(packageName: KiwiBundlePackage, handlerName: string) {
+    if(this.getModuleName(packageName) !== this.name) {
+      const packageJson = this.getPackageJson(packageName)
+      if(typeof packageJson !== "undefined") {
+        if(typeof packageJson.bundles !== "undefined") {
+          const bundle = packageJson.bundles[this.getModuleName(KiwiBundlePackage.TYPESCRIPT)]
+          if(typeof bundle !== "undefined") {
+            if(typeof bundle.handlers !== "undefined") {
+              if(typeof bundle.handlers[handlerName] !== "undefined") {
+                const bundleDir = join(this.path, "node_modules", packageJson.name)
+                const bundleOutDir = require(join(bundleDir, "tsconfig.json")).compilerOptions.outDir
+                return join(bundleDir, bundleOutDir, bundle.handlers[handlerName])
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  getPackageHandler(packageName: KiwiBundlePackage, handlerName: string) {
+    const path = this.getPackageHandlerPath(packageName, handlerName)
+    if(typeof path !== "undefined") {
+      const ext = extname(path)
+      if(ext.length !== 0) {
+        return require(path.slice(0, -ext.length) + ".js")[ext.slice(1)]
+      }
+      return require(path + ".js")
+    }
+  }
+
+  getCurrentOptions() {
+    if(typeof this.dependencies[this.name].bundles !== "undefined") {
+      const bundle = this.dependencies[this.name].bundles[this.getModuleName(KiwiBundlePackage.TYPESCRIPT)]
+      if(typeof bundle !== "undefined") {
+        if(typeof bundle.options !== "undefined") {
+          return bundle.options
+        }
+      }
+    }
+    return {}
+  }
+
+  getCurrentHandlers() {
+    if(typeof this.dependencies[this.name].bundles !== "undefined") {
+      const bundle = this.dependencies[this.name].bundles[this.getModuleName(KiwiBundlePackage.TYPESCRIPT)]
+      if(typeof bundle !== "undefined") {
+        if(typeof bundle.handlers !== "undefined") {
+          return bundle.handlers
+        }
+      }
+    }
+    return {}
   }
 
   display() {
@@ -153,17 +188,19 @@ export class KiwiBundleContext {
       console.log("============ [DEVELOPMENT MODE] ============")
     }
 
-    console.log("Current package :", this.packageJson.name)
-    console.log("Current version :", this.packages[this.packageJson.name].version)
+    console.log("Current package :", this.name)
+    console.log("Current version :", this.dependencies[this.name].version)
 
-    const corePackage = this.getPackageJson(KiwiBundlePackage.CORE)
-    if(typeof corePackage !== "undefined") {
-      console.log("Core Bundle version  :", corePackage.version)
+    const tsPackage = this.getPackageJson(KiwiBundlePackage.TYPESCRIPT)
+    if(typeof tsPackage !== "undefined") {
+      console.log("TypeScript Bundle version :", tsPackage.version)
     }
 
-    const reactBundle = this.getPackageJson(KiwiBundlePackage.REACT)
-    if(typeof reactBundle !== "undefined") {
-      console.log("React Bundle version  :", reactBundle.version)
+    if(this.name !== this.getModuleName(KiwiBundlePackage.REACT)) {
+      const reactBundle = this.getPackageJson(KiwiBundlePackage.REACT)
+      if(typeof reactBundle !== "undefined") {
+        console.log("React Bundle version :", reactBundle.version)
+      }
     }
 
     console.log("============================================\n")

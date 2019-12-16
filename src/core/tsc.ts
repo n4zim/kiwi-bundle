@@ -2,7 +2,7 @@ import * as tsc from "typescript"
 import { relative, join, extname } from "path"
 import chalk from "chalk"
 import { readdirSync, statSync, chmodSync } from "fs"
-import { KiwiBundleContext } from "./context"
+import { Bundle } from "./bundle"
 
 export class TypeScriptComplier {
 
@@ -40,7 +40,7 @@ export class TypeScriptComplier {
     }, [])
   }
 
-  private static fsChmodBinaries(context: KiwiBundleContext) {
+  private static fsChmodBinaries(context: Bundle) {
     const packageJson = context.getPackageJson()
     if(typeof packageJson.bin !== "undefined") {
       (Object.values(packageJson.bin) as string[]).forEach(binPath => {
@@ -49,10 +49,15 @@ export class TypeScriptComplier {
     }
   }
 
-  static build(context: KiwiBundleContext, callback?: (files: string[]) => void) {
-    const files = TypeScriptComplier.fsGetAllFiles(join(context.path, context.options.compiler.rootDir))
+  static build(context: Bundle, callback?: (files: string[]) => void) {
+    const files = TypeScriptComplier.fsGetAllFiles(join(context.path, context.compiler.rootDir))
     console.log(`Files to compile :\n${files.map(file => `- ./${relative(context.path, file)}`).join("\n")}\n`)
-    const program = tsc.createProgram(files, context.options.compiler)
+    const program = tsc.createProgram(files, context.compiler)
+
+    files.forEach(file => {
+      console.log((program.getSourceFile(file) as any).resolvedModules)
+    })
+
     const emitResult = program.emit()
     const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
     allDiagnostics.forEach(TypeScriptComplier.reportDiagnostic)
@@ -85,7 +90,7 @@ export class TypeScriptComplier {
     console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost))
   }
 
-  static watch(context: KiwiBundleContext) {
+  static watch(context: Bundle) {
     const configPath = tsc.findConfigFile(context.path, tsc.sys.fileExists, "tsconfig.json")
     if(typeof configPath !== "undefined") {
       const createProgram = tsc.createSemanticDiagnosticsBuilderProgram

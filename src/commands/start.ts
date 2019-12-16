@@ -1,17 +1,19 @@
-import { KiwiBundleContext } from "../core/context"
+import { Bundle, KiwiBundlePackage } from "../core/bundle"
 import { TypeScriptComplier } from "../core/tsc"
 
 export const Start = (path: string) => {
-  const context = new KiwiBundleContext(path)
-  context.display()
+  const bundle = new Bundle(path)
+  bundle.display()
 
-  if(typeof context.handlers.react !== "undefined") {
-    context.handlers.react.start(
+  const reactHandler = bundle.getPackageHandler(KiwiBundlePackage.REACT, "start")
+  if(typeof reactHandler !== "undefined") {
+    reactHandler({
       path,
-      context.options.compiler.outDir,
-      context.getPackageJson().bundles["kiwi-bundle"]
-    )
+      outDir: bundle.compiler.outDir,
+      options: bundle.getCurrentOptions(),
+      handlers: bundle.getCurrentHandlers(),
+    })
   } else {
-    TypeScriptComplier.watch(context)
+    TypeScriptComplier.watch(bundle)
   }
 }

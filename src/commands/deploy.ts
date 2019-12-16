@@ -1,7 +1,7 @@
 import { Environment } from "dropin-recipes"
-import { KiwiBundleContext } from "../core/context"
+import { Bundle } from "../core/bundle"
 
 export const Deploy = (path: string, stage: string, name?: string) => {
-  const context = new KiwiBundleContext(path, Environment.PRODUCTION)
-  context.display()
+  const bundle = new Bundle(path, Environment.PRODUCTION)
+  bundle.display()
 }
