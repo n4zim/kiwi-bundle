@@ -34,7 +34,6 @@ enum KiwiBundlePackage {
   REACT_NATIVE = "react-native",
   ELECTRON = "electron",
   VSCODE = "vscode",
-  KUBELESS = "kubeless",
 }
 
 export class KiwiBundleContext {
@@ -165,11 +164,6 @@ export class KiwiBundleContext {
     const reactBundle = this.getPackageJson(KiwiBundlePackage.REACT)
     if(typeof reactBundle !== "undefined") {
       console.log("React Bundle version  :", reactBundle.version)
-    }
-
-    const kubelessBundle = this.getPackageJson(KiwiBundlePackage.KUBELESS)
-    if(typeof kubelessBundle !== "undefined") {
-      console.log("Kubeless Bundle version  :", kubelessBundle.version)
     }
 
     console.log("============================================\n")
