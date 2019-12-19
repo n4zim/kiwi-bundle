@@ -11,7 +11,7 @@ export const Test = (path: string) => {
     roots: [ `<rootDir>/${bundle.compiler.rootDir}` ],
     moduleFileExtensions: [ "ts", "tsx", "js" ],
     transform: JSON.stringify({
-      "^.+\\.(ts|tsx)$": `<rootDir>/${bundle.compiler.outDir}/core/jest.js`,
+      "^.+\\.(ts|tsx)$": `<rootDir>/node_modules/kiwi-bundle/dist/core/jest.js`,
     }),
     transformIgnorePatterns: [ "/node_modules/" ],
     moduleDirectories: [ "node_modules" ],
