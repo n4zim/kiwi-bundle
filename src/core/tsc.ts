@@ -54,9 +54,9 @@ export class TypeScriptComplier {
     console.log(`Files to compile :\n${files.map(file => `- ./${relative(context.path, file)}`).join("\n")}\n`)
     const program = tsc.createProgram(files, context.compiler)
 
-    files.forEach(file => {
+    /*files.forEach(file => {
       console.log((program.getSourceFile(file) as any).resolvedModules)
-    })
+    })*/
 
     const emitResult = program.emit()
     const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
