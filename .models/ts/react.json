@@ -11,6 +11,10 @@
     "removeComments": true,
     "declaration": false,
     "sourceMap": false,
-    "declarationMap": false
+    "declarationMap": false,
+    "types": [
+      "node",
+      "react"
+    ]
   }
 }
