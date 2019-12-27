@@ -28,6 +28,12 @@ const ScriptTargets: any = {
   esnext: tsc.ScriptTarget.ESNext,
 }
 
+export enum JsxEmit {
+  preserve = 1,
+  react = 2,
+  "react-native" = 3,
+}
+
 export enum KiwiBundlePackage {
   TYPESCRIPT = "ts",
   REACT = "react",
@@ -109,6 +115,9 @@ export class Bundle {
       }
       if(typeof options.lib === "object") {
         options.lib = options.lib.map((lib: string) => `lib.${lib}.d.ts`)
+      }
+      if(typeof options.jsx === "string") {
+        options.jsx = JsxEmit[options.jsx]
       }
     }
     return options

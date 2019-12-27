@@ -49,22 +49,22 @@ export class TypeScriptComplier {
     }
   }
 
-  static build(context: Bundle, callback?: (files: string[]) => void) {
-    const files = TypeScriptComplier.fsGetAllFiles(join(context.path, context.compiler.rootDir))
-    console.log(`Files to compile :\n${files.map(file => `- ./${relative(context.path, file)}`).join("\n")}\n`)
-    const program = tsc.createProgram(files, context.compiler)
+  static build(bundle: Bundle, callback?: (files: string[]) => void) {
+    const files = TypeScriptComplier.fsGetAllFiles(join(bundle.path, bundle.compiler.rootDir))
+    console.log(`Files to compile :\n${files.map(file => `- ./${relative(bundle.path, file)}`).join("\n")}\n`)
 
     /*files.forEach(file => {
       console.log((program.getSourceFile(file) as any).resolvedModules)
     })*/
 
+    const program = tsc.createProgram(files, bundle.compiler)
     const emitResult = program.emit()
     const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
     allDiagnostics.forEach(TypeScriptComplier.reportDiagnostic)
     if(emitResult.emitSkipped) {
       process.exit(1)
     } else {
-      TypeScriptComplier.fsChmodBinaries(context)
+      TypeScriptComplier.fsChmodBinaries(bundle)
       if(typeof callback !== "undefined") {
         callback(files)
       } else {
