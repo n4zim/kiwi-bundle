@@ -3,7 +3,6 @@ import { join, extname } from "path"
 import { existsSync, readFileSync } from "fs"
 import { Environment } from "dropin-recipes"
 import chalk from "chalk"
-import { KiwiBundleHandlers } from "../.bundles/kiwi-bundle/handlers"
 
 const ModuleKinds: any = {
   none: tsc.ModuleKind.None,
@@ -37,10 +36,10 @@ export enum JsxEmit {
 export enum KiwiBundlePackage {
   TYPESCRIPT = "ts",
   REACT = "react",
+  API = "api",
+  VSCODE = "vscode",
   REACT_NATIVE = "react-native",
   ELECTRON = "electron",
-  DOCKER = "docker",
-  VSCODE = "vscode",
 }
 
 export class Bundle {
@@ -197,18 +196,25 @@ export class Bundle {
       console.log("============ [DEVELOPMENT MODE] ============")
     }
 
-    console.log("Current package :", this.name)
+    console.log("Current module :", this.name)
     console.log("Current version :", this.dependencies[this.name].version)
 
     const tsPackage = this.getPackageJson(KiwiBundlePackage.TYPESCRIPT)
     if(typeof tsPackage !== "undefined") {
-      console.log("TypeScript Bundle version :", tsPackage.version)
+      console.log("TypeScript module version :", tsPackage.version)
     }
 
     if(this.name !== this.getModuleName(KiwiBundlePackage.REACT)) {
       const reactBundle = this.getPackageJson(KiwiBundlePackage.REACT)
       if(typeof reactBundle !== "undefined") {
-        console.log("React Bundle version :", reactBundle.version)
+        console.log("React module version :", reactBundle.version)
+      }
+    }
+
+    if(this.name !== this.getModuleName(KiwiBundlePackage.API)) {
+      const apiBundle = this.getPackageJson(KiwiBundlePackage.API)
+      if(typeof apiBundle !== "undefined") {
+        console.log("API module version :", apiBundle.version)
       }
     }
 

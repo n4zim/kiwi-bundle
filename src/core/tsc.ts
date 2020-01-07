@@ -90,7 +90,7 @@ export class TypeScriptComplier {
     console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost))
   }
 
-  static watch(context: Bundle) {
+  static watch(context: Bundle, callback?: () => void) {
     const configPath = tsc.findConfigFile(context.path, tsc.sys.fileExists, "tsconfig.json")
     if(typeof configPath !== "undefined") {
       const createProgram = tsc.createSemanticDiagnosticsBuilderProgram
@@ -110,6 +110,9 @@ export class TypeScriptComplier {
       host.afterProgramCreate = program => {
         origPostProgramCreate!(program)
         TypeScriptComplier.fsChmodBinaries(context)
+        if(typeof callback !== "undefined") {
+          callback()
+        }
       }
 
       tsc.createWatchProgram(host)
