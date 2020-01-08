@@ -1,21 +1,9 @@
-import { readdirSync, lstatSync, unlinkSync, existsSync } from "fs"
+
 import { Environment } from "dropin-recipes"
 import { join } from "path"
 import { Bundle, KiwiBundlePackage } from "../core/bundle"
 import { TypeScriptCompiler } from "../core/tsc"
-
-const clearDirectory = (dir: string) => {
-  if(existsSync(dir)) {
-    readdirSync(dir).forEach(element => {
-      const path = join(dir, element)
-      if(lstatSync(path).isDirectory()) {
-        clearDirectory(path)
-      } else {
-        unlinkSync(path)
-      }
-    })
-  }
-}
+import { clearDirectory } from "../core/utils"
 
 export const Build = (path: string, callback?: () => void) => {
   const bundle = new Bundle(path, Environment.PRODUCTION)

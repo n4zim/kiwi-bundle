@@ -52,11 +52,6 @@ export class TypeScriptCompiler {
   static build(bundle: Bundle, callback?: (files: string[]) => void) {
     const files = TypeScriptCompiler.fsGetAllFiles(join(bundle.path, bundle.compiler.rootDir))
     console.log(`Files to compile :\n${files.map(file => `- ./${relative(bundle.path, file)}`).join("\n")}\n`)
-
-    /*files.forEach(file => {
-      console.log((program.getSourceFile(file) as any).resolvedModules)
-    })*/
-
     const program = tsc.createProgram(files, bundle.compiler)
     const emitResult = program.emit()
     const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)

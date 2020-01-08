@@ -1,5 +1,7 @@
+import { join } from "path"
 import { Bundle, KiwiBundlePackage } from "../core/bundle"
 import { TypeScriptCompiler } from "../core/tsc"
+import { clearDirectory } from "../core/utils"
 
 export const Start = (path: string) => {
   const bundle = new Bundle(path)
@@ -16,15 +18,14 @@ export const Start = (path: string) => {
   } else {
     const apiHandler = bundle.getPackageHandler(KiwiBundlePackage.API, "start")
     if(typeof apiHandler !== "undefined") {
-      const version = `v${bundle.getPackageJson().version.split(".")[0]}`
-      const handlers = bundle.getCurrentHandlers()
+      clearDirectory(join(bundle.path, bundle.compiler.outDir))
       apiHandler({
         path,
         rootDir: bundle.compiler.rootDir,
         outDir: bundle.compiler.outDir,
-        version,
+        version: `v${bundle.getPackageJson().version.split(".")[0]}`,
         options: bundle.getCurrentOptions(),
-        handlers,
+        handlers: bundle.getCurrentHandlers(),
       })
     } else {
       TypeScriptCompiler.watch(bundle)
