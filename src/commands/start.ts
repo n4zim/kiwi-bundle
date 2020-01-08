@@ -19,13 +19,13 @@ export const Start = (path: string) => {
     const apiHandler = bundle.getPackageHandler(KiwiBundlePackage.API, "start")
     if(typeof apiHandler !== "undefined") {
       clearDirectory(join(bundle.path, bundle.compiler.outDir))
+      // version: `v${bundle.getPackageJson().version.split(".")[0]}`,
       apiHandler({
         path,
         rootDir: bundle.compiler.rootDir,
-        outDir: bundle.compiler.outDir,
-        version: `v${bundle.getPackageJson().version.split(".")[0]}`,
-        options: bundle.getCurrentOptions(),
         handlers: bundle.getCurrentHandlers(),
+        outDir: bundle.compiler.outDir,
+        options: bundle.getCurrentOptions(),
       })
     } else {
       TypeScriptCompiler.watch(bundle)

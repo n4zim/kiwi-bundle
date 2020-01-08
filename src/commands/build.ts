@@ -20,6 +20,18 @@ export const Build = (path: string, callback?: () => void) => {
       handlers: bundle.getCurrentHandlers(),
     })
   } else {
-    TypeScriptCompiler.build(bundle)
+    const apiHandler = bundle.getPackageHandler(KiwiBundlePackage.API, "build")
+    if(typeof apiHandler !== "undefined") {
+      clearDirectory(join(bundle.path, bundle.compiler.outDir))
+      // version: `v${bundle.getPackageJson().version.split(".")[0]}`,
+      apiHandler({
+        path,
+        rootDir: bundle.compiler.rootDir,
+        handlers: bundle.getCurrentHandlers(),
+        outDir: bundle.compiler.outDir,
+      })
+    } else {
+      TypeScriptCompiler.build(bundle)
+    }
   }
 }
