@@ -17,10 +17,11 @@ export const Start = (path: string) => {
   } else {
     const apiHandler = bundle.getPackageHandler(KiwiBundlePackage.API, "start")
     if(typeof apiHandler !== "undefined") {
-      TypeScriptComplier.watch(bundle, () => {
+      // TypeScriptComplier.watch(bundle, () => {
         const version = `v${bundle.getPackageJson().version.split(".")[0]}`
         const handlers = bundle.getCurrentHandlers()
         apiHandler({
+          path,
           version,
           options: bundle.getCurrentOptions(),
           handlers: Object.keys(handlers).reduce((result, current) => {
@@ -33,7 +34,7 @@ export const Start = (path: string) => {
             return result
           }, {} as any),
         })
-      })
+      // })
     } else {
       TypeScriptComplier.watch(bundle)
     }
