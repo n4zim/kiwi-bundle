@@ -4,7 +4,7 @@ import chalk from "chalk"
 import { readdirSync, statSync, chmodSync } from "fs"
 import { Bundle } from "./bundle"
 
-export class TypeScriptComplier {
+export class TypeScriptCompiler {
 
   private static formatHost: tsc.FormatDiagnosticsHost = {
     getCanonicalFileName: path => path,
@@ -16,11 +16,11 @@ export class TypeScriptComplier {
     console.error(
       `[ERROR] error ${diagnostic.code}`,
       typeof diagnostic.file !== "undefined"
-        ? ` - ./${relative(join(TypeScriptComplier.formatHost.getCurrentDirectory(), ".."), diagnostic.file.fileName)}`
+        ? ` - ./${relative(join(TypeScriptCompiler.formatHost.getCurrentDirectory(), ".."), diagnostic.file.fileName)}`
         : "",
-      TypeScriptComplier.formatHost.getNewLine(),
-      chalk.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptComplier.formatHost.getNewLine())),
-      TypeScriptComplier.formatHost.getNewLine(),
+      TypeScriptCompiler.formatHost.getNewLine(),
+      chalk.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptCompiler.formatHost.getNewLine())),
+      TypeScriptCompiler.formatHost.getNewLine(),
     )
   }
 
@@ -29,7 +29,7 @@ export class TypeScriptComplier {
       const elementPath = join(dir, element)
       const elementStat = statSync(elementPath)
       if(elementStat.isDirectory()) {
-        list.unshift.apply(list, TypeScriptComplier.fsGetAllFiles(elementPath))
+        list.unshift.apply(list, TypeScriptCompiler.fsGetAllFiles(elementPath))
       } else if(elementStat.isFile()) {
         const elementExtension = extname(element)
         if(elementExtension === ".ts" || elementExtension === ".tsx") {
@@ -50,7 +50,7 @@ export class TypeScriptComplier {
   }
 
   static build(bundle: Bundle, callback?: (files: string[]) => void) {
-    const files = TypeScriptComplier.fsGetAllFiles(join(bundle.path, bundle.compiler.rootDir))
+    const files = TypeScriptCompiler.fsGetAllFiles(join(bundle.path, bundle.compiler.rootDir))
     console.log(`Files to compile :\n${files.map(file => `- ./${relative(bundle.path, file)}`).join("\n")}\n`)
 
     /*files.forEach(file => {
@@ -60,11 +60,11 @@ export class TypeScriptComplier {
     const program = tsc.createProgram(files, bundle.compiler)
     const emitResult = program.emit()
     const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
-    allDiagnostics.forEach(TypeScriptComplier.reportDiagnostic)
+    allDiagnostics.forEach(TypeScriptCompiler.reportDiagnostic)
     if(emitResult.emitSkipped) {
       process.exit(1)
     } else {
-      TypeScriptComplier.fsChmodBinaries(bundle)
+      TypeScriptCompiler.fsChmodBinaries(bundle)
       if(typeof callback !== "undefined") {
         callback(files)
       } else {
@@ -87,7 +87,7 @@ export class TypeScriptComplier {
         tag = chalk.bgGreen(chalk.white(" READY "))
         break
     }
-    console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptComplier.formatHost))
+    console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptCompiler.formatHost))
   }
 
   static watch(context: Bundle, callback?: () => void) {
@@ -99,13 +99,12 @@ export class TypeScriptComplier {
         {},
         tsc.sys,
         createProgram,
-        TypeScriptComplier.reportDiagnostic,
-        TypeScriptComplier.reportWatchStatusChanged,
+        TypeScriptCompiler.reportDiagnostic,
+        TypeScriptCompiler.reportWatchStatusChanged,
       )
 
       const origCreateProgram = host.createProgram
       host.createProgram = (rootNames, options, host, oldProgram) => origCreateProgram(rootNames, options, host, oldProgram)
-
       const origPostProgramCreate = host.afterProgramCreate
       host.afterProgramCreate = program => {
         origPostProgramCreate!(program)

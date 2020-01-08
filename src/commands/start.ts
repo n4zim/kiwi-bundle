@@ -1,6 +1,5 @@
 import { Bundle, KiwiBundlePackage } from "../core/bundle"
-import { TypeScriptComplier } from "../core/tsc"
-import { join } from "path"
+import { TypeScriptCompiler } from "../core/tsc"
 
 export const Start = (path: string) => {
   const bundle = new Bundle(path)
@@ -17,26 +16,18 @@ export const Start = (path: string) => {
   } else {
     const apiHandler = bundle.getPackageHandler(KiwiBundlePackage.API, "start")
     if(typeof apiHandler !== "undefined") {
-      // TypeScriptComplier.watch(bundle, () => {
-        const version = `v${bundle.getPackageJson().version.split(".")[0]}`
-        const handlers = bundle.getCurrentHandlers()
-        apiHandler({
-          path,
-          version,
-          options: bundle.getCurrentOptions(),
-          handlers: Object.keys(handlers).reduce((result, current) => {
-            let handlerPath = `/${version}${current.replace(/\{.*?\}/g, "([A-Za-z0-9]+)")}`
-            if(handlerPath.charAt(handlerPath.length - 1) === "/") handlerPath += "?"
-            result["^" + handlerPath + "$"] = {
-              path: join(path, bundle.compiler.outDir, handlers[current] + ".js"),
-              params: current.match(/\{.*?\}/g)?.map(c => c.slice(1, -1)),
-            }
-            return result
-          }, {} as any),
-        })
-      // })
+      const version = `v${bundle.getPackageJson().version.split(".")[0]}`
+      const handlers = bundle.getCurrentHandlers()
+      apiHandler({
+        path,
+        rootDir: bundle.compiler.rootDir,
+        outDir: bundle.compiler.outDir,
+        version,
+        options: bundle.getCurrentOptions(),
+        handlers,
+      })
     } else {
-      TypeScriptComplier.watch(bundle)
+      TypeScriptCompiler.watch(bundle)
     }
   }
 }
