@@ -1,4 +1,3 @@
-
 import { Environment } from "dropin-recipes"
 import { join } from "path"
 import { Bundle, KiwiBundlePackage } from "../core/bundle"
@@ -29,6 +28,7 @@ export const Build = (path: string, callback?: () => void) => {
         rootDir: bundle.compiler.rootDir,
         handlers: bundle.getCurrentHandlers(),
         outDir: bundle.compiler.outDir,
+        packageJson: bundle.getPackageJson(),
       })
     } else {
       TypeScriptCompiler.build(bundle)

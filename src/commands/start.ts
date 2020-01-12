@@ -26,6 +26,7 @@ export const Start = (path: string) => {
         handlers: bundle.getCurrentHandlers(),
         outDir: bundle.compiler.outDir,
         options: bundle.getCurrentOptions(),
+        packageJson: bundle.getPackageJson(),
       })
     } else {
       TypeScriptCompiler.watch(bundle)
