@@ -103,7 +103,7 @@ export class TypeScriptCompiler {
       const origPostProgramCreate = host.afterProgramCreate
       host.afterProgramCreate = program => {
         origPostProgramCreate!(program)
-        TypeScriptComplier.fsChmodBinaries(context)
+        TypeScriptCompiler.fsChmodBinaries(context)
         if(typeof callback !== "undefined") {
           callback()
         }
