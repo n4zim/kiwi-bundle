@@ -20,7 +20,7 @@
     "build": "kiwi build"
   },
   "devDependencies": {
-    "kiwi-bundle": "^3.0.1"
+    "kiwi-bundle": "3.1.0"
   }
 }
 ```
