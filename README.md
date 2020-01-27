@@ -1,16 +1,14 @@
-# Kiwi Bundle - TypeScript
+# Kiwi Bundle
 
 
 ## Features
-
 - TypeScript everywhere for a well-structured code
 - project boilerplate ready in seconds
 - all-in-one NPM package, no versions to manage
-- sidekick CLI (start, test, build & deploy)
+- sidekick CLI (start, test & build)
 
 
 ## Getting started
-
 **./package.json** (required)
 ```json
 {
@@ -19,9 +17,7 @@
   "scripts": {
     "start": "kiwi start",
     "test": "kiwi test",
-    "build": "kiwi build",
-    "deploy": "kiwi deploy",
-    "undeploy": "kiwi undeploy"
+    "build": "kiwi build"
   },
   "devDependencies": {
     "kiwi-bundle": "^3.0.1"
@@ -64,12 +60,10 @@ node_modules/
 
 ## Additional packages
 
-### kiwi-bundle-react
+### [kiwi-bundle-react](https://github.com/theblueforest/kiwi-bundle-react)
 
-### kiwi-bundle-react-native
+### [kiwi-bundle-api](https://github.com/theblueforest/kiwi-bundle-api)
 
-### kiwi-bundle-react-electron
+### [kiwi-bundle-cli-runtime](https://github.com/theblueforest/kiwi-bundle-cli-runtime)
 
-### kiwi-bundle-docker
-
-### kiwi-bundle-vscode
+### [kiwi-bundle-vscode](https://github.com/theblueforest/kiwi-bundle-vscode)
