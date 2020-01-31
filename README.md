@@ -1,5 +1,5 @@
-# Kiwi Bundle
 
+![Kiwi Bundle](./assets/cover.png)
 
 ## Features
 - TypeScript everywhere for a well-structured code
