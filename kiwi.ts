@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std/http/server.ts"
-import { exists, readFileStr } from "https://deno.land/std@0.51.0/fs/mod.ts"
+import { exists, readFileStr } from "https://deno.land/std/fs/mod.ts"
 import { join } from "https://deno.land/std/path/mod.ts"
 
 const port = 8080
