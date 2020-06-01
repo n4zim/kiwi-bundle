@@ -1,6 +1,6 @@
 {
   "name": "kiwi-bundle",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "A simple and clean TypeScript environment for all your cross-platform applications",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
@@ -15,17 +15,17 @@
     "deploy": "kiwi deploy",
     "undeploy": "kiwi undeploy"
   },
-  "dependencies": {
-    "@types/jest": "25.2.1",
-    "@types/node": "13.13.0",
-    "chalk": "4.0.0",
-    "dropin-recipes": "1.8.0",
-    "jest": "25.4.0",
-    "path": "0.12.7",
-    "tslint": "6.1.1",
-    "typescript": "3.8.3"
-  },
   "devDependencies": {
-    "kiwi-bundle": "3.1.1"
+    "kiwi-bundle": "3.1.2"
+  },
+  "dependencies": {
+    "@types/jest": "25.2.3",
+    "@types/node": "14.0.6",
+    "chalk": "4.0.0",
+    "dropin-recipes": "1.8.2",
+    "jest": "26.0.1",
+    "path": "0.12.7",
+    "tslint": "6.1.2",
+    "typescript": "3.9.3"
   }
 }
