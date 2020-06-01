@@ -50,7 +50,9 @@ export class TypeScriptCompiler {
   }
 
   static build(bundle: Bundle, callback?: (files: string[]) => void) {
-    const files = TypeScriptCompiler.fsGetAllFiles(join(bundle.path, bundle.compiler.rootDir))
+    const files = TypeScriptCompiler
+      .fsGetAllFiles(join(bundle.path, bundle.compiler.rootDir))
+      .filter(p => !/^.*\.test.tsx?/.test(p))
     console.log(`Files to compile :\n${files.map(file => `- ./${relative(bundle.path, file)}`).join("\n")}\n`)
     const program = tsc.createProgram(files, bundle.compiler)
     const emitResult = program.emit()
