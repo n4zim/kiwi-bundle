@@ -64,6 +64,6 @@ node_modules/
 
 ### [kiwi-bundle-api](https://github.com/theblueforest/kiwi-bundle-api)
 
-### [kiwi-bundle-vscode](https://github.com/theblueforest/kiwi-bundle-vscode)
+### [kiwi-bundle-cli](https://github.com/theblueforest/kiwi-bundle-cli)
 
-### [kiwi-runtime-cli](https://github.com/theblueforest/kiwi-runtime-cli)
+### [kiwi-bundle-vscode](https://github.com/theblueforest/kiwi-bundle-vscode)
