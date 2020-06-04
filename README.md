@@ -20,7 +20,7 @@
     "build": "kiwi build"
   },
   "devDependencies": {
-    "kiwi-bundle": "3.1.0"
+    "kiwi-bundle": "3.1.3"
   }
 }
 ```
@@ -64,6 +64,6 @@ node_modules/
 
 ### [kiwi-bundle-api](https://github.com/theblueforest/kiwi-bundle-api)
 
-### [kiwi-bundle-cli-runtime](https://github.com/theblueforest/kiwi-bundle-cli-runtime)
+### [kiwi-bundle-cli](https://github.com/theblueforest/kiwi-bundle-cli)
 
 ### [kiwi-bundle-vscode](https://github.com/theblueforest/kiwi-bundle-vscode)
