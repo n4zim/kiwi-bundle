@@ -19,7 +19,8 @@ export class TypeScriptCompiler {
         ? ` - ./${relative(join(TypeScriptCompiler.formatHost.getCurrentDirectory(), ".."), diagnostic.file.fileName)}`
         : "",
       TypeScriptCompiler.formatHost.getNewLine(),
-      chalk.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptCompiler.formatHost.getNewLine())),
+      // chalk.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptCompiler.formatHost.getNewLine())),
+      chalk.red(tsc.formatDiagnostic(diagnostic, TypeScriptCompiler.formatHost)),
       TypeScriptCompiler.formatHost.getNewLine(),
     )
   }
