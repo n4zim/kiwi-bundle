@@ -12,3 +12,4 @@ services:
         command: start
       - name: Build production files
         command: build
+        callAfter: { install: true }
