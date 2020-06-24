@@ -2,7 +2,6 @@ $: dropin.recipes/Automations/Deployment
 
 services:
   kiwi-bundle:
-    context: .
     runtime: { name: nodejs }
     dependencies:
       kiwi-bundle: blueforest:kiwi/core:kiwi-bundle:v1
