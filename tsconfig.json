@@ -1,8 +1,9 @@
 {
-  "extends": "./.models/ts/commonjs.json",
+  "extends": "./.models/ts/es2015.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*"
