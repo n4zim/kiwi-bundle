@@ -86,8 +86,7 @@ export class Bundle {
     Object.values(KiwiBundlePackage).forEach(packageName => {
       const moduleName = this.checkPackageModule(packageJson, packageName)
       if(moduleName !== null) {
-        const path = join(this.path, "node_modules", moduleName)
-        packages[moduleName] = this.extractPackageJson(path)
+        packages[moduleName] = this.extractPackageJson(join(this.path, "node_modules", moduleName))
       }
     })
     return packages
