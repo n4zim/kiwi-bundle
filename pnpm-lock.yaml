@@ -3,7 +3,7 @@ dependencies:
   '@types/node': 14.0.14
   chalk: 4.1.0
   command-exists: 1.2.9
-  dropin-recipes: 'link:../../../../../../../../../../usr/local/pnpm-global/pnpm-global/node_modules/dropin-recipes'
+  dropin-recipes: 1.8.2
   eslint: 7.3.1
   jest: 26.1.0
   path: 0.12.7
@@ -1105,7 +1105,6 @@ packages:
   /dropin-recipes/1.8.2:
     dependencies:
       node-fetch: 2.6.0
-    dev: true
     resolution:
       integrity: sha512-KLCufFGioUBIk1TkcXy185CWXLFsz0byRPI5baW736R6Bhaw5aNyMtsCNJqOUAYgEScVf3YpOQByaUCQWorQiQ==
   /ecc-jsbn/0.1.2:
@@ -2561,7 +2560,6 @@ packages:
     resolution:
       integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
   /node-fetch/2.6.0:
-    dev: true
     engines:
       node: 4.x || >=6.0.0
     resolution:
