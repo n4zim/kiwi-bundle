@@ -5,6 +5,7 @@ import { Test } from "./commands/test"
 import { Build } from "./commands/build"
 import { Deploy } from "./commands/deploy"
 import { Undeploy } from "./commands/undeploy"
+import { PostInstall } from "./commands/postinstall"
 
 if(process.argv.length === 2) {
   console.error("No command argument")
@@ -21,6 +22,9 @@ switch(process.argv[2]) {
     break
   case "build":
     Build(path)
+    break
+  case "postinstall":
+    PostInstall(path)
     break
   case "deploy":
     if(process.argv.length < 4) {
