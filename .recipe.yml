@@ -4,7 +4,6 @@ services:
   kiwi-bundle:
     runtime: { name: nodejs }
     dependencies:
-      kiwi-bundle: blueforest:kiwi/core:kiwi-bundle:v1
       dropin-recipes: blueforest:dropin/recipes:dropin-recipes-js:v1
     tasks:
       - name: Start developement build
