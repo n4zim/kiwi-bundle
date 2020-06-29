@@ -1,6 +1,5 @@
-import { join } from "path"
-import chalk from "chalk"
-import { existsSync } from "fs"
+import { join, dirname } from "path"
+import { existsSync, symlink, mkdirSync } from "fs"
 import { exec } from "child_process"
 import { Bundle } from "../core/bundle"
 
@@ -19,22 +18,27 @@ export const PostInstall = (path: string) => {
         ignoreList.push(packageName)
       })
     }
+    const deps: { [name: string]: string } = {}
     Object.keys(bundle.dependencies).forEach(packageName => {
       if(packageName !== bundle.name) {
-        const deps = bundle.dependencies[packageName].dependencies
-        if(typeof deps !== "undefined") {
-          Object.keys(deps).forEach(depName => {
-            if(ignoreList.indexOf(depName) === -1) {
-              console.log(existsSync(join(path, "node_modules", depName)) ? "OK" : depName)
-              if(!existsSync(join(path, "node_modules", depName))) {
-                exec(`pnpm add --prefer-offline --ignore-scripts --save-optional ${depName}@${deps[depName]}`, (err, output) => {
-                  console.log(chalk.bold(`[Kiwi Bundle] Adding "${depName}" package...`))
-                  console.log(output)
-                })
-              }
+        const packageDeps = bundle.dependencies[packageName].dependencies
+        if(typeof packageDeps !== "undefined") {
+          Object.keys(packageDeps).forEach(depName => {
+            if(typeof deps[depName] === "undefined" && ignoreList.indexOf(depName) === -1) {
+              deps[depName] = packageName
             }
           })
         }
+      }
+    })
+    Object.keys(deps).forEach(depName => {
+      const depPath = join(path, "node_modules", depName)
+      if(!existsSync(depPath)) {
+        const depDir = dirname(depPath)
+        if(!existsSync(depDir)) mkdirSync(depDir)
+        symlink(join(path, "node_modules", deps[depName], "node_modules", depName), depPath, () => {
+          console.log(`Added symbolic link for "${depName}" dependency from ${deps[depName]}\n`)
+        })
       }
     })
   }
