@@ -50,10 +50,10 @@ dist/
 node_modules/
 ```
 
-**./tslint.json** (optional)
+**./.eslintrc.json** (optional)
 ```json
 {
-  "extends": "./node_modules/kiwi-bundle/.models/tslint/bf.json"
+  "extends": "./node_modules/kiwi-bundle/.models/eslint/bf.json"
 }
 ```
 

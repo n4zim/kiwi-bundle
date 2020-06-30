@@ -5,9 +5,3 @@ services:
     runtime: { name: nodejs }
     dependencies:
       dropin-recipes: blueforest:dropin/recipes:dropin-recipes-js:v1
-    tasks:
-      - name: Start developement build
-        command: start
-      - name: Build production files
-        command: build
-        callAfter: { install: true }
