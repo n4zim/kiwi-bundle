@@ -11,7 +11,8 @@
   "scripts": {
     "start": "kiwi start",
     "test": "kiwi test",
-    "build": "kiwi build"
+    "build": "kiwi build",
+    "postinstall": "kiwi postinstall"
   },
   "devDependencies": {
     "kiwi-bundle": "3.1.4"
