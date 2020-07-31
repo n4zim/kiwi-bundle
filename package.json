@@ -1,6 +1,6 @@
 {
   "name": "kiwi-bundle",
-  "version": "3.1.8",
+  "version": "3.1.9",
   "description": "A simple and clean TypeScript environment for all your cross-platform applications",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
@@ -12,7 +12,7 @@
     "start": "kiwi start",
     "test": "kiwi test",
     "build": "kiwi build",
-    "postinstall": "kiwi postinstall"
+    "postinstall": "echo kiwi postinstall"
   },
   "devDependencies": {
     "kiwi-bundle": "3.1.6"
