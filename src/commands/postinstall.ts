@@ -1,10 +1,35 @@
 import { join, dirname } from "path"
 import { existsSync, symlink, mkdirSync } from "fs"
-import { exec } from "child_process"
 import { Bundle } from "../core/bundle"
 
 export const PostInstall = (path: string) => {
-  if(existsSync(join(path, "pnpm-lock.yaml"))) {
+  const previousPath = process.env.INIT_CWD as string
+  if(previousPath !== path && existsSync(join(path, "pnpm-lock.yaml"))) {
+    const bundle = new Bundle(path)
+    const currentPackageJson = bundle.getPackageJson()
+    const packages: string[] = []
+    if(typeof currentPackageJson.dependencies !== "undefined") {
+      Object.keys(currentPackageJson.dependencies).forEach(packageName => {
+        packages.push(packageName)
+      })
+    }
+    if(typeof currentPackageJson.devDependencies !== "undefined") {
+      Object.keys(currentPackageJson.devDependencies).forEach(packageName => {
+        packages.push(packageName)
+      })
+    }
+    /*packages.forEach(pkg => {
+      const depPath = join(previousPath, "node_modules/.pnpm/", pkg)
+      if(!existsSync(depPath)) {
+        const depDir = dirname(depPath)
+        if(!existsSync(depDir)) mkdirSync(depDir, { recursive: true })
+        symlink(join(path, "node_modules", pkg), depPath, () => {
+          console.log(`Added symbolic link for "${pkg}" dependency from ${bundle.name}`)
+        })
+      }
+    })*/
+  }
+  /*if(existsSync(join(path, "pnpm-lock.yaml"))) {
     const bundle = new Bundle(path)
     const ignoreList: string[] = []
     const currentPackageJson = bundle.getPackageJson()
@@ -41,5 +66,5 @@ export const PostInstall = (path: string) => {
         })
       }
     })
-  }
+  }*/
 }
