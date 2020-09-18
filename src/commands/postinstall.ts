@@ -18,16 +18,16 @@ export const PostInstall = (path: string) => {
         packages.push(packageName)
       })
     }
-    /*packages.forEach(pkg => {
-      const depPath = join(previousPath, "node_modules/.pnpm/", pkg)
+    packages.forEach(pkg => {
+      const depPath = join(previousPath, "node_modules/", pkg)
       if(!existsSync(depPath)) {
         const depDir = dirname(depPath)
         if(!existsSync(depDir)) mkdirSync(depDir, { recursive: true })
-        symlink(join(path, "node_modules", pkg), depPath, () => {
+        symlink(join(path, "node_modules/.pnpm/", pkg), depPath, () => {
           console.log(`Added symbolic link for "${pkg}" dependency from ${bundle.name}`)
         })
       }
-    })*/
+    })
   }
   /*if(existsSync(join(path, "pnpm-lock.yaml"))) {
     const bundle = new Bundle(path)
