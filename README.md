@@ -20,7 +20,7 @@
     "build": "kiwi build"
   },
   "devDependencies": {
-    "kiwi-bundle": "3.1.3"
+    "kiwi-bundle": "3.2.0"
   }
 }
 ```
@@ -28,7 +28,7 @@
 **./tsconfig.json** (required)
 ```json
 {
-  "extends": "./node_modules/kiwi-bundle/.models/ts/commonjs.json",
+  "extends": "./node_modules/kiwi-bundle/configs/ts/commonjs.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist"
@@ -53,7 +53,7 @@ node_modules/
 **./.eslintrc.json** (optional)
 ```json
 {
-  "extends": "./node_modules/kiwi-bundle/.models/eslint/bf.json"
+  "extends": "./node_modules/kiwi-bundle/configs/eslint/bf.json"
 }
 ```
 

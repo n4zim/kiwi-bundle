@@ -6,9 +6,6 @@ services:
 
     runtime: { name: node }
 
-    dependencies:
-      dropin-client: blueforest:dropin/client:v1:dropin-client-js
-
     tasks:
       start:
         name: Watch and build

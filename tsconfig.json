@@ -1,5 +1,5 @@
 {
-  "extends": "./.models/ts/commonjs.json",
+  "extends": "./conigs/ts/commonjs.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist"
