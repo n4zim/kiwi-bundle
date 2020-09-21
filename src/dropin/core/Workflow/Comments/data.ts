@@ -1,0 +1,2 @@
+
+export type CommentId = string
