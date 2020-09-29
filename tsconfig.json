@@ -1,5 +1,5 @@
 {
-  "extends": "./.models/ts/commonjs.json",
+  "extends": "./configs/ts/commonjs.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist"

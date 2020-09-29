@@ -2,12 +2,15 @@ $: dropin.recipes/Automations/Deployment
 
 services:
   kiwi-bundle:
-    runtime: { name: nodejs }
-    dependencies:
-      dropin-recipes: blueforest:dropin/recipes:dropin-recipes-js:v1
+    context: .
+
+    runtime: { name: node }
+
     tasks:
-      - name: Start developement build
+      start:
+        name: Watch and build
         command: start
-      - name: Build production files
+
+      build:
+        name: Build production files
         command: build
-        callAfter: { install: true }

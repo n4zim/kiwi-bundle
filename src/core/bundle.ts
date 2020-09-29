@@ -64,6 +64,7 @@ export class Bundle {
   }
 
   private extractPackageJson(modulePath: string) {
+    console.log("Reading", modulePath, "package...")
     return JSON.parse(readFileSync(join(modulePath, "package.json"), "utf8"))
   }
 
