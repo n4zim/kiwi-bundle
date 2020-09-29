@@ -1,15 +1,26 @@
 
 ![Kiwi Bundle](./assets/cover.png)
 
-## Features
-- TypeScript everywhere for a well-structured code
-- project boilerplate ready in seconds
+# Features
+- out-of-the box configurations for [TypeScript](https://github.com/microsoft/TypeScript), [ESLint](https://github.com/eslint/eslint) and [Prettier](https://github.com/prettier/prettier)
+- integration of [Jest](https://github.com/facebook/jest) for testing
+- sidekick scripts for start, test, build, clean and postinstall
 - all-in-one NPM package, no versions to manage
-- sidekick CLI (start, test & build)
+
+# Getting started
+
+## Requirements
+You will need NodeJS to be installed : https://nodejs.org/en/download/
+
+Optionally you can install `yarn` in replacement of `npm` by running `npm install -g yarn`
+
+If you want Prettier as a code formatter, you will need to install it : https://prettier.io/docs/en/install.html
+
+Finally, if you do not have a text editor yet, give VSCode a try : https://code.visualstudio.com
 
 
-## Getting started
-**./package.json** (required)
+## Install
+Create a **./package.json** file :
 ```json
 {
   "name": "example",
@@ -25,45 +36,18 @@
 }
 ```
 
-**./tsconfig.json** (required)
-```json
-{
-  "extends": "./node_modules/kiwi-bundle/configs/ts/commonjs.json",
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist"
-  },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx"
-  ]
-}
-```
+Then run `npm install` or `yarn install`
 
-**./.gitignore** (recommended)
-```
-dist/
-node_modules/
-```
+## Commands
+To start, run `npm run start` or `yarn start`
 
-**./.eslintrc.json** (optional)
-```json
-{
-  "extends": "./node_modules/kiwi-bundle/configs/eslint/bf.json"
-}
-```
+To launch Jest for .test.ts file, run `npm run test` or `yarn test`
+
+To build, run `npm run build` or `yarn build`
 
 
 ## Additional packages
-
-### [kiwi-bundle-react](https://github.com/theblueforest/kiwi-bundle-react)
-
-### [kiwi-bundle-api](https://github.com/theblueforest/kiwi-bundle-api)
-
-### [kiwi-bundle-cli](https://github.com/theblueforest/kiwi-bundle-cli)
-
-### [kiwi-bundle-vscode](https://github.com/theblueforest/kiwi-bundle-vscode)
+- [kiwi-bundle-react](https://github.com/theblueforest/kiwi-bundle-react) : easily build a cross-platform app with React
+- [kiwi-bundle-api](https://github.com/theblueforest/kiwi-bundle-api) : easily build an HTTP server with NodeJS
+- [kiwi-bundle-cli](https://github.com/theblueforest/kiwi-bundle-cli) : easily build a cross-platform CLI with NodeJS
+- [kiwi-bundle-vscode](https://github.com/theblueforest/kiwi-bundle-vscode) : easily build a VSCode extension
