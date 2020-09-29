@@ -28,7 +28,9 @@ Create a **./package.json** file :
   "scripts": {
     "start": "kiwi start",
     "test": "kiwi test",
-    "build": "kiwi build"
+    "build": "kiwi build",
+    "clean": "kiwi clean",
+    "postinstall": "kiwi postinstall"
   },
   "devDependencies": {
     "kiwi-bundle": "3.2.0"
@@ -47,7 +49,8 @@ To build, run `npm run build` or `yarn build`
 
 
 ## Additional packages
-- [kiwi-bundle-react](https://github.com/theblueforest/kiwi-bundle-react) : easily build a cross-platform app with React
-- [kiwi-bundle-api](https://github.com/theblueforest/kiwi-bundle-api) : easily build an HTTP server with NodeJS
-- [kiwi-bundle-cli](https://github.com/theblueforest/kiwi-bundle-cli) : easily build a cross-platform CLI with NodeJS
-- [kiwi-bundle-vscode](https://github.com/theblueforest/kiwi-bundle-vscode) : easily build a VSCode extension
+
+### [kiwi-bundle-react](https://github.com/theblueforest/kiwi-bundle-react) : easily build a cross-platform app with React
+### [kiwi-bundle-api](https://github.com/theblueforest/kiwi-bundle-api) : easily build an HTTP server with NodeJS
+### [kiwi-bundle-cli](https://github.com/theblueforest/kiwi-bundle-cli) : easily build a cross-platform CLI with NodeJS
+### [kiwi-bundle-vscode](https://github.com/theblueforest/kiwi-bundle-vscode) : easily build a VSCode extension
