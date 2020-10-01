@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "extends": ["@react-native-community"],
+  "ignorePatterns": ["node_modules/", "android/", "ios/"],
+  "rules": {
+    "array-bracket-spacing": [
+      "error",
+      "always",
+      {
+        "objectsInArrays": false
+      }
+    ],
+    "quotes": ["error", "double"],
+    "comma-dangle": ["error", "always-multiline"],
+    "semi": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-newline": ["error", "always"],
+    "space-after-keywords": ["error ", "never"]
+  }
+}
