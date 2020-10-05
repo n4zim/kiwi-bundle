@@ -2,7 +2,7 @@ import * as tsc from "typescript"
 import { join, extname } from "path"
 import { existsSync, readFileSync } from "fs"
 import { Environment } from "dropin-recipes"
-import chalk from "chalk"
+import { colorText } from "./utils"
 
 const ModuleKinds: any = {
   none: tsc.ModuleKind.None,
@@ -34,12 +34,12 @@ export enum JsxEmit {
 }
 
 export enum KiwiBundlePackage {
-  TYPESCRIPT = "ts",
+  CORE = "core",
   REACT = "react",
   API = "api",
+  CLI = "cli",
   VSCODE = "vscode",
-  REACT_NATIVE = "react-native",
-  ELECTRON = "electron",
+  NEUTRALINO = "neutralino",
 }
 
 export class Bundle {
@@ -58,8 +58,8 @@ export class Bundle {
     this.compiler = this.extractTSConfig()
   }
 
-  private getModuleName(name: KiwiBundlePackage) {
-    if(name === KiwiBundlePackage.TYPESCRIPT) return "kiwi-bundle"
+  getModuleName(name: KiwiBundlePackage) {
+    if(name === KiwiBundlePackage.CORE) return "kiwi-bundle"
     return `kiwi-bundle-${name}`
   }
 
@@ -134,7 +134,7 @@ export class Bundle {
       const packageJson = this.getPackageJson(packageName)
       if(typeof packageJson !== "undefined") {
         if(typeof packageJson.bundles !== "undefined") {
-          const bundle = packageJson.bundles[this.getModuleName(KiwiBundlePackage.TYPESCRIPT)]
+          const bundle = packageJson.bundles[this.getModuleName(KiwiBundlePackage.CORE)]
           if(typeof bundle !== "undefined") {
             if(typeof bundle.handlers !== "undefined") {
               if(typeof bundle.handlers[handlerName] !== "undefined") {
@@ -162,7 +162,7 @@ export class Bundle {
 
   getCurrentOptions() {
     if(typeof this.dependencies[this.name].bundles !== "undefined") {
-      const bundle = this.dependencies[this.name].bundles[this.getModuleName(KiwiBundlePackage.TYPESCRIPT)]
+      const bundle = this.dependencies[this.name].bundles[this.getModuleName(KiwiBundlePackage.CORE)]
       if(typeof bundle !== "undefined") {
         if(typeof bundle.options !== "undefined") {
           return bundle.options
@@ -174,7 +174,7 @@ export class Bundle {
 
   getCurrentHandlers() {
     if(typeof this.dependencies[this.name].bundles !== "undefined") {
-      const bundle = this.dependencies[this.name].bundles[this.getModuleName(KiwiBundlePackage.TYPESCRIPT)]
+      const bundle = this.dependencies[this.name].bundles[this.getModuleName(KiwiBundlePackage.CORE)]
       if(typeof bundle !== "undefined") {
         if(typeof bundle.handlers !== "undefined") {
           return bundle.handlers
@@ -185,10 +185,10 @@ export class Bundle {
   }
 
   display() {
-    console.log(chalk.green(" _____ _       _    _____           _ _"))
-    console.log(chalk.green("|  |  |_|_ _ _|_|  | __  |_ _ ___ _| | |___"))
-    console.log(chalk.green("|    -| | | | | |  | __ -| | |   | . | | -_|"))
-    console.log(chalk.green("|__|__|_|_____|_|  |_____|___|_|_|___|_|___|\n"))
+    console.log(colorText(" _____ _       _    _____           _ _", { color: "green" }))
+    console.log(colorText("|  |  |_|_ _ _|_|  | __  |_ _ ___ _| | |___", { color: "green" }))
+    console.log(colorText("|    -| | | | | |  | __ -| | |   | . | | -_|", { color: "green" }))
+    console.log(colorText("|__|__|_|_____|_|  |_____|___|_|_|___|_|___|\n", { color: "green" }))
 
     if(this.env === Environment.PRODUCTION) {
       console.log("============ [PRODUCTION MODE] =============")
@@ -199,7 +199,7 @@ export class Bundle {
     console.log("Current module :", this.name)
     console.log("Current version :", this.dependencies[this.name].version)
 
-    const tsPackage = this.getPackageJson(KiwiBundlePackage.TYPESCRIPT)
+    const tsPackage = this.getPackageJson(KiwiBundlePackage.CORE)
     if(typeof tsPackage !== "undefined") {
       console.log("TypeScript module version :", tsPackage.version)
     }

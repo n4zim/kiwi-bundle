@@ -1,8 +1,8 @@
 import * as tsc from "typescript"
 import { relative, join, extname } from "path"
-import chalk from "chalk"
 import { readdirSync, statSync, chmodSync } from "fs"
 import { Bundle } from "./bundle"
+import { colorText } from "./utils"
 
 export class TypeScriptCompiler {
 
@@ -20,7 +20,7 @@ export class TypeScriptCompiler {
         : "",
       TypeScriptCompiler.formatHost.getNewLine(),
       // chalk.red(tsc.flattenDiagnosticMessageText(diagnostic.messageText, TypeScriptCompiler.formatHost.getNewLine())),
-      chalk.red(tsc.formatDiagnostic(diagnostic, TypeScriptCompiler.formatHost)),
+      colorText(tsc.formatDiagnostic(diagnostic, TypeScriptCompiler.formatHost), { color: "red" }),
       TypeScriptCompiler.formatHost.getNewLine(),
     )
   }
@@ -76,13 +76,13 @@ export class TypeScriptCompiler {
     switch(diagnostic.code) {
       case 6031:
       case 6032:
-        tag = chalk.bgYellow(chalk.white(" WORKING "))
+        tag = colorText(" WORKING ", { background: "yellow", color: "white" })
         break
       case 6193:
-        tag = chalk.bgRed(chalk.white(" ERRORS "))
+        tag = colorText(" ERRORS ", { background: "red", color: "white" })
         break
       case 6194:
-        tag = chalk.bgGreen(chalk.white(" READY "))
+        tag = colorText(" READY ", { background: "green", color: "white" })
         break
     }
     console.info(tag, tsc.formatDiagnostic(diagnostic, TypeScriptCompiler.formatHost))

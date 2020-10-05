@@ -1,70 +1,35 @@
-import { join, dirname } from "path"
-import { existsSync, symlink, mkdirSync } from "fs"
-import { Bundle } from "../core/bundle"
+import { join } from "path"
+import { existsSync, readdirSync, statSync } from "fs"
+import { Bundle, KiwiBundlePackage } from "../core/bundle"
+import { readFileSync } from "fs"
+import { writeFileSync } from "fs"
+import { mkdirSync } from "fs"
 
 export const PostInstall = (path: string) => {
-  const previousPath = process.env.INIT_CWD as string
-  if(previousPath !== path && existsSync(join(path, "pnpm-lock.yaml"))) {
-    const bundle = new Bundle(path)
-    const currentPackageJson = bundle.getPackageJson()
-    const packages: string[] = []
-    if(typeof currentPackageJson.dependencies !== "undefined") {
-      Object.keys(currentPackageJson.dependencies).forEach(packageName => {
-        packages.push(packageName)
-      })
-    }
-    if(typeof currentPackageJson.devDependencies !== "undefined") {
-      Object.keys(currentPackageJson.devDependencies).forEach(packageName => {
-        packages.push(packageName)
-      })
-    }
-    packages.forEach(pkg => {
-      const depPath = join(previousPath, "node_modules/", pkg)
-      if(!existsSync(depPath)) {
-        const depDir = dirname(depPath)
-        if(!existsSync(depDir)) mkdirSync(depDir, { recursive: true })
-        symlink(join(path, "node_modules/.pnpm/", pkg), depPath, () => {
-          console.log(`Added symbolic link for "${pkg}" dependency from ${bundle.name}`)
-        })
+  const bundle = new Bundle(path)
+  const reactModule = bundle.getModuleName(KiwiBundlePackage.REACT)
+  if(typeof bundle.dependencies[reactModule] !== "undefined") {
+    const templatePath = join(bundle.path, "node_modules", reactModule, "template")
+    if(existsSync(templatePath)) {
+      const appJson = JSON.parse(readFileSync(join(templatePath, "app.json"), "utf-8"))
+      const appOptions = bundle.getCurrentOptions().app
+      const writeFileContent = (path: string, content: string) => {
+        path = path.replace(appJson.name, appOptions.id)
+        content = content.replace(appJson.name, appOptions.id).replace(appJson.displayName, appOptions.name)
+        writeFileSync(path, content)
       }
-    })
-  }
-  /*if(existsSync(join(path, "pnpm-lock.yaml"))) {
-    const bundle = new Bundle(path)
-    const ignoreList: string[] = []
-    const currentPackageJson = bundle.getPackageJson()
-    if(typeof currentPackageJson.dependencies !== "undefined") {
-      Object.keys(currentPackageJson.dependencies).forEach(packageName => {
-        ignoreList.push(packageName)
-      })
-    }
-    if(typeof currentPackageJson.devDependencies !== "undefined") {
-      Object.keys(currentPackageJson.devDependencies).forEach(packageName => {
-        ignoreList.push(packageName)
-      })
-    }
-    const deps: { [name: string]: string } = {}
-    Object.keys(bundle.dependencies).forEach(packageName => {
-      if(packageName !== bundle.name) {
-        const packageDeps = bundle.dependencies[packageName].dependencies
-        if(typeof packageDeps !== "undefined") {
-          Object.keys(packageDeps).forEach(depName => {
-            if(typeof deps[depName] === "undefined" && ignoreList.indexOf(depName) === -1) {
-              deps[depName] = packageName
-            }
-          })
+      readdirSync(templatePath).forEach(subPath => {
+        const destinationPath = join(bundle.path, subPath)
+        if(!existsSync(destinationPath)) {
+          const templateSubPath = join(templatePath, subPath)
+          if(statSync(templateSubPath).isDirectory()) {
+            mkdirSync(destinationPath)
+            console.log(templateSubPath)
+          } else {
+            writeFileContent(destinationPath, readFileSync(templateSubPath, "utf-8"))
+          }
         }
-      }
-    })
-    Object.keys(deps).forEach(depName => {
-      const depPath = join(path, "node_modules", depName)
-      if(!existsSync(depPath)) {
-        const depDir = dirname(depPath)
-        if(!existsSync(depDir)) mkdirSync(depDir)
-        symlink(join(path, "node_modules", deps[depName], "node_modules", depName), depPath, () => {
-          console.log(`Added symbolic link for "${depName}" dependency from ${deps[depName]}\n`)
-        })
-      }
-    })
-  }*/
+      })
+    }
+  }
 }
