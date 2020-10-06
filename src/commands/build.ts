@@ -1,4 +1,4 @@
-import { Environment } from "dropin-recipes"
+import { Environment } from "dropin-client"
 import { join } from "path"
 import { Bundle, KiwiBundlePackage } from "../core/bundle"
 import { TypeScriptCompiler } from "../core/tsc"

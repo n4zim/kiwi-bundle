@@ -1,4 +1,4 @@
-import { NameField_ByLanguage } from "dropin-recipes"
+import { NameField_ByLanguage } from "dropin-client"
 
 interface KiwiBundleHandlersOptions {
   app: {

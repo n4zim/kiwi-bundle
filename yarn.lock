@@ -1409,6 +1409,13 @@ domexception@^2.0.1:
   dependencies:
     webidl-conversions "^5.0.0"
 
+dropin-client@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/dropin-client/-/dropin-client-0.0.1.tgz#a3c72c2ab7f44d1cf4bc86b4f8df06fd7ae0a96c"
+  integrity sha512-tR/tL8vJhYtVsZBb4Hl7RrwLkQ11rwtn5tWjyGe+foK24Vibb+v6RAD0w9vwRelLnJKY3ngaDdJzG2hUHgf6CQ==
+  dependencies:
+    node-fetch "^2.6.0"
+
 dropin-recipes@1.8.2:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/dropin-recipes/-/dropin-recipes-1.8.2.tgz#7d86555906d83ed16293672267337fb74faadf2c"

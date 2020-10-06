@@ -1,7 +1,7 @@
 import * as tsc from "typescript"
 import { join, extname } from "path"
 import { existsSync, readFileSync } from "fs"
-import { Environment } from "dropin-recipes"
+import { Environment } from "dropin-client"
 import { colorText } from "./utils"
 
 const ModuleKinds: any = {
@@ -83,7 +83,7 @@ export class Bundle {
   }
 
   private extractPackages(packageJson: any) {
-    let packages = { [this.name]: packageJson }
+    const packages = { [this.name]: packageJson }
     Object.values(KiwiBundlePackage).forEach(packageName => {
       const moduleName = this.checkPackageModule(packageJson, packageName)
       if(moduleName !== null) {
