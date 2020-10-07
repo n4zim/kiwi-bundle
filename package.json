@@ -1,6 +1,6 @@
 {
   "name": "kiwi-bundle",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "description": "A simple and clean TypeScript environment for all your cross-platform applications",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
@@ -28,6 +28,7 @@
   },
   "files": [
     "/configs",
-    "/dist"
+    "/dist",
+    "/template"
   ]
 }
