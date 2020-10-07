@@ -17,6 +17,8 @@ const walk = (templateRoot: string, destinationRoot: string, action: (path: stri
   })
 }
 
+// TODO : ignore binary files and copy permissions
+
 export const PostInstall = (path: string) => {
   const bundle = new Bundle(path)
   const reactModule = bundle.getModuleName(KiwiBundlePackage.REACT)
