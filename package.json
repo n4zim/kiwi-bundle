@@ -1,6 +1,6 @@
 {
   "name": "kiwi-bundle",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "description": "A simple and clean TypeScript environment for all your cross-platform applications",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
@@ -25,5 +25,9 @@
     "eslint": "7.9.0",
     "jest": "26.4.2",
     "typescript": "4.0.3"
-  }
+  },
+  "files": [
+    "/configs",
+    "/dist"
+  ]
 }
