@@ -32,7 +32,9 @@ export const PostInstall = (path: string) => {
         if(typeof content === "undefined") {
           mkdirSync(path)
         } else {
-          content = content.replace(appJson.name, appOptions.id).replace(appJson.displayName, appOptions.name)
+          content = content
+            .replace(`/${appJson.name}/gm`, appOptions.id)
+            .replace(`/${appJson.displayName}/gm`, appOptions.name)
           writeFileSync(path, content)
         }
       })
