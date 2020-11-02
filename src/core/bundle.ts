@@ -97,13 +97,13 @@ export class Bundle {
     let options: any = {}
     const tsConfigPath = join(this.path, "tsconfig.json")
     if(existsSync(tsConfigPath)) {
-      const tsConfig = JSON.parse(readFileSync(tsConfigPath, "utf8"))
-      if(typeof tsConfig.extends !== "undefined") {
-        const extendsConfig = JSON.parse(readFileSync(join(this.path, tsConfig.extends), "utf8"))
-        if(typeof tsConfig.compilerOptions !== "undefined") {
-          options = Object.assign(extendsConfig.compilerOptions, tsConfig.compilerOptions)
-        } else {
+      options = JSON.parse(readFileSync(tsConfigPath, "utf8"))
+      if(typeof options.extends !== "undefined") {
+        const extendsConfig = JSON.parse(readFileSync(join(this.path, options.extends), "utf8"))
+        if(typeof options.compilerOptions === "undefined") {
           options = extendsConfig.compilerOptions
+        } else {
+          options.compilerOptions = Object.assign(extendsConfig.compilerOptions, options.compilerOptions)
         }
       }
       if(typeof options.module === "string") {

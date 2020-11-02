@@ -6,9 +6,9 @@ export const Test = (path: string) => {
   bundle.display()
 
   const options: any = {
-    projects: [ bundle.compiler.rootDir ],
+    projects: [ bundle.compiler.compilerOptions.rootDir ],
     rootDir: bundle.path,
-    roots: [ `<rootDir>/${bundle.compiler.rootDir}` ],
+    roots: [ `<rootDir>/${bundle.compiler.compilerOptions.rootDir}` ],
     moduleFileExtensions: [ "ts", "tsx", "js" ],
     transform: JSON.stringify({
       "^.+\\.(ts|tsx)$": `<rootDir>/node_modules/kiwi-bundle/dist/core/jest.js`,

@@ -12,7 +12,7 @@ export const Start = (path: string) => {
   if(typeof reactHandler !== "undefined") {
     reactHandler({
       path,
-      outDir: bundle.compiler.outDir,
+      outDir: bundle.compiler.compilerOptions.outDir,
       options: bundle.getCurrentOptions(),
       handlers: bundle.getCurrentHandlers(),
       args: process.argv.slice(3),
@@ -20,13 +20,13 @@ export const Start = (path: string) => {
   } else {
     const apiHandler = bundle.getPackageHandler(KiwiBundlePackage.API, "start")
     if(typeof apiHandler !== "undefined") {
-      clearDirectory(join(bundle.path, bundle.compiler.outDir))
+      clearDirectory(join(bundle.path, bundle.compiler.compilerOptions.outDir))
       // version: `v${bundle.getPackageJson().version.split(".")[0]}`,
       apiHandler({
         path,
-        rootDir: bundle.compiler.rootDir,
+        rootDir: bundle.compiler.compilerOptions.rootDir,
         handlers: bundle.getCurrentHandlers(),
-        outDir: bundle.compiler.outDir,
+        outDir: bundle.compiler.compilerOptions.outDir,
         options: bundle.getCurrentOptions(),
         packageJson: bundle.getPackageJson(),
       })
