@@ -1,0 +1,18 @@
+
+"array-bracket-newline": [1, "always"],
+
+"array-bracket-spacing": [1, "always"],
+
+"keyword-spacing": [
+  1,
+  {
+    "overrides": {
+      "if": { "after": false },
+      "for": { "after": false },
+      "while": { "after": false }
+    }
+  }
+]
+
+
+"computed-property-spacing": [1, "always"],

@@ -1,18 +1,25 @@
 {
   "ignorePatterns": ["node_modules/", "android/", "ios/"],
   "rules": {
-    "array-bracket-spacing": [
-      2,
-      "always",
-      {
-        "objectsInArrays": false
-      }
+    "quotes": [1, "double"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [0],
+    "comma-dangle": [
+      1,
+      "always-multiline",
+      { "functions": "never" }
     ],
-    "quotes": [2, "double"],
-    "comma-dangle": [2, "always-multiline"],
-    "semi": [2, "never"],
-    "object-curly-spacing": [2, "always"],
-    "array-bracket-newline": [2, "always"],
-    "space-after-keywords": [2, "never"]
+    "semi": [1, "never"],
+    "object-curly-spacing": [1, "always"],
+    "prettier/prettier": [
+      1,
+      {
+        "bracketSpacing": true,
+        "jsxBracketSameLine": true,
+        "singleQuote": false,
+        "trailingComma": "all",
+        "semi": false
+      }
+    ]
   }
 }
