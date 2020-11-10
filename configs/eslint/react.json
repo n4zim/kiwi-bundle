@@ -1,20 +1,18 @@
 {
-  "root": true,
-  "extends": ["@react-native-community"],
   "ignorePatterns": ["node_modules/", "android/", "ios/"],
   "rules": {
     "array-bracket-spacing": [
-      "error",
+      2,
       "always",
       {
         "objectsInArrays": false
       }
     ],
-    "quotes": ["error", "double"],
-    "comma-dangle": ["error", "always-multiline"],
-    "semi": ["error", "never"],
-    "object-curly-spacing": ["error", "always"],
-    "array-bracket-newline": ["error", "always"],
-    "space-after-keywords": ["error ", "never"]
+    "quotes": [2, "double"],
+    "comma-dangle": [2, "always-multiline"],
+    "semi": [2, "never"],
+    "object-curly-spacing": [2, "always"],
+    "array-bracket-newline": [2, "always"],
+    "space-after-keywords": [2, "never"]
   }
 }
