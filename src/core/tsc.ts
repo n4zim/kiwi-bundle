@@ -55,7 +55,7 @@ export class TypeScriptCompiler {
       .fsGetAllFiles(join(bundle.path, bundle.compiler.compilerOptions.rootDir))
       .filter(p => !/^.*\.test.tsx?/.test(p))
     console.log(`Files to compile :\n${files.map(file => `- ./${relative(bundle.path, file)}`).join("\n")}\n`)
-    const program = tsc.createProgram(files, bundle.compiler)
+    const program = tsc.createProgram(files, bundle.compiler.compilerOptions)
     const emitResult = program.emit()
     const allDiagnostics = tsc.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
     allDiagnostics.forEach(TypeScriptCompiler.reportDiagnostic)
