@@ -1,16 +1,16 @@
 {
   "extends": "./configs/ts/commonjs.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "noEmit": false
   },
   "include": [
-    "src/**/*"
+    "./src/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx"
+    "./node_modules",
+    "./src/**/*.test.ts",
+    "./src/**/*.test.tsx"
   ]
 }
