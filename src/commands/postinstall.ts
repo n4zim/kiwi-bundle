@@ -29,15 +29,15 @@ export const PostInstall = (path: string) => {
       const appJson = JSON.parse(readFileSync(join(templatePath, "app.json"), "utf-8"))
       const appOptions = bundle.getCurrentOptions().app
       walk(templatePath, bundle.path, (path, mode, content) => {
-        path = path.replace(appJson.name, appOptions.id)
+        path = path.replace(appJson.name, appOptions.key)
         if(typeof content === "undefined") {
           mkdirSync(path, { mode })
         } else {
           const ext = extname(path)
           if(ext !== ".jar" && ext !== ".keystore") {
             content = content.toString()
-              .replace(`/${appJson.name}/gm`, appOptions.id)
-              .replace(`/${appJson.displayName}/gm`, appOptions.name)
+              .replace(new RegExp(appJson.name, "gm"), appOptions.key)
+              .replace(new RegExp(appJson.displayName, "gm"), appOptions.name)
           }
           writeFileSync(path, content, { mode })
         }
