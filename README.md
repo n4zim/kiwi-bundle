@@ -6,7 +6,6 @@
 - integration of [react-native-web](https://github.com/necolas/react-native-web) for building **web**, **Android** and **iOS** apps with the same codebase
 - **instant start-up** and **hot reloading** to see your components changes in real time
 - complete toolbox with built-in **router**, **logger**, **states management** and **styling** simplified to the limit
-- sidekick scripts for start, test, build, clean and postinstall
 - all-in-one NPM package, no versions to manage
 
 
