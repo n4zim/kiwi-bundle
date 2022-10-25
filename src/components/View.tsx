@@ -1,6 +1,6 @@
 import React from "react"
 import * as ReactNative from "react-native"
-import { StyleSheetStyleView } from "../styles"
+import { StyleSheetStyleView } from "../types/styles"
 
 interface Props
   extends ReactNative.ViewProps,

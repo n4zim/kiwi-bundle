@@ -1,14 +1,14 @@
 import { AppConfig } from "../app/config"
 import { AppLinksImports } from "../app/links"
 import { AppOptions } from "../app/options"
-import { AppStyleSheet } from "../app/styles"
+import { AppStyleSheet } from "../types/styles"
 import {
   ArchitectComponentProps,
   ArchitectComponentStates,
   ArchitectComponentType,
   ArchitectComponentFunctions,
   ArchitectComponentValues,
-} from "./component"
+} from "../types/architect"
 import { ArchitectContext } from "./context"
 
 export type ArchitectOptions<

@@ -8,11 +8,12 @@ import { ArchitectOnMount } from "./onMount"
 import { ArchitectOnUnmount } from "./onUnmount"
 import { ArchitectValues } from "./values"
 import { ArchitectFunctions } from "./functions"
-import { ArchitectComponentProps } from "./component"
+import { ArchitectComponentProps } from "../types/architect"
 import { AppConfig } from "../app/config"
 import { ArchitectOnUpdate } from "./onUpdate"
 import { ArchitectStores } from "./stores"
-import { AppStyleSheet, renderStyle } from "../app/styles"
+import { AppStyleSheet } from "../types/styles"
+import { renderStyle } from "../app/styles"
 
 export type ArchitectStyle<
   Config extends AppConfig,

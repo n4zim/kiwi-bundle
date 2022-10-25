@@ -15,8 +15,8 @@ import {
   ArchitectComponent,
   ArchitectComponentFunctions,
   ArchitectComponentValues,
-} from "./component"
-import { AppStyleSheet } from "../app/styles"
+} from "../types/architect"
+import { AppStyleSheet } from "../types/styles"
 
 export type ArchitectRender<
   Config extends AppConfig,

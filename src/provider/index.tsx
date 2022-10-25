@@ -1,8 +1,7 @@
 import "./imports"
-import { React, ReactNative } from "../../vendors"
+import { React, ReactNative } from "../vendors"
 import {
   createStackNavigator,
-  StackHeaderLeftButtonProps,
 } from "@react-navigation/stack"
 import {
   DefaultTheme,
@@ -15,7 +14,7 @@ import {
 import { AppLinks, AppLinksCustom } from "../app/links"
 import { AppConfig } from "../app/config"
 import { AppOptions } from "../app/options"
-import { i18n } from "../utils/i18n"
+import { i18n } from "../helpers/i18n"
 
 export const Provider = <
   Config extends AppConfig,
@@ -27,13 +26,13 @@ export const Provider = <
 ): ReactNative.ComponentProvider => {
   // LINKING
   const Stack = createStackNavigator()
-  const linking: LinkingOptions = {
+  const linking: LinkingOptions<{}> = {
     enabled: true,
     prefixes: config.navigation.prefixes,
     getStateFromPath: config.navigation.getStateFromPath,
     getPathFromState: config.navigation.getPathFromState,
     config: {
-      screens: Object.keys(config.navigation.routes).reduce<PathConfigMap>(
+      screens: Object.keys(config.navigation.routes).reduce<PathConfigMap<any>>(
         (screens, route) => {
           screens[route] = {
             exact: true,
@@ -107,12 +106,12 @@ export const Provider = <
       })
       React.useEffect(() => {
         options.actions.theme.name.bind({
-          set: (name) => {
+          set: (name: string) => {
             console.log("load", name)
           },
         })
         options.actions.theme.scheme.bind({
-          set: (scheme) => {
+          set: (scheme: ReactNative.ColorSchemeName) => {
             if ((scheme === "dark") !== theme.dark) {
               setTheme(generateTheme(scheme))
             }
@@ -147,7 +146,7 @@ export const Provider = <
                   : (props: any) => {
                       return (links.custom?.header?.left as AppLinksCustom<
                         Config,
-                        StackHeaderLeftButtonProps
+                        any
                       >)(props, {
                         page: screenProps.route.name,
                         navigation: screenProps.navigation,

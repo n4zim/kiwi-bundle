@@ -1,6 +1,6 @@
 import { React, ReactNative } from "../vendors"
 import { PinchGestureHandler } from "react-native-gesture-handler"
-import { StyleSheetStyleView } from "../styles"
+import { StyleSheetStyleView } from "../types/styles"
 
 export interface ZoomableViewProps {
   children?: React.ReactNode

@@ -1,7 +1,7 @@
 import { ReactNative } from "../vendors"
 import { AppConfig } from "../app/config"
 import { AppLinksImports } from "../app/links"
-import { ArchitectComponent, ArchitectComponentProps } from "./component"
+import { ArchitectComponent, ArchitectComponentProps } from "../types/architect"
 import { ArchitectContext } from "./context"
 import { ArchitectFunctions } from "./functions"
 import { ArchitectOnInit } from "./onInit"

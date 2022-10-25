@@ -1,5 +1,5 @@
-import { Language } from "../Context/Fields/Language"
-import { i18nMarkdownCompiler, i18nSettingsMarkdownObject, i18nSettingsCompilerCallback, i18nMarkdownCompilerOptions } from "../Formats/Models/i18n"
+import { Language } from "../../types/names"
+import { i18nMarkdownCompiler, i18nSettingsMarkdownObject, i18nSettingsCompilerCallback, i18nMarkdownCompilerOptions } from "../../types/i18n"
 
 // tslint:disable-next-line: class-name
 export class i18nSettings {

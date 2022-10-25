@@ -7,16 +7,16 @@ import {
   AppLinksImports,
 } from "./links"
 import { Architect } from "../architect"
-import { DynamicData } from "../utils/dynamicData"
 import {
   ArchitectComponentProps,
   ArchitectComponentType,
-} from "../architect/component"
+} from "../types/architect"
 import { AppConfig } from "./config"
 import { AppOptions } from "./options"
 import { AppTheme } from "./theme"
 import { AppStore, AppStoreValues } from "./store"
-import { AppStyleSheet } from "./styles"
+import { AppStyleSheet } from "../types/styles"
+import { DynamicData } from "../helpers/dynamicData"
 
 export const App = <
   Config extends AppConfig,

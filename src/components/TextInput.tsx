@@ -1,5 +1,5 @@
 import { React, ReactNative } from "../vendors"
-import { StyleSheetStyleText } from "../styles"
+import { StyleSheetStyleText } from "../types/styles"
 
 interface Props extends ReactNative.TextInputProps {
   style?: ReactNative.StyleProp<StyleSheetStyleText>

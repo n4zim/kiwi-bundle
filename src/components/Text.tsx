@@ -1,7 +1,8 @@
 import { React, ReactNative } from "../vendors"
-import { StyleSheetStyleText } from "../styles"
-import { i18n, NameField_Text } from "dropin-client"
+import { StyleSheetStyleText } from "../types/styles"
 import { useTheme } from "@react-navigation/native"
+import { NameField_Text } from "../types/names"
+import { i18n } from "../helpers/i18n"
 
 interface Props extends ReactNative.TextProps {
   style?: ReactNative.StyleProp<StyleSheetStyleText>

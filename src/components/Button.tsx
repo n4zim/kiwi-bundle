@@ -1,7 +1,8 @@
 import { React, ReactNative } from "../vendors"
-import { XOR } from "dropin-client"
-import { Text, View } from "."
-import { StyleSheetStyleText, StyleSheetStyleView } from "../styles"
+import { Text } from "./Text"
+import { View } from "./View"
+import { StyleSheetStyleText, StyleSheetStyleView } from "../types/styles"
+import { XOR } from "../types/XOR"
 
 type Props = Omit<ReactNative.ButtonProps, "onPress"> & {
   onPress?: (

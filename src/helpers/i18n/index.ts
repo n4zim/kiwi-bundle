@@ -1,10 +1,6 @@
-import { i18nSchema, i18nOptions } from "../Formats/Models/i18n"
-import { i18nQuery } from "../Formats/Queries/i18n"
-import { Language } from "../Context/Fields/Language"
-import { i18nSettings } from "./i18nSettings"
-import { i18nArticle } from "../Context/Code/i18nArticle"
-import { NameArticle } from "../Context/Fields/NameArticle"
-import { NameField_ByLanguage, NameField_ByNumber, NameField_ForAPerson } from "../Formats/Fields"
+import { i18nArticle, i18nOptions, i18nQuery, i18nSchema } from "../../types/i18n"
+import { Language, NameArticle, NameField_ByLanguage, NameField_ByNumber, NameField_ForAPerson } from "../../types/names"
+import { i18nSettings } from "./settings"
 
 /*
     d888888b  db .d888b. d8b   db

@@ -1,3 +1,6 @@
+
+export * from "./app"
+
 export * from "./components/ActivityIndicator"
 export * from "./components/Button"
 export * from "./components/CheckBox"
@@ -21,4 +24,7 @@ export * from "./components/View"
 export * from "./components/VirtualizedList"
 export * from "./components/ZoomableView"
 
+export * from "./types/i18n"
+export * from "./types/names"
+export * from "./types/objects"
 export * from "./types/XOR"

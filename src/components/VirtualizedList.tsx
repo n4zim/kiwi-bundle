@@ -1,5 +1,5 @@
 import { React, ReactNative } from "../vendors"
-import { StyleSheetStyleView } from "../styles"
+import { StyleSheetStyleView } from "../types/styles"
 
 interface Props<Item> extends ReactNative.VirtualizedListProps<Item> {
   style?: StyleSheetStyleView

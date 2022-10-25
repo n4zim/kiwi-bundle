@@ -1,11 +1,12 @@
-import { React, ReactNative } from "../vendors"
-import { StyleSheetStyleView } from "../styles"
+import { PickerItemProps, Picker } from "@react-native-picker/picker"
+import { React } from "../vendors"
+import { StyleSheetStyleView } from "../types/styles"
 
-interface Props extends ReactNative.PickerItemProps {
+interface Props extends PickerItemProps {
   style?: StyleSheetStyleView
   children?: any
 }
 
 export const PickerItem = (props: Props) => {
-  return <ReactNative.Picker.Item {...props} />
+  return <Picker.Item {...props} />
 }

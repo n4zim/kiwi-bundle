@@ -1,27 +1,5 @@
-import { ReactNative } from "../vendors"
+import { AppStyleSheet, StyleSheetStyle } from "../types/styles"
 import { DimensionsWidth, onDimensionsChange } from "./dimensions"
-
-export type StyleSheetStyleView = ReactNative.ViewStyle & {
-  cursor?: "pointer" | "move" | "initial"
-}
-
-export type StyleSheetStyleText = ReactNative.TextStyle
-
-export type StyleSheetStyleImage = ReactNative.ImageStyle
-
-export type StyleSheetStyle = StyleSheetStyleView &
-  StyleSheetStyleText &
-  StyleSheetStyleImage
-
-export type StyleSheetMediaQuery = {
-  min?: number
-  max?: number
-  style: StyleSheetStyle
-}
-
-export type AppStyleSheet<Style = StyleSheetStyle | StyleSheetMediaQuery[]> = {
-  [name: string]: Style
-}
 
 const stylesUpdates: {
   min: { [min: number]: ((width: number) => void)[] }

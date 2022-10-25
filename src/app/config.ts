@@ -1,5 +1,5 @@
 import { ReactNative } from "../vendors"
-import { Language, NameField_ByLanguage } from "../types/i18n"
+import { Language, NameField_ByLanguage } from "../types/names"
 import { LinkingOptions } from "@react-navigation/native"
 
 export type AppConfig = {

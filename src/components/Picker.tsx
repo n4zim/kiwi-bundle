@@ -1,8 +1,8 @@
-import { React, ReactNative } from "../vendors"
-import { Picker as PickerBase } from "@react-native-community/picker"
-import { StyleSheetStyleView } from "../styles"
+import { React } from "../vendors"
+import { Picker as PickerBase, PickerProps } from "@react-native-picker/picker"
+import { StyleSheetStyleView } from "../types/styles"
 
-interface Props extends ReactNative.PickerProps {
+interface Props extends PickerProps {
   style?: StyleSheetStyleView
   children?: React.ReactNode
 }

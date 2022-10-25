@@ -1,5 +1,5 @@
 import { AppConfig } from "./config"
-import { ArchitectComponent } from "../architect/component"
+import { ArchitectComponent } from "../types/architect"
 import { AppTheme } from "./theme"
 import { NavigationActions } from "../provider/navigation"
 import { React } from "../vendors"

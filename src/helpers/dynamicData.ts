@@ -1,10 +1,11 @@
+
 export type DynamicData<Data> = {
   data: {
     get: () => Data | undefined
     set: (data: Data) => void
   }
   onUpdate: (cb: () => void) => void
-  bind: (callbacks: { get?: () => Data; set?: (data: Data) => void }) => void
+  bind: (callbacks: { get?: () => Data, set?: (data: Data) => void }) => void
 }
 
 export const DynamicData = <Data>(initialValue: Data): DynamicData<Data> => {

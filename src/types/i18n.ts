@@ -1,41 +1,49 @@
-import { XOR } from "./XOR"
+import { NameField } from "./names"
+import { Language } from "./names"
+import { KeysObject } from "./objects"
+
+export enum i18nArticle {
+  FR_IND, // Français - Indéfini (un, une, des)
+  FR_DEF, // Français - Défini (le, l', la, les)
+  FR_DEF_CNT, // Français - Défini contracté (au, à l', à la, aux)
+  FR_PAR, // Français - Partitif (du, de l', de la, des)
+}
+
+export type i18nQuery<Name = NameField> = {
+  $: { type: "i18n", name: Name, options?: i18nOptions }
+}
+
+export type i18nSchema<Name = NameField> = Name | i18nQuery<Name>
 
 
-export enum Language {
-  ENGLISH = "en",
-  FRENCH = "fr",
+export type i18nData<Data = any> = KeysObject<i18nSchema|i18nSchema[]|((...params: any[]) => i18nSchema|i18nSchema[]), Data>
+
+export const i18nData = <Data extends i18nData<Data>>(data: Data): Data => data
+
+
+export type i18nOptions<Vars = { [name: string]: string }> = {
+  count?: number
+  vars?: Vars
+  lowercase?: boolean
+  article?: i18nArticle
+  language?: Language
 }
 
 
-export enum NameArticle {
-  FR_MAS, // Français - Masculin (un, le, du, au, les, des, aux)
-  FR_MAS_CNT, // Français - Masculin contracté (un, l', de l', à l', les, des, aux)
-  FR_FEM, // Français - Féminin (une, la, de la, à la, les, des, aux)
-  FR_FEM_CNT, // Français - Féminin contracté (une, l', de l', à l', les, des, aux)
+export type i18nMarkdownCompilerOptions = { [index: string]: string }
+
+export type i18nMarkdownCompiler<Output = any> = {
+  bold: (id: string, children: Output, options: i18nMarkdownCompilerOptions) => Output
+  link: (id: string, link: string, children: Output, options: i18nMarkdownCompilerOptions) => Output
 }
 
-
-export type LanguagesObject<Content, L extends Language = Language> = XOR<{
-  "*": Content
-}, {
-  [language in L]?: Content
-}>
-
-
-export type NameField_Text = string | number | (string|number)[]
-
-export type NameField_ByNumber<Text = NameField_Text> = {
-  one?: Text
-  many?: Text
-  short?: Text
-  article?: NameArticle
+type i18nSettingsMarkdownString = {
+  text: string
+  options: i18nMarkdownCompilerOptions
+  bold?: boolean
+  link?: string
 }
 
-export type NameField_ForAPerson<Text = NameField_Text> = { firstname?: Text, lastname?: Text, middlename?: Text }
+export type i18nSettingsMarkdownObject = { [index: number]: { end: number, value: i18nSettingsMarkdownString } }
 
-
-type FieldsContent<Text> = Text | NameField_ByNumber<Text> | NameField_ForAPerson<Text>
-
-export type NameField_ByLanguage<Text = NameField_Text> = LanguagesObject<FieldsContent<Text>>
-
-export type NameField<Text = NameField_Text> = FieldsContent<Text> | NameField_ByLanguage<Text>
+export type i18nSettingsCompilerCallback = (match: RegExpExecArray, children?: i18nSettingsMarkdownString) => i18nSettingsMarkdownString

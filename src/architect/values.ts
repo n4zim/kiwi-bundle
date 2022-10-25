@@ -1,11 +1,11 @@
 import { AppConfig } from "../app/config"
 import { AppLinksImports } from "../app/links"
-import { AppStyleSheet } from "../app/styles"
+import { AppStyleSheet } from "../types/styles"
 import {
   ArchitectComponentProps,
   ArchitectComponentStates,
   ArchitectComponentValues,
-} from "./component"
+} from "../types/architect"
 import { ArchitectFunctions } from "./functions"
 import { ArchitectOnInit } from "./onInit"
 import { ArchitectOnMount } from "./onMount"
