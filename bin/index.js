@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import Start from "./start.js"
-import Test from "./test.js"
-import Build from "./build.js"
+const Start = require("./start")
+const Test = require("./test")
+const Build = require("./build")
 
 if(process.argv.length === 2) {
   console.error("No command argument")
@@ -10,15 +10,18 @@ if(process.argv.length === 2) {
 }
 
 const path = process.cwd()
+
+const args = process.argv.slice(3)
+
 switch(process.argv[2]) {
   case "start":
-    Start(path)
+    Start(path, args)
     break
   case "test":
-    Test(path)
+    Test(path, args)
     break
   case "build":
-    Build(path)
+    Build(path, args)
     break
   default:
     console.error(`The command "${process.argv[2]}" does not exist`)

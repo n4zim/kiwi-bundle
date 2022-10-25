@@ -174,7 +174,7 @@ export const App = <
             config.key,
             Provider(config, resolvedLinks, options),
           )
-          if (ReactNative.Platform.OS === "web") {
+          if(ReactNative.Platform.OS === "web") {
             ReactNative.AppRegistry.runApplication(config.key, {
               rootTag: document.getElementById("root"),
             })

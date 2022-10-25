@@ -24,7 +24,11 @@ export * from "./components/View"
 export * from "./components/VirtualizedList"
 export * from "./components/ZoomableView"
 
+export * from "./helpers/i18n/settings"
+
 export * from "./types/i18n"
 export * from "./types/names"
 export * from "./types/objects"
 export * from "./types/XOR"
+
+export * from "./vendors"

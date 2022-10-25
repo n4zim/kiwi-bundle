@@ -1,8 +1,19 @@
-import { spawn } from "child_process"
-import { join } from "path"
+const { spawn } = require("child_process")
+const { join } = require("path")
+const { initTemplate, initBundle } = require("./utils")
 
-export default ({ path }) => {
-  spawn(
+module.exports = async (path, args) => {
+  if(args.length !== 0) {
+    await initTemplate(path)
+    await initBundle(path)
+    switch(args[0]) {
+      case "web":
+        return
+    }
+  }
+
+  console.log("You must specify a platform to build : web, android or ios")
+    /*spawn(
     join(path, "node_modules/.bin/react-scripts"),
     ["build"],
     {
@@ -15,5 +26,5 @@ export default ({ path }) => {
         FORCE_COLOR: "true",
       },
     }
-  )
+  )*/
 }

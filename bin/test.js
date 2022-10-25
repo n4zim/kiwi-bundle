@@ -1,6 +1,6 @@
-import jest from "jest"
+const jest = require("jest")
 
-export default path => {
+module.exports = async path => {
   const bundle = new Bundle(path)
   bundle.display()
 

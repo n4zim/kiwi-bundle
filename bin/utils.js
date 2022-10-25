@@ -1,7 +1,18 @@
-import { spawn } from "child_process"
-import { join } from "path"
+const { spawn } = require("child_process")
+const { join } = require("path")
+const fs = require("fs")
 
-export const run = (path, bin, args) => {
+module.exports.initTemplate = async (path) => {
+}
+
+module.exports.initBundle = (path) => {
+  const kiwiDir = join(path, ".kiwi")
+  if(!fs.existsSync(kiwiDir)) {
+    fs.mkdirSync(kiwiDir)
+  }
+}
+
+module.exports.initTemplate.run = (path, bin, args) => {
   return spawn(
     join("node_modules", ".bin", bin),
     args,

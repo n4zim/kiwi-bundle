@@ -18,10 +18,10 @@ import { renderStyle } from "../app/styles"
 export type ArchitectStyle<
   Config extends AppConfig,
   Links extends AppLinksImports<Config>,
-  Props extends ArchitectComponentProps
-  > = <Style extends AppStyleSheet>(
-    style: Style,
-  ) => Omit<ArchitectSelf<Config, Links, Props, Style>, "style">
+  Props extends ArchitectComponentProps,
+> = <Style extends AppStyleSheet>(
+  style: Style,
+) => Omit<ArchitectSelf<Config, Links, Props, Style>, "style">
 
 export const ArchitectStyle = <
   Config extends AppConfig,

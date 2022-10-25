@@ -1,4 +1,4 @@
-import { run } from "./utils.js"
+const { run } = require("./utils")
 
 const help = () => {
   console.log("You have to choose which platform to start :")
@@ -8,7 +8,7 @@ const help = () => {
   console.log("- ios : development on iOS device")
 }
 
-export default ({ path, args }) => {
+module.exports = async ({ path, args }) => {
   if(args.length !== 1) {
     if(args.length !== 0) {
       console.log("/!\\ You provided too many arguments\n")
