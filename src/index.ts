@@ -1,26 +1,24 @@
-#!/usr/bin/env node
+export * from "./components/ActivityIndicator"
+export * from "./components/Button"
+export * from "./components/CheckBox"
+export * from "./components/FlatList"
+export * from "./components/Image"
+export * from "./components/ImageBackground"
+export * from "./components/KeyboardAvoidingView"
+export * from "./components/Modal"
+export * from "./components/Picker"
+export * from "./components/PickerItem"
+export * from "./components/SafeAreaView"
+export * from "./components/ScrollView"
+export * from "./components/SectionList"
+export * from "./components/StatusBar"
+export * from "./components/Switch"
+export * from "./components/Text"
+export * from "./components/TextInput"
+export * from "./components/TouchableHighlight"
+export * from "./components/TouchableOpacity"
+export * from "./components/View"
+export * from "./components/VirtualizedList"
+export * from "./components/ZoomableView"
 
-import { Start } from "./commands/start"
-import { Build } from "./commands/build"
-import { PostInstall } from "./commands/postinstall"
-
-if(process.argv.length === 2) {
-  console.error("No command argument")
-  process.exit(1)
-}
-
-const path = process.cwd()
-switch(process.argv[2]) {
-  case "start":
-    Start(path)
-    break
-  case "build":
-    Build(path)
-    break
-  case "postinstall":
-    PostInstall(path)
-    break
-  default:
-    console.error(`The command "${process.argv[2]}" does not exist`)
-    process.exit(1)
-}
+export * from "./types/XOR"
