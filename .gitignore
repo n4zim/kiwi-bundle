@@ -1,7 +1,1 @@
-
-# [\/] kiwi-bundle
-dist/
 node_modules/
-*.log
-./pnpm-lock.yaml
-# [/\] kiwi-bundle

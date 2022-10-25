@@ -5,23 +5,13 @@
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
   "license": "Apache-2.0",
+  "type": "module",
   "bin": {
-    "kiwi": "./dist/index.js"
-  },
-  "scripts": {
-    "start": "kiwi start",
-    "test": "kiwi test",
-    "build": "kiwi build"
+    "kiwi": "./bin/index.js"
   },
   "dependencies": {
-    "babel-plugin-react-native-web": "0.18.9",
-    "react-dom": "18.2.0",
-    "react-native-web": "0.18.9",
-    "typescript": "4.8.4"
-  },
-  "files": [
-    "/configs",
-    "/dist",
-    "/template"
-  ]
+    "jest": "29.2.2",
+    "react": "^18.2.0",
+    "react-native": "^0.70.3"
+  }
 }
