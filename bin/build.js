@@ -1,11 +1,11 @@
 const { spawn } = require("child_process")
 const { join } = require("path")
-const { initTemplate, initBundle } = require("./utils")
+const { initTemplate, initNative } = require("./utils")
 
 module.exports = async (path, args) => {
   if(args.length !== 0) {
-    await initTemplate(path)
-    await initBundle(path)
+    initTemplate(path)
+    //initNative(path)
     switch(args[0]) {
       case "web":
         return
