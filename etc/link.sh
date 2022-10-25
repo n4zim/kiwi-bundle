@@ -11,5 +11,5 @@ ln -s ../kiwi-bundle/bin/index.js kiwi
 
 cd ..
 
-rm -rf react react-native
-ln -s kiwi-bundle/node_modules/{react,react-native} .
+rm -rf react react-native react-test-renderer
+ln -s kiwi-bundle/node_modules/{react,react-native,react-test-renderer} .

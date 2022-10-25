@@ -8,6 +8,7 @@ module.exports = async (path, args) => {
     //initNative(path)
     switch(args[0]) {
       case "web":
+
         return
     }
   }
