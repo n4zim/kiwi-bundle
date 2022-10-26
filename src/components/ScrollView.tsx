@@ -7,5 +7,5 @@ interface Props extends ReactNative.ScrollViewProps {
 }
 
 export const ScrollView = (props: Props) => {
-  return <ReactNative.ScrollView {...props} />
+  return <ReactNative.ScrollView {...props}/>
 }

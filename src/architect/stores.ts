@@ -33,8 +33,8 @@ export const ArchitectStores = <
   Style extends AppStyleSheet,
   States extends ArchitectComponentStates
 >(
-  options: ArchitectOptions<Config, Links, Props, Style, States>,
-): ArchitectStores<Config, Links, Props, Style, States> => {
+    options: ArchitectOptions<Config, Links, Props, Style, States>,
+  ): ArchitectStores<Config, Links, Props, Style, States> => {
   return <Stores extends AppStoreBinding[]>(stores: Stores) => {
     stores.forEach((onUpdate) => onUpdate(() => options.context.update()))
     return {

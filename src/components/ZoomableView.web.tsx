@@ -20,16 +20,16 @@ export const ZoomableView = (props: ZoomableViewProps) => {
       isMouseDown.current = event.target === ref.current
     }
     ref.current.onmousemove = (event: any) => {
-      if (isMouseDown.current) {
-        if (event.buttons !== 1) {
+      if(isMouseDown.current) {
+        if(event.buttons !== 1) {
           isMouseDown.current = false
         } else {
           let x = translate.x + event.movementX
-          if (x >= 0) {
+          if(x >= 0) {
             x = 0
           }
           let y = translate.y + event.movementY
-          if (y >= 0) {
+          if(y >= 0) {
             y = 0
           }
           setTranslate({ x, y })
@@ -38,14 +38,14 @@ export const ZoomableView = (props: ZoomableViewProps) => {
     }
 
     const keydown = (event: KeyboardEvent) => {
-      if (event.key === "Control") {
+      if(event.key === "Control") {
         console.log("keydown")
         setIsCtrlDown(true)
       }
     }
 
     const keyup = (event: KeyboardEvent) => {
-      if (event.key === "Control") {
+      if(event.key === "Control") {
         console.log("keyup")
         setIsCtrlDown(false)
       }
@@ -71,10 +71,10 @@ export const ZoomableView = (props: ZoomableViewProps) => {
         }
       }*/
       const zoomDelta = (event.offsetY - oldY.current) / 10
-      if (oldY.current < 0) {
+      if(oldY.current < 0) {
         oldY.current = event.offsetY
       }
-      if (Math.abs(zoomDelta) > 5) {
+      if(Math.abs(zoomDelta) > 5) {
         //const oldScale = scale
         setScale(
           Math.max(Math.min(MAX_ZOOM, scale + zoomDelta / 100), MIN_ZOOM),

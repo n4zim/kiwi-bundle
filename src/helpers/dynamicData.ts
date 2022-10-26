@@ -14,10 +14,10 @@ export const DynamicData = <Data>(initialValue: Data): DynamicData<Data> => {
   let onUpdate: (() => void)[] = []
   return {
     bind: (cb) => {
-      if (typeof cb.get !== "undefined") {
+      if(typeof cb.get !== "undefined") {
         get = cb.get
       }
-      if (typeof cb.set !== "undefined") {
+      if(typeof cb.set !== "undefined") {
         set.push(cb.set)
       }
     },

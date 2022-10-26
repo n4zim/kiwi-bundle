@@ -54,7 +54,7 @@ export const ArchitectOnUnmount = <
   Values extends ArchitectComponentValues,
   Functions extends ArchitectComponentFunctions
 >(
-  options: ArchitectOptions<
+    options: ArchitectOptions<
     Config,
     Links,
     Props,
@@ -63,7 +63,7 @@ export const ArchitectOnUnmount = <
     Values,
     Functions
   >,
-): ArchitectOnUnmount<
+  ): ArchitectOnUnmount<
   Config,
   Links,
   Props,

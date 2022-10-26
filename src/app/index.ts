@@ -22,9 +22,9 @@ export const App = <
   Config extends AppConfig,
   Links extends AppLinksImports<Config>
 >(
-  config: Config,
-  links: Links,
-) => {
+    config: Config,
+    links: Links,
+  ) => {
   const options: AppOptions = {
     actions: {
       theme: {
@@ -72,10 +72,10 @@ export const App = <
           screen: ReactNative.Dimensions.get("screen"),
         },
       })
-      if (typeof style2 !== "undefined") {
+      if(typeof style2 !== "undefined") {
         Object.keys(style2).forEach((key) => {
           const value = style2[key]
-          if (typeof style[key] === "undefined") {
+          if(typeof style[key] === "undefined") {
             style[key] = value
           } else {
             style[key] = Object.assign(style[key], value)
@@ -88,20 +88,20 @@ export const App = <
       const methods: Omit<AppStore, "bind"> = { get: {}, set: {} }
       const onUpdateBindings = Object.keys(values).reduce<{
         [key: string]: (cb: () => void) => void
-      }>((all, key) => {
-        let value = values[key]
-        const data = DynamicData(value)
-        data.bind({
-          get: () => value,
-          set: (newValue) => {
-            value = newValue
-          },
-        })
-        methods.get[key] = data.data.get
-        methods.set[key] = data.data.set
-        all[key] = data.onUpdate
-        return all
-      }, {})
+          }>((all, key) => {
+            let value = values[key]
+            const data = DynamicData(value)
+            data.bind({
+              get: () => value,
+              set: (newValue) => {
+                value = newValue
+              },
+            })
+            methods.get[key] = data.data.get
+            methods.set[key] = data.data.set
+            all[key] = data.onUpdate
+            return all
+          }, {})
       return {
         ...methods,
         bind: (bindValues) => (onUpdate) => {
@@ -122,7 +122,7 @@ export const App = <
           (promise, key) =>
             promise.then((all) => {
               const item = from[key]
-              if (typeof item === "undefined") {
+              if(typeof item === "undefined") {
                 return all
               }
               return item.then((current) => {
@@ -141,7 +141,7 @@ export const App = <
               resolvedLinks.pages = pages
             })
             .then(() => {
-              if (typeof linksResolve.themes === "undefined") {
+              if(typeof linksResolve.themes === "undefined") {
                 return
               }
               return resolveImports(linksResolve.themes).then((themes) => {
@@ -149,13 +149,13 @@ export const App = <
               })
             })
             .then(() => {
-              if (typeof linksResolve.custom === "undefined") {
+              if(typeof linksResolve.custom === "undefined") {
                 return
               }
               const importsCustom = linksResolve.custom
               return Promise.resolve<NonNullable<AppLinks<any>["custom"]>>({})
                 .then((custom) => {
-                  if (typeof importsCustom.header === "undefined") {
+                  if(typeof importsCustom.header === "undefined") {
                     return custom
                   }
                   return resolveImports(importsCustom.header).then((header) => {

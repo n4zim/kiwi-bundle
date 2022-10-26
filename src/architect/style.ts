@@ -28,8 +28,8 @@ export const ArchitectStyle = <
   Links extends AppLinksImports<Config>,
   Props extends ArchitectComponentProps
 >(
-  options: ArchitectOptions<Config, Links, Props>,
-): ArchitectStyle<Config, Links, Props> => {
+    options: ArchitectOptions<Config, Links, Props>,
+  ): ArchitectStyle<Config, Links, Props> => {
   return <Style extends AppStyleSheet>(style: Style) => {
     renderStyle(
       style,

@@ -13,9 +13,9 @@ const setStyleDimensions = (width: number, isInit: boolean) => {
     .map((s) => Number(s))
     .sort((a, b) => a - b)
     .reduce<number>((all, current) => (width > current ? current : all), 0)
-  if (isInit || min !== stylesUpdates.currentMin) {
+  if(isInit || min !== stylesUpdates.currentMin) {
     stylesUpdates.currentMin = min
-    if (!isInit && typeof stylesUpdates.min[min] !== "undefined") {
+    if(!isInit && typeof stylesUpdates.min[min] !== "undefined") {
       stylesUpdates.min[min].forEach((cb) => cb(min))
     }
   }
@@ -26,9 +26,9 @@ const setStyleDimensions = (width: number, isInit: boolean) => {
     (all, current) => (width < current ? current : all),
     maxList[0],
   )
-  if (isInit || max !== stylesUpdates.currentMax) {
+  if(isInit || max !== stylesUpdates.currentMax) {
     stylesUpdates.currentMax = max
-    if (!isInit && typeof stylesUpdates.max[max] !== "undefined") {
+    if(!isInit && typeof stylesUpdates.max[max] !== "undefined") {
       stylesUpdates.max[max].forEach((cb) => cb(max))
     }
   }
@@ -50,18 +50,18 @@ export const renderStyle = (
       Object.keys(style).reduce<AppStyleSheet<StyleSheetStyle>>(
         (styleChildren, name) => {
           const currentStyle = style[name]
-          if (Array.isArray(currentStyle)) {
+          if(Array.isArray(currentStyle)) {
             styleChildren[name] = currentStyle.reduce<StyleSheetStyle>(
               (all, current) => {
-                if (isInit) {
-                  if (typeof current.min !== "undefined") {
+                if(isInit) {
+                  if(typeof current.min !== "undefined") {
                     limits.min.push(current.min)
                   }
-                  if (typeof current.max !== "undefined") {
+                  if(typeof current.max !== "undefined") {
                     limits.max.push(current.max)
                   }
                 }
-                if (
+                if(
                   (typeof current.min === "undefined" ||
                     width >= current.min) &&
                   (typeof current.max === "undefined" || width <= current.max)
@@ -80,19 +80,19 @@ export const renderStyle = (
         {},
       ),
     )
-    if (isInit) {
+    if(isInit) {
       const trigger = (newWidth: number) => {
         generate(newWidth, false)
         update()
       }
       limits.min.forEach((limit) => {
-        if (typeof stylesUpdates.min[limit] === "undefined") {
+        if(typeof stylesUpdates.min[limit] === "undefined") {
           stylesUpdates.min[limit] = []
         }
         stylesUpdates.min[limit].push(trigger)
       })
       limits.max.forEach((limit) => {
-        if (typeof stylesUpdates.max[limit] === "undefined") {
+        if(typeof stylesUpdates.max[limit] === "undefined") {
           stylesUpdates.max[limit] = []
         }
         stylesUpdates.max[limit].unshift(trigger)

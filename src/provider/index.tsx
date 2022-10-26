@@ -20,10 +20,10 @@ export const Provider = <
   Config extends AppConfig,
   Links extends AppLinks<Config>
 >(
-  config: Config,
-  links: Links,
-  options: AppOptions,
-): ReactNative.ComponentProvider => {
+    config: Config,
+    links: Links,
+    options: AppOptions,
+  ): ReactNative.ComponentProvider => {
   // LINKING
   const Stack = createStackNavigator()
   const linking: LinkingOptions<{}> = {
@@ -47,7 +47,7 @@ export const Provider = <
 
   // TITLE
   let documentTitle: DocumentTitleOptions | undefined
-  if (
+  if(
     ReactNative.Platform.OS === "web" &&
     typeof config.platforms?.web?.title !== "undefined"
   ) {
@@ -55,17 +55,17 @@ export const Provider = <
     documentTitle = {
       enabled: true,
       formatter: (_, route) => {
-        if (typeof configTitle === "string") {
-          return configTitle
-        }
-        if (
+        if(typeof configTitle === "string")
+        {return configTitle}
+
+        if(
           typeof route !== "undefined" &&
           typeof config.navigation.routes[route.name]?.title !== "undefined"
-        ) {
-          return configTitle(
-            i18n(config.navigation.routes[route.name].title || ""),
-          )
-        }
+        )
+        {return configTitle(
+          i18n(config.navigation.routes[route.name].title || ""),
+        )}
+
         return ""
       },
     }
@@ -73,19 +73,19 @@ export const Provider = <
 
   // THEME
   const generateTheme = (scheme: ReactNative.ColorSchemeName): Theme => {
-    if (typeof links.themes !== "undefined") {
+    if(typeof links.themes !== "undefined") {
       const first: any = Object.values(links.themes)[0]
       return {
         dark: scheme === "dark",
         colors: (Object.keys(first) as (keyof Theme["colors"])[]).reduce<
           Partial<Theme["colors"]>
         >((all, key) => {
-          if (typeof first[key] === "function") {
-            all[key] = first[key](config.appearance.colors)
-          }
-          if (typeof first[key] === "object") {
-            all[key] = first[key][scheme || "light"]
-          }
+          if(typeof first[key] === "function")
+          {all[key] = first[key](config.appearance.colors)}
+
+          if(typeof first[key] === "object")
+          {all[key] = first[key][scheme || "light"]}
+
           return all
         }, {}) as Theme["colors"],
       }
@@ -112,9 +112,9 @@ export const Provider = <
         })
         options.actions.theme.scheme.bind({
           set: (scheme: ReactNative.ColorSchemeName) => {
-            if ((scheme === "dark") !== theme.dark) {
-              setTheme(generateTheme(scheme))
-            }
+            if((scheme === "dark") !== theme.dark)
+            {setTheme(generateTheme(scheme))}
+
           },
         })
       }, [theme])
@@ -131,8 +131,8 @@ export const Provider = <
               cardStyle:
                 ReactNative.Platform.OS === "web"
                   ? {
-                      height: "100vh",
-                    }
+                    height: "100vh",
+                  }
                   : {},
               headerStyle: [
                 {
@@ -144,26 +144,26 @@ export const Provider = <
                 typeof links.custom?.header?.left === "undefined"
                   ? undefined
                   : (props: any) => {
-                      return (links.custom?.header?.left as AppLinksCustom<
+                    return (links.custom?.header?.left as AppLinksCustom<
                         Config,
                         any
                       >)(props, {
-                        page: screenProps.route.name,
-                        navigation: screenProps.navigation,
-                      })
-                    },
+                      page: screenProps.route.name,
+                      navigation: screenProps.navigation,
+                    })
+                  },
               headerRight:
                 typeof links.custom?.header?.right === "undefined"
                   ? undefined
                   : (props) => {
-                      return (links.custom?.header?.right as AppLinksCustom<
+                    return (links.custom?.header?.right as AppLinksCustom<
                         Config,
                         {}
                       >)(props, {
-                        page: screenProps.route.name,
-                        navigation: screenProps.navigation,
-                      })
-                    },
+                      page: screenProps.route.name,
+                      navigation: screenProps.navigation,
+                    })
+                  },
             })}
             children={Object.keys(links.pages).map((page) => {
               const route = config.navigation.routes[page]

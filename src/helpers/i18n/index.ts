@@ -12,12 +12,12 @@ import { i18nSettings } from "./settings"
 */
 
 export const i18n = (schema: i18nSchema, options: i18nOptions = {}): string => {
-  if(typeof schema === "number") return schema.toString() // NAME NUMBER
-  if(typeof schema === "string") return fromString(schema, options) // NAME STRING
+  if(typeof schema === "number") {return schema.toString()} // NAME NUMBER
+  if(typeof schema === "string") {return fromString(schema, options)} // NAME STRING
   if(typeof schema === "object") {
-    if(Array.isArray(schema)) return fromArray(schema, options) // ARRAY
+    if(Array.isArray(schema)) {return fromArray(schema, options)} // ARRAY
     const schemaAsQuery = schema as i18nQuery
-    if(typeof schemaAsQuery.$ !== "undefined") return fromQuery(schemaAsQuery, options)
+    if(typeof schemaAsQuery.$ !== "undefined") {return fromQuery(schemaAsQuery, options)}
     const schemaAsByNumber = schema as NameField_ByNumber
     if(
       typeof schemaAsByNumber.one !== "undefined"
@@ -95,53 +95,53 @@ const fromByNumber = (nameByNumber: NameField_ByNumber, options: i18nOptions): s
 
   // ARTICLES
   if(typeof options.article !== "undefined" && options.article && typeof options.language !== "undefined") {
-    switch(options.language) {
-      case Language.FRENCH:
-        switch(options.article as i18nArticle) {
-          case i18nArticle.FR_IND:
-            if(options.count !== 1) {
-              output = "des " + output
-            } else if(nameByNumber.article === NameArticle.FR_FEM || nameByNumber.article === NameArticle.FR_FEM_CNT) {
-              output = "une " + output
-            } else {
-              output = "un " + output
-            }
-            break
-          case i18nArticle.FR_DEF:
-            if(options.count !== 1) {
-              output = "les " + output
-            } else if(nameByNumber.article === NameArticle.FR_MAS_CNT || nameByNumber.article === NameArticle.FR_FEM_CNT) {
-              output = "l'" + output
-            } else if(nameByNumber.article === NameArticle.FR_FEM) {
-              output = "la " + output
-            } else {
-              output = "le " + output
-            }
-            break
-          case i18nArticle.FR_DEF_CNT:
-            if(options.count !== 1) {
-              output = "aux " + output
-            } else if(nameByNumber.article === NameArticle.FR_MAS_CNT || nameByNumber.article === NameArticle.FR_FEM_CNT) {
-              output = "à l'" + output
-            } else if(nameByNumber.article === NameArticle.FR_FEM) {
-              output = "à la " + output
-            } else {
-              output = "au " + output
-            }
-            break
-          case i18nArticle.FR_PAR:
-            if(options.count !== 1) {
-              output = "des " + output
-            } else if(nameByNumber.article === NameArticle.FR_MAS_CNT || nameByNumber.article === NameArticle.FR_FEM_CNT) {
-              output = "de l'" + output
-            } else if(nameByNumber.article === NameArticle.FR_FEM) {
-              output = "de la " + output
-            } else {
-              output = "du " + output
-            }
-            break
+    switch (options.language) {
+    case Language.FRENCH:
+      switch (options.article as i18nArticle) {
+      case i18nArticle.FR_IND:
+        if(options.count !== 1) {
+          output = "des " + output
+        } else if(nameByNumber.article === NameArticle.FR_FEM || nameByNumber.article === NameArticle.FR_FEM_CNT) {
+          output = "une " + output
+        } else {
+          output = "un " + output
         }
         break
+      case i18nArticle.FR_DEF:
+        if(options.count !== 1) {
+          output = "les " + output
+        } else if(nameByNumber.article === NameArticle.FR_MAS_CNT || nameByNumber.article === NameArticle.FR_FEM_CNT) {
+          output = "l'" + output
+        } else if(nameByNumber.article === NameArticle.FR_FEM) {
+          output = "la " + output
+        } else {
+          output = "le " + output
+        }
+        break
+      case i18nArticle.FR_DEF_CNT:
+        if(options.count !== 1) {
+          output = "aux " + output
+        } else if(nameByNumber.article === NameArticle.FR_MAS_CNT || nameByNumber.article === NameArticle.FR_FEM_CNT) {
+          output = "à l'" + output
+        } else if(nameByNumber.article === NameArticle.FR_FEM) {
+          output = "à la " + output
+        } else {
+          output = "au " + output
+        }
+        break
+      case i18nArticle.FR_PAR:
+        if(options.count !== 1) {
+          output = "des " + output
+        } else if(nameByNumber.article === NameArticle.FR_MAS_CNT || nameByNumber.article === NameArticle.FR_FEM_CNT) {
+          output = "de l'" + output
+        } else if(nameByNumber.article === NameArticle.FR_FEM) {
+          output = "de la " + output
+        } else {
+          output = "du " + output
+        }
+        break
+      }
+      break
     }
   }
   return i18n(output, options)
@@ -149,9 +149,9 @@ const fromByNumber = (nameByNumber: NameField_ByNumber, options: i18nOptions): s
 
 const fromAPerson = (person: NameField_ForAPerson, options: i18nOptions): string => {
   let output: string = ""
-  if(typeof person.firstname !== "undefined") output += person.firstname
-  if(typeof person.middlename !== "undefined") output += (output.length ? " " : "") + person.middlename
-  if(typeof person.lastname !== "undefined") output += (output.length ? " " : "") + person.lastname
+  if(typeof person.firstname !== "undefined") {output += person.firstname}
+  if(typeof person.middlename !== "undefined") {output += (output.length ? " " : "") + person.middlename}
+  if(typeof person.lastname !== "undefined") {output += (output.length ? " " : "") + person.lastname}
   return i18n(output, options)
 }
 

@@ -7,5 +7,5 @@ interface Props extends ReactNative.TouchableOpacityProps {
 }
 
 export const TouchableOpacity = (props: Props) => {
-  return <ReactNative.TouchableOpacity {...props} />
+  return <ReactNative.TouchableOpacity {...props}/>
 }

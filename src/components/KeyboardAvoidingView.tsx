@@ -7,5 +7,5 @@ interface Props extends ReactNative.KeyboardAvoidingViewProps {
 }
 
 export const KeyboardAvoidingView = (props: Props) => {
-  return <ReactNative.KeyboardAvoidingView {...props} />
+  return <ReactNative.KeyboardAvoidingView {...props}/>
 }

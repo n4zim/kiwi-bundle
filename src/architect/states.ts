@@ -31,8 +31,8 @@ export const ArchitectStates = <
   Props extends ArchitectComponentProps,
   Style extends AppStyleSheet
 >(
-  options: ArchitectOptions<Config, Links, Props, Style>,
-): ArchitectStates<Config, Links, Props, Style> => {
+    options: ArchitectOptions<Config, Links, Props, Style>,
+  ): ArchitectStates<Config, Links, Props, Style> => {
   return <States extends ArchitectComponentStates>(states: States) => {
     options.cache.states = states
     return {

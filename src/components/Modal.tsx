@@ -7,5 +7,5 @@ interface Props extends ReactNative.ModalProps {
 }
 
 export const Modal = (props: Props) => {
-  return <ReactNative.Modal {...props} />
+  return <ReactNative.Modal {...props}/>
 }

@@ -7,5 +7,5 @@ interface Props extends ReactNative.TouchableHighlightProps {
 }
 
 export const TouchableHighlight = (props: Props) => {
-  return <ReactNative.TouchableHighlight {...props} />
+  return <ReactNative.TouchableHighlight {...props}/>
 }

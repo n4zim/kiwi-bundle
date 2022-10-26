@@ -11,14 +11,14 @@ interface Props extends ReactNative.TextProps {
 
 export const Text = (props: Props) => {
   let { children, style, ...propsLeft } = props
-  if (typeof children === "string") {
+  if(typeof children === "string") {
     children = i18n(children)
   }
-  if (!style) {
+  if(!style) {
     style = {}
   }
-  if (!(style as any).color) {
+  if(!(style as any).color) {
     (style as any).color = useTheme().colors.text
   }
-  return <ReactNative.Text {...propsLeft} style={style} children={children} />
+  return <ReactNative.Text {...propsLeft} style={style} children={children}/>
 }

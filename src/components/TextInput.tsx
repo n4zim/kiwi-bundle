@@ -8,5 +8,5 @@ interface Props extends ReactNative.TextInputProps {
 }
 
 export const TextInput = (props: Props) => {
-  return <ReactNative.TextInput {...props} />
+  return <ReactNative.TextInput {...props}/>
 }

@@ -14,10 +14,10 @@ interface Props
 
 export const View = React.forwardRef<ReactNative.View, Props>((props, ref) => {
   const { onPress, ...rest } = props
-  const view = <ReactNative.View ref={ref} {...rest} />
-  if (typeof onPress !== "undefined") {
+  const view = <ReactNative.View ref={ref} {...rest}/>
+  if(typeof onPress !== "undefined") {
     return (
-      <ReactNative.TouchableWithoutFeedback onPress={onPress} children={view} />
+      <ReactNative.TouchableWithoutFeedback onPress={onPress} children={view}/>
     )
   }
   return view

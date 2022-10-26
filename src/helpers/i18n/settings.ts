@@ -20,9 +20,9 @@ export class i18nSettings {
   }
 
   static setCurrentLanguageFromString(locale: string) {
-    switch(locale) {
-      case Language.FRENCH: return this.setCurrentLanguage(Language.FRENCH)
-      default: return this.setCurrentLanguage(this.defaultLanguage)
+    switch (locale) {
+    case Language.FRENCH: return this.setCurrentLanguage(Language.FRENCH)
+    default: return this.setCurrentLanguage(this.defaultLanguage)
     }
   }
 
@@ -54,23 +54,23 @@ export class i18nSettings {
   }
 
   static compileMarkdown<Output = any>(id: string, text: string): Output[] {
-    if(typeof this.markdownCompiler === "undefined") return [ text as any ]
+    if(typeof this.markdownCompiler === "undefined") {
+      return [ text as any ]
+    }
 
     let outputIndexes: i18nSettingsMarkdownObject = {}
 
     outputIndexes = this.extractStringIndexes(text, outputIndexes, /\*\*(.*?)\*\*/g, (match, children) => {
-      const text = match[1]
       const bold = true
       if(typeof children !== "undefined") {
-        children.text = text
+        children.text = match[1]
         children.bold = bold
         return children
       }
-      return { text, bold, options: {} }
+      return { text: match[1], bold, options: {} }
     })
 
     outputIndexes = this.extractStringIndexes(text, outputIndexes, /\[(.*?)\]\((.*?)\)(\{.*?\})?/g, (match, children) => {
-      const text = match[1]
       const link = match[2]
       let options: i18nMarkdownCompilerOptions = {}
       if(typeof match[3] !== "undefined") {
@@ -81,18 +81,18 @@ export class i18nSettings {
         }, {})
       }
       if(typeof children !== "undefined") {
-        children.text = text
+        children.text = match[1]
         children.link = link
         children.options = Object.assign(children.options, options)
         return children
       }
-      return { text, link, options }
+      return { text: match[1], link, options }
     })
 
     let lastChar = 0
 
     const output = (Object.keys(outputIndexes) as any[]).reduce((result, index: number) => {
-      if(lastChar < index) result.push(text.slice(lastChar, index))
+      if(lastChar < index) {result.push(text.slice(lastChar, index))}
       const currentIndex = outputIndexes[index]
       let currentOutput: Output = currentIndex.value.text as any
       if(typeof currentIndex.value.link !== "undefined") {

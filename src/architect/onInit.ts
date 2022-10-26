@@ -49,7 +49,7 @@ export const ArchitectOnInit = <
   Values extends ArchitectComponentValues,
   Functions extends ArchitectComponentFunctions
 >(
-  options: ArchitectOptions<
+    options: ArchitectOptions<
     Config,
     Links,
     Props,
@@ -58,7 +58,7 @@ export const ArchitectOnInit = <
     Values,
     Functions
   >,
-): ArchitectOnInit<Config, Links, Props, Style, States, Values, Functions> => {
+  ): ArchitectOnInit<Config, Links, Props, Style, States, Values, Functions> => {
   return (onInit) => {
     options.cache.onInit = onInit
     return {

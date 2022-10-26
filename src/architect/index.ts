@@ -20,8 +20,8 @@ export const Architect = <
   Config extends AppConfig,
   Links extends AppLinksImports<Config>
 >(
-  options: Omit<ArchitectOptions<Config, Links, {}>, "context" | "cache">,
-) => {
+    options: Omit<ArchitectOptions<Config, Links, {}>, "context" | "cache">,
+  ) => {
   return <Props extends ArchitectComponentProps>(
     architect: (
       self: ArchitectSelf<Config, Links, Props>,

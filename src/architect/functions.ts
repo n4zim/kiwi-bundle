@@ -48,8 +48,8 @@ export const ArchitectFunctions = <
   States extends ArchitectComponentStates,
   Values extends ArchitectComponentValues
 >(
-  options: ArchitectOptions<Config, Links, Props, Style, States, Values>,
-): ArchitectFunctions<Config, Links, Props, Style, States, Values> => {
+    options: ArchitectOptions<Config, Links, Props, Style, States, Values>,
+  ): ArchitectFunctions<Config, Links, Props, Style, States, Values> => {
   return <Functions extends ArchitectComponentFunctions>(
     functions: (
       context: ArchitectContext<

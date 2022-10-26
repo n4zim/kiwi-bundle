@@ -19,27 +19,27 @@ type Props = Omit<ReactNative.ButtonProps, "onPress"> & {
   >
 
 export const Button = (props: Props) => {
-  if (
+  if(
     typeof props.style !== "undefined" ||
     typeof props.textStyle !== "undefined"
   ) {
     const textStyle: ReactNative.TextStyle = {}
-    if (typeof props.color !== "undefined") {
+    if(typeof props.color !== "undefined") {
       textStyle.color = props.color
     }
     const style: StyleSheetStyleView = { cursor: "pointer" }
     return (
       <View style={[style, props.style]} onPress={props.onPress}>
-        <Text style={[textStyle, props.textStyle]} children={props.title} />
+        <Text style={[textStyle, props.textStyle]} children={props.title}/>
       </View>
     )
   }
   let { onPress, ...propsLeft } = props
   const button = (
-    <ReactNative.Button onPress={onPress || (() => {})} {...propsLeft} />
+    <ReactNative.Button onPress={onPress || (() => {})} {...propsLeft}/>
   )
-  if (typeof props.containerStyle === "undefined") {
+  if(typeof props.containerStyle === "undefined") {
     return button
   }
-  return <View style={props.containerStyle} children={button} />
+  return <View style={props.containerStyle} children={button}/>
 }

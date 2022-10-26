@@ -15,6 +15,8 @@ module.exports = {
     },
   ],
   rules: {
+    "react-hooks/rules-of-hooks": "off",
+    "react-native/no-inline-styles": "off",
     "prettier/prettier": 0,
     indent: ["error", 2],
     "linebreak-style": ["error", "unix"],

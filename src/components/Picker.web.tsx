@@ -8,5 +8,5 @@ interface Props extends PickerProps {
 }
 
 export const Picker = (props: Props) => {
-  return <PickerBase {...props} />
+  return <PickerBase {...props}/>
 }

@@ -49,7 +49,7 @@ export const ArchitectRender = <
   Values extends ArchitectComponentValues,
   Functions extends ArchitectComponentFunctions
 >(
-  options: ArchitectOptions<
+    options: ArchitectOptions<
     Config,
     Links,
     Props,
@@ -58,8 +58,8 @@ export const ArchitectRender = <
     Values,
     Functions
   >,
-): ArchitectRender<Config, Links, Props, Style, States, Values, Functions> => (
-  render,
+  ): ArchitectRender<Config, Links, Props, Style, States, Values, Functions> => (
+    render,
   ) => {
     return (props: any) => {
       // PROPS
@@ -70,7 +70,7 @@ export const ArchitectRender = <
 
       // STATES
       const states = options.cache.states
-      if (typeof states !== "undefined") {
+      if(typeof states !== "undefined") {
         Object.keys(states).forEach((name) => {
           const state = React.useState(states[name])
           options.context.states.get[name] = state[0]
@@ -94,7 +94,7 @@ export const ArchitectRender = <
       }
 
       // FUNCTIONS
-      if (typeof options.cache.functions !== "undefined") {
+      if(typeof options.cache.functions !== "undefined") {
         options.context.functions = options.cache.functions(options.context)
       }
 
@@ -102,7 +102,7 @@ export const ArchitectRender = <
       options.context.update = React.useReducer((u) => ++u, 0)[1]
 
       // VALUES
-      if (typeof options.cache.values !== "undefined") {
+      if(typeof options.cache.values !== "undefined") {
         Object.keys(options.cache.values).forEach((valueKey) => {
           const ref = React.useRef(options.cache.values![valueKey])
           options.context.values[valueKey as keyof Values] = {
@@ -115,24 +115,24 @@ export const ArchitectRender = <
       }
 
       const isInit = React.useRef(false)
-      if (!isInit.current) {
+      if(!isInit.current) {
         // INIT
-        if (typeof options.cache.onInit !== "undefined") {
+        if(typeof options.cache.onInit !== "undefined") {
           options.cache.onInit(options.context)
         }
         isInit.current = true
-      } else if (typeof options.cache.onUpdate !== "undefined") {
+      } else if(typeof options.cache.onUpdate !== "undefined") {
         // UPDATE
         options.cache.onUpdate(options.context)
       }
 
       // MOUNT / UNMOUNT
       React.useEffect(() => {
-        if (typeof options.cache.onMount !== "undefined") {
+        if(typeof options.cache.onMount !== "undefined") {
           options.cache.onMount(options.context)
         }
         return () => {
-          if (typeof options.cache.onUnmount !== "undefined") {
+          if(typeof options.cache.onUnmount !== "undefined") {
             options.cache.onUnmount(options.context)
           }
         }

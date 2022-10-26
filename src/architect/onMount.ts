@@ -48,7 +48,7 @@ export const ArchitectOnMount = <
   Values extends ArchitectComponentValues,
   Functions extends ArchitectComponentFunctions
 >(
-  options: ArchitectOptions<
+    options: ArchitectOptions<
     Config,
     Links,
     Props,
@@ -57,7 +57,7 @@ export const ArchitectOnMount = <
     Values,
     Functions
   >,
-): ArchitectOnMount<Config, Links, Props, Style, States, Values, Functions> => {
+  ): ArchitectOnMount<Config, Links, Props, Style, States, Values, Functions> => {
   return (onMount) => {
     options.cache.onMount = onMount
     return {
