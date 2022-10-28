@@ -17,6 +17,7 @@ import { AppTheme } from "./theme"
 import { AppStore, AppStoreValues } from "./store"
 import { AppStyleSheet } from "../types/styles"
 import { DynamicData } from "../helpers/dynamicData"
+import render from "./render"
 
 export const App = <
   Config extends AppConfig,
@@ -170,15 +171,7 @@ export const App = <
             .then(() => resolvedLinks)
         })
         .then((resolvedLinks) => {
-          ReactNative.AppRegistry.registerComponent(
-            config.key,
-            Provider(config, resolvedLinks, options),
-          )
-          if(ReactNative.Platform.OS === "web") {
-            ReactNative.AppRegistry.runApplication(config.key, {
-              rootTag: document.getElementById("root"),
-            })
-          }
+          render(config.key, Provider(config, resolvedLinks, options))
         })
     },
   }
