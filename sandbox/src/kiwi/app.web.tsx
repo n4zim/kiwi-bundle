@@ -6,10 +6,9 @@ import { AppOptions } from "./types/app"
 export async function App (options: AppOptions) {
   console.log("WEB", options)
   let firstRoute
-  const keys = Object.keys(options.navigation.routes)
+  const keys = Object.keys(options.routes)
   for(const key of keys) {
-    const route = options.navigation.routes[key]
-    if(route.path === window.location.pathname) {
+    if(options.routes[key].path === window.location.pathname) {
       firstRoute = key
       break
     }

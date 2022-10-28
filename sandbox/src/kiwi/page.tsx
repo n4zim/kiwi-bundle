@@ -1,18 +1,30 @@
 import React from "react"
-import { Language } from "./types/names"
+import { Platform } from "react-native"
+import { Language, LanguagesObject } from "./types/names"
 import { Context } from "./context"
 import { CURRENT_LANGUAGE } from "./local"
 import { AppOptions } from "./types/app"
-import { Platform } from "react-native"
+import { i18n } from "./i18n"
+import initNavigation, { Navigation } from "./navigation"
 
 function Page (props: {
   name: string,
+  navigation: Navigation,
   getComponent: (name: string) => Promise<any>,
-  getPath: (name: string) => string,
+  getTitle: (name: string) => string | LanguagesObject<string> | undefined,
 }) {
   const [language, setLanguage] = React.useState<Language>(Language.ENGLISH)
+
   const [page, setPage] = React.useState<string>(props.name)
+  props.navigation.bind(newPage => setPage(newPage))
+
   const Component = React.lazy(() => props.getComponent(page))
+
+  const title = props.getTitle(page)
+  if(Platform.OS === "web" && typeof title !== "undefined") {
+    document.title = i18n(title)
+  }
+
   return <Context.Provider
     value={{
       language,
@@ -21,12 +33,7 @@ function Page (props: {
         CURRENT_LANGUAGE.set(lang)
         setLanguage(lang)
       },
-      goTo: name => {
-        if(Platform.OS === "web") {
-          window.history.pushState({}, "", props.getPath(name))
-        }
-        setPage(name)
-      },
+      goTo: props.navigation.goTo,
     }}
   >
     <React.Suspense>
@@ -36,9 +43,11 @@ function Page (props: {
 }
 
 export default function(initialName: string, options: AppOptions) {
+  const navigation = initNavigation(initialName, options)
   return () => <Page
     name={initialName}
-    getComponent={name => options.navigation.routes[name].component}
-    getPath={name => options.navigation.routes[name].path}
+    navigation={navigation}
+    getComponent={name => options.routes[name].component}
+    getTitle={name => options.routes[name].title}
   />
 }
