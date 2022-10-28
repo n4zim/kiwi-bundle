@@ -1,4 +1,4 @@
-import * as Kiwi from "kiwi-bundle"
+import * as Kiwi from "../kiwi"
 
 export const i18nLinks = {
 
@@ -8,8 +8,8 @@ export const i18nLinks = {
   }),
 
   changeLanguage: (language: Kiwi.Language) => ({
-    fr: `Changer la langue en "${language}"`,
-    en: `Change the language to "${language}"`,
+    fr: `Changer la langue en ${language === Kiwi.Language.ENGLISH ? "anglais" : "français"}`,
+    en: `Change the language to ${language === Kiwi.Language.ENGLISH ? "english" : "french"}`,
   }),
 
 }

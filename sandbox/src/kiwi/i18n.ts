@@ -1,50 +1,8 @@
-import { NativeModules, Platform } from "react-native"
+import { CURRENT_LANGUAGE } from "./local"
 import { i18nArticle, i18nOptions, i18nQuery, i18nSchema } from "./types/i18n"
 import { Language, NameArticle, NameField_ByLanguage, NameField_ByNumber, NameField_ForAPerson } from "./types/names"
 
-const CURRENT_LANGUAGE = (() => {
-  let locale: Language = (() => {
-    switch (Platform.OS) {
-    case "web":
-      if(navigator.language) {
-        return navigator.language.slice(0, 2)
-      }
-      if((navigator as any).userLanguage) {
-        return (navigator as any).userLanguage.slice(0, 2)
-      }
-      break
-    case "android":
-      if(NativeModules.I18nManager.localeIdentifier) {
-        return NativeModules.I18nManager.localeIdentifier.slice(0, 2)
-      }
-      break
-    case "ios":
-      if(NativeModules.SettingsManager.settings.AppleLocale) {
-        return NativeModules.SettingsManager.settings.AppleLocale.slice(0, 2)
-      }
-      if(NativeModules.SettingsManager.settings.AppleLanguages[0]) {
-        return NativeModules.SettingsManager.settings.AppleLanguages[0].slice(0, 2)
-      }
-    }
-    return Language.ENGLISH
-  })()
-  if(Object.values(Language).indexOf(locale) === -1) {
-    locale = Language.ENGLISH
-  }
-  return {
-    get: () => locale,
-    set: (v: Language) => {
-      locale = v
-    },
-  }
-})()
-
-export const i18n = {
-  translate,
-  currentLanguage: CURRENT_LANGUAGE,
-}
-
-function translate(schema: i18nSchema, options: i18nOptions = {}): string {
+export function i18n(schema: i18nSchema, options: i18nOptions = {}): string {
   if(typeof schema === "number") {return schema.toString()} // NAME NUMBER
   if(typeof schema === "string") {return fromString(schema, options)} // NAME STRING
   if(typeof schema === "object") {
@@ -81,7 +39,7 @@ const fromString = (text: string, options: i18nOptions): string => {
 }
 
 const fromArray = (schema: i18nSchema[], options: i18nOptions): string => {
-  return schema.map(current => translate(current, options)).join("")
+  return schema.map(current => i18n(current, options)).join("")
 }
 
 const fromQuery = (schema: i18nQuery, options: i18nOptions): string => {
@@ -99,7 +57,7 @@ const fromQuery = (schema: i18nQuery, options: i18nOptions): string => {
   } else {
     queryOptions = options
   }
-  return translate(schema.$.name, queryOptions)
+  return i18n(schema.$.name, queryOptions)
 }
 
 const fromByNumber = (nameByNumber: NameField_ByNumber, options: i18nOptions): string => {
@@ -112,17 +70,17 @@ const fromByNumber = (nameByNumber: NameField_ByNumber, options: i18nOptions): s
   // One
   if(options.count === 1) {
     if(typeof nameByNumber.one !== "undefined") {
-      output = translate(nameByNumber.one, options)
+      output = i18n(nameByNumber.one, options)
     } else if(typeof nameByNumber.many !== "undefined") {
-      output = translate(nameByNumber.many, options)
+      output = i18n(nameByNumber.many, options)
     }
 
   // Many
   } else {
     if(typeof nameByNumber.many !== "undefined") {
-      output = translate(nameByNumber.many, options)
+      output = i18n(nameByNumber.many, options)
     } else if(typeof nameByNumber.one !== "undefined") {
-      output = translate(nameByNumber.one, options)
+      output = i18n(nameByNumber.one, options)
     }
   }
 
@@ -177,7 +135,7 @@ const fromByNumber = (nameByNumber: NameField_ByNumber, options: i18nOptions): s
       break
     }
   }
-  return translate(output, options)
+  return i18n(output, options)
 }
 
 const fromAPerson = (person: NameField_ForAPerson, options: i18nOptions): string => {
@@ -185,19 +143,19 @@ const fromAPerson = (person: NameField_ForAPerson, options: i18nOptions): string
   if(typeof person.firstname !== "undefined") {output += person.firstname}
   if(typeof person.middlename !== "undefined") {output += (output.length ? " " : "") + person.middlename}
   if(typeof person.lastname !== "undefined") {output += (output.length ? " " : "") + person.lastname}
-  return translate(output, options)
+  return i18n(output, options)
 }
 
 const fromByLanguage = (byLanguage: NameField_ByLanguage, options: i18nOptions): string => {
   if(typeof options.language !== "undefined" && typeof byLanguage[options.language] !== "undefined") {
-    return translate(byLanguage[options.language] as i18nSchema, options)
+    return i18n(byLanguage[options.language] as i18nSchema, options)
   }
   if(typeof byLanguage["*"] !== "undefined") { // Global Name text
-    return translate(byLanguage["*"], options)
+    return i18n(byLanguage["*"], options)
   }
   if(typeof byLanguage[CURRENT_LANGUAGE.get()] !== "undefined") { // Default language
     options.language = CURRENT_LANGUAGE.get()
-    return translate(byLanguage[options.language] as i18nSchema, options)
+    return i18n(byLanguage[options.language] as i18nSchema, options)
   }
   return ""
 }
