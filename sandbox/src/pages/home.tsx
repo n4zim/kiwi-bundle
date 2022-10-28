@@ -11,15 +11,14 @@ import { i18nLinks } from "../i18n/links"
 
 export default () => {
   const context = React.useContext(Kiwi.Context)
-  console.log(context)
   return <Page>
     <Text
       style={STYLE.text1}
       children={Kiwi.i18n(i18nContent.home)}
     />
     <Button
-      onPress={console.log}
-      title={Kiwi.i18n(i18nLinks.goTo("Test"))}
+      onPress={() => context.goTo("test")}
+      title={Kiwi.i18n(i18nLinks.goTo("test"))}
     />
     <Button
       onPress={() => context.setLanguage(Kiwi.Language.ENGLISH)}

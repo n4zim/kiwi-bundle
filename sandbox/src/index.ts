@@ -9,6 +9,11 @@ Kiwi.App({
         component: import("./pages/home"),
         title: { en: "Home", fr: "Accueil" },
       },
+      test: {
+        path: "/test",
+        component: import("./pages/test"),
+        title: "Test",
+      },
     },
     prefixes: ["http://localhost:3000"],
   },
