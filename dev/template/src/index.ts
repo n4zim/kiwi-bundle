@@ -1,4 +1,4 @@
-import * as Kiwi from "./kiwi"
+import * as Kiwi from "kiwi-bundle"
 
 Kiwi.App({
   key: "kiwi_bundle_key",

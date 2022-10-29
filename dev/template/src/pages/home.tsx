@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Text,
 } from "react-native"
-import * as Kiwi from "../kiwi"
+import * as Kiwi from "kiwi-bundle"
 import { Page } from "../layouts/page"
 import { i18nContent } from "../i18n/content"
 import { i18nLinks } from "../i18n/links"

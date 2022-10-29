@@ -6,7 +6,7 @@ import {
 } from "react-native"
 import { i18nContent } from "../i18n/content"
 import { i18nLinks } from "../i18n/links"
-import * as Kiwi from "../kiwi"
+import * as Kiwi from "kiwi-bundle"
 import { Page } from "../layouts/page"
 
 export default () => {
