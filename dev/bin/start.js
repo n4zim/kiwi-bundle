@@ -1,4 +1,4 @@
-const { run } = require("./utils")
+const { run, readOptions, initTemplate, initNative } = require("./utils")
 
 const help = () => {
   console.log("You have to choose which platform to start :")
@@ -15,11 +15,23 @@ module.exports = async (path, args) => {
     }
     help()
   } else {
+    const options = readOptions(path)
+    initTemplate(path, options)
     switch (args[0]) {
-    case "web": run(path, "react-scripts", [ "start" ]); break
-    case "metro": run(path, "react-native", [ "start --reset-cache" ]); break
-    case "android": run(path, "react-native", [ "run-android" ]); break
-    case "ios": run(path, "react-native", [ "run-ios" ]); break
+    case "web":
+      run(path, "react-scripts", [ "start" ])
+      break
+    case "metro":
+      run(path, "react-native", [ "start --reset-cache" ])
+      break
+    case "android":
+      initNative(path, options)
+      run(path, "react-native", [ "run-android" ])
+      break
+    case "ios":
+      initNative(path, options)
+      run(path, "react-native", [ "run-ios" ])
+      break
     default:
       console.log(`/!\\ Unknown argument "${args[0]}"\n`)
       help()

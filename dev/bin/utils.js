@@ -89,7 +89,7 @@ module.exports.initNative = (path, options) => {
       }
     }
     if(changed) {
-      console.log(`[TEMPLATE] Writing file "${file}"...`)
+      //console.log(`[TEMPLATE] Writing file "${file}"...`)
       fs.writeFileSync(file, content)
     }
   }
