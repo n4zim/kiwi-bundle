@@ -1,4 +1,4 @@
-package com.kiwibundle.newarchitecture;
+package kiwi_bundle_package.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.kiwibundle.BuildConfig;
-import com.kiwibundle.newarchitecture.components.MainComponentsRegistry;
-import com.kiwibundle.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import kiwi_bundle_package.BuildConfig;
+import kiwi_bundle_package.newarchitecture.components.MainComponentsRegistry;
+import kiwi_bundle_package.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

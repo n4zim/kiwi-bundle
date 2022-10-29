@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface kiwibundleTests : XCTestCase
+@interface kiwi_bundle_keyTests : XCTestCase
 
 @end
 
-@implementation kiwibundleTests
+@implementation kiwi_bundle_keyTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {

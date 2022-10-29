@@ -1,4 +1,4 @@
-package com.kiwibundle2;
+package kiwi_bundle_package;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "kiwibundle2";
+    return "kiwi_bundle_key";
   }
 
   /**

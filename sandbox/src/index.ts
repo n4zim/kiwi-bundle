@@ -1,7 +1,7 @@
 import * as Kiwi from "./kiwi"
 
 Kiwi.App({
-  key: "kiwibundle",
+  key: "kiwi_bundle_key",
   routes: {
     home: {
       path: "/",

@@ -1,4 +1,4 @@
-rootProject.name = 'kiwibundle'
+rootProject.name = 'kiwi_bundle_key'
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
 applyNativeModulesSettingsGradle(settings)

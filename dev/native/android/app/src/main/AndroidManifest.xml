@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.kiwibundle2">
+  package="kiwi_bundle_package">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

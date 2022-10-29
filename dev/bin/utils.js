@@ -4,19 +4,21 @@ const fs = require("fs")
 
 const templateDir = join(__dirname, "..", "template")
 
-const recursiveCopy = (from, to) => {
+const recursiveCopy = (from, to, overrideName) => {
   for(const file of fs.readdirSync(from)) {
     const fromPath = join(from, file)
-    const toPath = join(to, file)
-    const stats = fs.statSync(fromPath)
-    if(stats.isDirectory()) {
-      fs.mkdirSync(toPath)
-      recursiveCopy(fromPath, toPath)
+    const isDir = fs.statSync(fromPath).isDirectory()
+    const toPath = join(to, overrideName ? overrideName(file, to, isDir) : file)
+    if(isDir) {
+      fs.mkdirSync(toPath, { recursive: true })
+      recursiveCopy(fromPath, toPath, overrideName)
     } else {
       fs.copyFileSync(fromPath, toPath)
     }
   }
 }
+
+module.exports.recursiveCopy = recursiveCopy
 
 module.exports.initTemplate = async (path) => {
   const currentFiles = fs.readdirSync(path)
