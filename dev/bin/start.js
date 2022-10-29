@@ -8,22 +8,22 @@ const help = () => {
   console.log("- ios : development on iOS device")
 }
 
-module.exports = async ({ path, args }) => {
+module.exports = async (path, args) => {
   if(args.length !== 1) {
     if(args.length !== 0) {
       console.log("/!\\ You provided too many arguments\n")
     }
     help()
   } else {
-    switch(args[0]) {
-      case "web": run(path, "react-scripts", [ "start" ]); break
-      case "metro": run(path, "react-native", [ "start --reset-cache" ]); break
-      case "android": run(path, "react-native", [ "run-android" ]); break
-      case "ios": run(path, "react-native", [ "run-ios" ]); break
-      default:
-        console.log(`/!\\ Unknown argument "${args[0]}"\n`)
-        help()
-        break
+    switch (args[0]) {
+    case "web": run(path, "react-scripts", [ "start" ]); break
+    case "metro": run(path, "react-native", [ "start --reset-cache" ]); break
+    case "android": run(path, "react-native", [ "run-android" ]); break
+    case "ios": run(path, "react-native", [ "run-ios" ]); break
+    default:
+      console.log(`/!\\ Unknown argument "${args[0]}"\n`)
+      help()
+      break
     }
   }
 }
