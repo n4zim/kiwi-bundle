@@ -1,7 +1,0 @@
-{
-  "short_name": "kbr",
-  "name": "Kiwi Bundle React",
-  "icons": [],
-  "start_url": ".",
-  "display": "standalone"
-}

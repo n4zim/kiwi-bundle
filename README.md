@@ -2,11 +2,10 @@
 ![Kiwi Bundle](./assets/cover.png)
 
 # Features
-- out-of-the box configurations for [TypeScript](https://github.com/microsoft/TypeScript), [React](https://github.com/facebook/react) and [React Native](https://github.com/facebook/react-native)
+- out-of-the box configurations for [TypeScript](https://github.com/microsoft/TypeScript), [React](https://github.com/facebook/react), [React Native](https://github.com/facebook/react-native), [Babel](https://github.com/babel/babel) and [ESLint](https://github.com/eslint/eslint)
 - integration of [react-native-web](https://github.com/necolas/react-native-web) for building **web**, **Android** and **iOS** apps with the same codebase
 - **instant start-up** and **hot reloading** to see your components changes in real time
-- complete toolbox with built-in **router**, **logger**, **states management** and **styling** simplified to the limit
-- all-in-one NPM package, no versions to manage
+- only two NPM packages : one for development and one for distribution
 
 
 # Getting started
@@ -26,19 +25,26 @@ Finally, if you do not have a text editor yet, give VSCode a try : https://code.
 Create a **./package.json** file :
 ```json
 {
-  "name": "example",
+  "name": "kiwibundle",
   "version": "1.0.0",
   "scripts": {
-    "postinstall": "kiwi postinstall",
     "start": "kiwi start",
     "build": "kiwi build"
   },
+  "dependencies": {
+    "kiwi-bundle": "*"
+  },
   "devDependencies": {
-    "kiwi-bundle": "4.6.1.0"
+    "kiwi-bundle-dev": "*"
   },
   "kiwi": {
-    "key": "example",
-    "name": "Example App"
+    "android": {
+      "package": "cc.blueforest.kiwi-bundle",
+      "build": 1
+    },
+    "ios": {
+      "build": 1
+    }
   },
   "browserslist": {
     "production": [

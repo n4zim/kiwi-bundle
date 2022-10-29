@@ -136,11 +136,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "kiwi_bundle_package"
+        applicationId "kiwi_bundle_android_package"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode kiwi_bundle_android_version_code
-        versionName "kiwi_bundle_android_version_name"
+        versionCode kiwi_bundle_android_build
+        versionName "kiwi_bundle_version"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {

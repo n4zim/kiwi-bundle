@@ -1,4 +1,3 @@
 .native/
-.parcel-cache
-dist/
+build/
 node_modules/

@@ -485,14 +485,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = kiwi_bundle_ios_version_code;
+				CURRENT_PROJECT_VERSION = kiwi_bundle_ios_build;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = kiwi_bundle_key/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = kiwi_bundle_ios_version_name;
+				MARKETING_VERSION = kiwi_bundle_version;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -512,13 +512,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = kiwi_bundle_ios_version_code;
+				CURRENT_PROJECT_VERSION = kiwi_bundle_ios_build;
 				INFOPLIST_FILE = kiwi_bundle_key/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = kiwi_bundle_ios_version_name;
+				MARKETING_VERSION = kiwi_bundle_version;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

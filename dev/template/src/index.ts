@@ -1,6 +1,17 @@
-import { i18nSettings, Language } from "kiwi-bundle"
-import { APP } from "./app"
+import * as Kiwi from "./kiwi"
 
-i18nSettings.setCurrentLanguage(Language.FRENCH)
-
-APP.Render()
+Kiwi.App({
+  key: "kiwi_bundle_key",
+  routes: {
+    home: {
+      path: "/",
+      component: import("./pages/home"),
+      title: { en: "Home", fr: "Accueil" },
+    },
+    test: {
+      path: "/test",
+      component: import("./pages/test"),
+      title: "Test",
+    },
+  },
+})

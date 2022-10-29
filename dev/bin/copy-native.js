@@ -18,23 +18,22 @@ const from = path.resolve(__dirname, "../native")
 
 const config = {
   kiwi_bundle_key: "kiwibundle",
-  kiwi_bundle_package: "cc.blueforest.kiwibundle",
-  kiwi_bundle_android_version_code: "1",
-  kiwi_bundle_android_version_name: "1.0",
-  kiwi_bundle_ios_version_code: "1",
-  kiwi_bundle_ios_version_name: "1.0",
+  kiwi_bundle_version: "1.0.0",
+  kiwi_bundle_android_package: "cc.blueforest.kiwibundle",
+  kiwi_bundle_android_build: "1",
+  kiwi_bundle_ios_build: "1",
 }
 
 recursiveCopy(from, to, (name, root, isDir) => {
-  if(name === "kiwi_bundle_package") {
+  if(name === "kiwi_bundle_android_package") {
     name = name.replace(
-      "kiwi_bundle_package",
-      config.kiwi_bundle_package.split(".").join("/"),
+      "kiwi_bundle_android_package",
+      config.kiwi_bundle_android_package.split(".").join("/"),
     )
   } else if(name.startsWith("kiwi_bundle_key")) {
     name = name.replace("kiwi_bundle_key", config.kiwi_bundle_key)
   }
-  if(!isDir) files.push(path.join(root, name))
+  if(!isDir) {files.push(path.join(root, name))}
   return name
 })
 
