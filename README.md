@@ -27,6 +27,15 @@ Create a **./package.json** file :
 {
   "name": "kiwibundle",
   "version": "1.0.0",
+  "kiwi": {
+    "android": {
+      "package": "cc.blueforest.kiwi-bundle",
+      "build": 1
+    },
+    "ios": {
+      "build": 1
+    }
+  },
   "scripts": {
     "start": "kiwi start",
     "build": "kiwi build"
@@ -36,15 +45,6 @@ Create a **./package.json** file :
   },
   "devDependencies": {
     "kiwi-bundle-dev": "*"
-  },
-  "kiwi": {
-    "android": {
-      "package": "cc.blueforest.kiwi-bundle",
-      "build": 1
-    },
-    "ios": {
-      "build": 1
-    }
   },
   "browserslist": {
     "production": [
