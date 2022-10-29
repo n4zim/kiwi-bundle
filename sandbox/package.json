@@ -4,7 +4,7 @@
     "build": "react-scripts build",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "metro": "react-native start ./src/index.ts"
+    "metro": "react-native start"
   },
   "dependencies": {
     "react": "18.2.0",
