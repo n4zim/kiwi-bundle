@@ -4,7 +4,7 @@ import page from "./page"
 import { AppOptions } from "./types/app"
 
 export async function App (options: AppOptions) {
-  console.log("WEB", options)
+  //console.log("WEB", options)
   let firstRoute
   const keys = Object.keys(options.routes)
   for(const key of keys) {

@@ -13,14 +13,13 @@ function Page (props: {
   getComponent: (name: string) => any,
   getTitle: (name: string) => string | LanguagesObject<string> | undefined,
 }) {
-  console.log("PAGE", props.name)
+  //console.log("PAGE", props.name)
   const [language, setLanguage] = React.useState<Language>(Language.ENGLISH)
 
   const [page, setPage] = React.useState<string>(props.name)
   props.navigation.bind(newPage => setPage(newPage))
 
   const Component = props.getComponent(page)
-  console.log(Component)
 
   const title = props.getTitle(page)
   if(Platform.OS === "web" && typeof title !== "undefined") {
