@@ -29,7 +29,7 @@ Create a **./package.json** file :
   "version": "1.0.0",
   "kiwi": {
     "android": {
-      "package": "cc.blueforest.kiwi-bundle",
+      "package": "cc.blueforest.kiwibundle",
       "build": 1
     },
     "ios": {
@@ -41,10 +41,10 @@ Create a **./package.json** file :
     "build": "kiwi build"
   },
   "dependencies": {
-    "kiwi-bundle": "*"
+    "kiwi-bundle": "4.6.1-6"
   },
   "devDependencies": {
-    "kiwi-bundle-dev": "*"
+    "kiwi-bundle-dev": "4.6.1-6"
   },
   "browserslist": {
     "production": [
