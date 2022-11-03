@@ -6,6 +6,10 @@ find ./README.md -type f -exec sed -i 's/"kiwi-bundle": ".*"/"kiwi-bundle": "'$V
 
 find ./README.md -type f -exec sed -i 's/"kiwi-bundle-dev": ".*"/"kiwi-bundle-dev": "'$VERSION'"/gm' {} +
 
-#yarn build
+find ./dev/package.json -type f -exec sed -i 's/"version": ".*"/"version": "'$VERSION'"/gm' {} +
 
-#npm publish
+yarn build
+yarn publish --non-interactive
+
+cd dev
+yarn publish --non-interactive
