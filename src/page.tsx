@@ -10,15 +10,17 @@ import initNavigation, { Navigation } from "./navigation"
 function Page (props: {
   name: string,
   navigation: Navigation,
-  getComponent: (name: string) => Promise<any>,
+  getComponent: (name: string) => any,
   getTitle: (name: string) => string | LanguagesObject<string> | undefined,
 }) {
+  console.log("PAGE", props.name)
   const [language, setLanguage] = React.useState<Language>(Language.ENGLISH)
 
   const [page, setPage] = React.useState<string>(props.name)
   props.navigation.bind(newPage => setPage(newPage))
 
-  const Component = React.lazy(() => props.getComponent(page))
+  const Component = props.getComponent(page)
+  console.log(Component)
 
   const title = props.getTitle(page)
   if(Platform.OS === "web" && typeof title !== "undefined") {
@@ -36,18 +38,22 @@ function Page (props: {
       goTo: props.navigation.goTo,
     }}
   >
-    <React.Suspense>
-      <Component/>
-    </React.Suspense>
+    {React.createElement(Component)}
   </Context.Provider>
 }
 
-export default function(initialName: string, options: AppOptions) {
+export default async function(initialName: string, options: AppOptions) {
   const navigation = initNavigation(initialName, options)
+
+  const components: { [name: string]: any } = {}
+  for(const name of Object.keys(options.routes)) {
+    components[name] = (await options.routes[name].component).default
+  }
+
   return () => <Page
     name={initialName}
     navigation={navigation}
-    getComponent={name => options.routes[name].component}
+    getComponent={name => components[name]}
     getTitle={name => options.routes[name].title}
   />
 }

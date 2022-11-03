@@ -5,5 +5,6 @@ import { AppOptions } from "./types/app"
 export async function App (options: AppOptions) {
   console.log("MOBILE", options)
   const firstRoute = Object.keys(options.routes)[0]
-  AppRegistry.registerComponent(options.key, () => page(firstRoute, options))
+  const Page = await page(firstRoute, options)
+  AppRegistry.registerComponent(options.key, () => Page)
 }

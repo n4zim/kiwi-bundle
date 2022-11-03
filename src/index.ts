@@ -7,3 +7,5 @@ export * from "./types/i18n"
 export * from "./types/names"
 export * from "./types/objects"
 export * from "./types/XOR"
+
+export * from "./vendors"

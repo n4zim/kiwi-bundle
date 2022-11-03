@@ -15,7 +15,7 @@ export default function(initialName: string, options: AppOptions): Navigation {
       "",
       options.routes[initialName].path,
     )
-    window.onpopstate = event => {
+    window.onpopstate = (event: any) => {
       if(event.state && event.state.page) {
         update(event.state.page)
       }

@@ -16,6 +16,6 @@ export async function App (options: AppOptions) {
   if(!firstRoute) {
     firstRoute = keys[0]
   }
-  const Page = page(firstRoute, options)
+  const Page = await page(firstRoute, options)
   createRoot(document.getElementById("root")!).render(<Page/>)
 }
