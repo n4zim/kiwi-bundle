@@ -104,7 +104,7 @@ module.exports.readOptions = (root) => {
   }
 }
 
-module.exports.run = (path, bin, args) => {
+module.exports.run = (path, bin, args, env) => {
   return spawn(
     join("node_modules", ".bin", bin),
     args,
@@ -117,6 +117,7 @@ module.exports.run = (path, bin, args) => {
         ...process.env,
         SKIP_PREFLIGHT_CHECK: "true",
         FORCE_COLOR: "true",
+        ...env,
       },
     }
   )

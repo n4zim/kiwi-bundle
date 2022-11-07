@@ -19,10 +19,14 @@ module.exports = async (path, args) => {
     initTemplate(path, options)
     switch (args[0]) {
     case "web":
-      run(path, "react-scripts", [ "start" ])
+      const webEnv = { BROWSER: "none" }
+      if(options?.web?.dev) {
+        webEnv.HOST = options.web.dev
+      }
+      run(path, "react-scripts", [ "start" ], webEnv)
       break
     case "metro":
-      run(path, "react-native", [ "start --reset-cache" ])
+      run(path, "react-native", [ "start", "--reset-cache" ])
       break
     case "android":
       initNative(path, options)
