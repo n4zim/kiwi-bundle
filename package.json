@@ -1,6 +1,6 @@
 {
   "name": "kiwi-bundle",
-  "version": "4.6.1-7",
+  "version": "4.6.1-8",
   "description": "A minimalistic React environment for all your cross-platform applications",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
@@ -8,16 +8,16 @@
   "main": "./dist/index.js",
   "dependencies": {
     "react": "18.2.0",
-    "react-dom": "^18.2.0",
-    "react-native": "0.70.4",
+    "react-dom": "18.2.0",
+    "react-native": "0.70.5",
     "react-native-web": "0.18.10"
   },
   "devDependencies": {
-    "@react-native-community/eslint-config": "^3.1.0",
-    "@types/react": "18.0.24",
-    "@types/react-dom": "^18.0.8",
+    "@react-native-community/eslint-config": "3.2.0",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.8",
     "@types/react-native": "0.70.6",
-    "typescript": "^4.8.4"
+    "typescript": "4.8.4"
   },
   "scripts": {
     "start": "tsc -w",
