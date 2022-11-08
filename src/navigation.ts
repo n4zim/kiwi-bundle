@@ -6,15 +6,18 @@ export type Navigation = {
   goTo: (page: string) => void
 }
 
-export default function(initialName: string, options: AppOptions): Navigation {
+export default function(
+  initialName: string,
+  options: AppOptions,
+  forcedPath?: string,
+): Navigation {
   let update: (page: string) => void = () => {}
   const history: string[] = [initialName]
   if(Platform.OS === "web") {
-    window.history.replaceState(
-      { page: initialName },
-      "",
-      options.routes[initialName].path,
-    )
+    const path = typeof forcedPath !== "undefined"
+      ? forcedPath
+      : options.routes[initialName].path
+    window.history.replaceState({ page: initialName }, "", path)
     window.onpopstate = (event: any) => {
       if(event.state && event.state.page) {
         update(event.state.page)

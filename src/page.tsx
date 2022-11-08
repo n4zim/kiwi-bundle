@@ -41,8 +41,12 @@ function Page (props: {
   </Context.Provider>
 }
 
-export default async function(initialName: string, options: AppOptions) {
-  const navigation = initNavigation(initialName, options)
+export default async function(
+  initialName: string,
+  options: AppOptions,
+  forcedPath?: string,
+) {
+  const navigation = initNavigation(initialName, options, forcedPath)
 
   const components: { [name: string]: any } = {}
   for(const name of Object.keys(options.routes)) {
