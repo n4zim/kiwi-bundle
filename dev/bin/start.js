@@ -1,4 +1,4 @@
-const { run, readOptions, initTemplate, initNative } = require("./utils")
+const { run, readOptions, initTemplate, initNative, patchWeb } = require("./utils")
 
 const help = () => {
   console.log("You have to choose which platform to start :")
@@ -19,6 +19,7 @@ module.exports = async (path, args) => {
     initTemplate(path, options)
     switch (args[0]) {
     case "web":
+      patchWeb()
       const webEnv = { BROWSER: "none" }
       if(options?.web?.dev) {
         webEnv.HOST = options.web.dev

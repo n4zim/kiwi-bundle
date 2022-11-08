@@ -122,3 +122,47 @@ module.exports.run = (path, bin, args, env) => {
     }
   )
 }
+
+module.exports.patchWeb = () => {
+  const path = "./node_modules/react-scripts/config/webpackDevServer.config.js"
+  const endString = "    },\n"
+
+  let file = fs.readFileSync(path, "utf8"), update = false
+
+  const beforeStartIndex = file.indexOf("    onBeforeSetupMiddleware")
+  if(beforeStartIndex !== -1)  {
+    const beforeEndIndex = file.indexOf(endString, beforeStartIndex)
+    if(beforeEndIndex !== -1) {
+      file = file.substring(0, beforeStartIndex)
+      + file.substring(beforeEndIndex + endString.length)
+      update = true
+    }
+  }
+
+  const aftterSttartIndex = file.indexOf("    onAfterSetupMiddleware")
+  if(aftterSttartIndex !== -1)  {
+    const afterEndIndex = file.indexOf(endString, aftterSttartIndex)
+    if(afterEndIndex !== -1) {
+      file = file.substring(0, aftterSttartIndex)
+      + file.substring(afterEndIndex + endString.length)
+      update = true
+    }
+  }
+
+  if(update) {
+    const index = beforeStartIndex || aftterSttartIndex
+    file = file.substring(0, index) +
+`    setupMiddlewares: (middlewares, devServer) => {
+      if(!devServer) throw new Error('webpack-dev-server is not defined')
+      if(fs.existsSync(paths.proxySetup)) require(paths.proxySetup)(devServer.app)
+      middlewares.push(
+        evalSourceMapMiddleware(devServer),
+        redirectServedPath(paths.publicUrlOrPath),
+        noopServiceWorkerMiddleware(paths.publicUrlOrPath),
+      )
+      return middlewares
+    },
+` + file.substring(index)
+    fs.writeFileSync(path, file)
+  }
+}
