@@ -12,6 +12,7 @@ function Page (props: {
   navigation: Navigation,
   getComponent: (name: string) => any,
   getTitle: (name: string) => string | LanguagesObject<string> | undefined,
+  props: { [key: string]: string },
 }) {
   //console.log("PAGE", props.name)
   const [language, setLanguage] = React.useState<Language>(Language.ENGLISH)
@@ -37,7 +38,7 @@ function Page (props: {
       goTo: props.navigation.goTo,
     }}
   >
-    {React.createElement(Component)}
+    <Component {...props.props}/>
   </Context.Provider>
 }
 
@@ -45,6 +46,7 @@ export default async function(
   initialName: string,
   options: AppOptions,
   forcedPath?: string,
+  props: { [key: string]: string } = {},
 ) {
   const navigation = initNavigation(initialName, options, forcedPath)
 
@@ -58,5 +60,6 @@ export default async function(
     navigation={navigation}
     getComponent={name => components[name]}
     getTitle={name => options.routes[name].title}
+    props={props}
   />
 }

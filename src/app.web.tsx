@@ -5,32 +5,59 @@ import { AppOptions } from "./types/app"
 
 export async function App (options: AppOptions) {
   //console.log("WEB", options)
-  let firstRoute: string | undefined, forcedPath: string | undefined
   const keys = Object.keys(options.routes)
 
-  const wildcards = keys.reduce<{ [path: string]: string }>((acc, key) => {
-    if(options.routes[key].path.startsWith("*.")) {
-      const split = options.routes[key].path.split("*.")
-      const count = split.length - 1
-      acc[count] = key
-      forcedPath = split[count]
+  const routes = keys.reduce<{
+    [domainCount: string]: {
+      [pathCount: string]: {
+        route: string
+        domains: string[]
+        paths: string[]
+      }[]
     }
+  }>((acc, route) => {
+    const split = options.routes[route].path.split("/")
+    const domains: string[] = split[0].length === 0 ? [] : split[0].split(".")
+    const paths = split.length === 2 && split[1].length === 0 ? [] : split.slice(1)
+    if(!acc[domains.length]) acc[domains.length] = {}
+    if(!acc[domains.length][paths.length]) acc[domains.length][paths.length] = []
+    acc[domains.length][paths.length].push({ domains, paths, route })
     return acc
   }, {})
 
-  if(Object.keys(wildcards).length > 0) {
-    const hostname = window.location.hostname
-    const parts = hostname.split(".").slice(0, -2).length
-    if(typeof wildcards[parts] !== "undefined") {
-      firstRoute = wildcards[parts]
-    }
-  }
+  let firstRoute: string | undefined, overridePath: string | undefined
+  const props: { [key: string]: string } = {}
 
-  if(!firstRoute) {
-    for(const key of keys) {
-      if(options.routes[key].path === window.location.pathname) {
-        firstRoute = key
-        break
+  const domains = window.location.hostname.split(".").slice(0, -2)
+  const paths = window.location.pathname === "/"
+    ? []
+    : window.location.pathname.slice(1).split("/")
+
+  if(routes[domains.length]) {
+    const pathsRoutes = routes[domains.length][paths.length]
+    if(pathsRoutes) {
+      for(const path of pathsRoutes) {
+        if(
+          path.domains.every((domain, i) => {
+            return domain === domains[i] || domain.charAt(0) === "{"
+          }) && path.paths.every((path, i) => {
+            return path === paths[i] || path.charAt(0) === "{"
+          })
+        ) {
+          firstRoute = path.route
+          path.domains.forEach((domain, i) => {
+            if(domain.charAt(0) === "{") {
+              props[domain.slice(1, -1)] = domains[i]
+            }
+          })
+          path.paths.forEach((path, i) => {
+            if(path.charAt(0) === "{") {
+              props[path.slice(1, -1)] = paths[i]
+            }
+          })
+          overridePath = document.location.pathname
+          break
+        }
       }
     }
   }
@@ -39,6 +66,6 @@ export async function App (options: AppOptions) {
     firstRoute = keys[0]
   }
 
-  const Page = await page(firstRoute, options, forcedPath)
+  const Page = await page(firstRoute, options, overridePath, props)
   createRoot(document.getElementById("root")!).render(<Page/>)
 }
