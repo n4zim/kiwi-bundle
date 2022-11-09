@@ -82,3 +82,33 @@ To build production files, run `npm run build android` or `yarn build android`
 Before your first start, you will need to run `pod install` in `./ios` to install CocoaPods dependencies
 
 Then run `npm run start ios` or `yarn start ios`
+
+
+## Routing for web
+```typescript
+import * as Kiwi from "kiwi-bundle"
+
+Kiwi.App({
+  key: "kiwibundle",
+  routes: { // the router will check the FIRST MATCHING ROUTE
+    root: { // this is the default route if no other matches
+      path: "/", // http://localhost:3000
+    },
+    dir: { // all routes MUST start with /
+      path: "/dir", // http://localhost:3000/dirè
+    },
+    dynamic: { // dynamic routes are supported with props
+      path: "/dir/{dynamic}", // http://localhost:3000/dir/test (props = { dynamic: "test" })
+    },
+    subdomain: { // before the first /, you can specify a subdomain
+      path: "subdomain/", // http://subdomain.localhost:3000
+    },
+    testSubdomain: { // you can use as many subdomains as you want
+      path: "test.subdomain", // http://test.subdomain.localhost:3000
+    },
+    dynamicSubdomain: { // dynamic subdomains are supported with props
+      path: "{domain}.subdomain/dir", // http://a.subdomain.localhost:3000/dir (props = { domain: "a" })
+    },
+  },
+})
+```
