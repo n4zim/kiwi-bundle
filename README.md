@@ -63,7 +63,7 @@ Create a **./package.json** file :
 }
 ```
 
-Then run `npm install` or `yarn install`
+Put your own values on "name" and "kiwi.android.package", then run `npm install` or `yarn install`
 
 
 ## Commands
