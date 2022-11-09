@@ -1,0 +1,7 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "lib": [ "es6", "DOM" ],
+    "skipLibCheck": true,
+  }
+}

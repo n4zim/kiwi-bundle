@@ -1,0 +1,3 @@
+{
+  "extends": "./node_modules/kiwi-bundle-dev/tsconfig.json",
+}

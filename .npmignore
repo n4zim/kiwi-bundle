@@ -1,4 +1,4 @@
-
-# [\/] kiwi-bundle
-!dist/
-# [/\] kiwi-bundle
+assets/
+dev/
+etc/
+.eslintrc.js
