@@ -1,5 +1,7 @@
-
 ![Kiwi Bundle](./assets/cover.png)
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftheblueforest%2Fkiwi-bundle.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftheblueforest%2Fkiwi-bundle?ref=badge_shield)
+
 
 # Features
 - out-of-the box configurations for [TypeScript](https://github.com/microsoft/TypeScript), [React](https://github.com/facebook/react), [React Native](https://github.com/facebook/react-native), [Babel](https://github.com/babel/babel) and [ESLint](https://github.com/eslint/eslint)
