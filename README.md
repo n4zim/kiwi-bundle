@@ -33,6 +33,7 @@ Create a **./package.json** file :
       "build": 1
     },
     "ios": {
+      "bundle": "cc.blueforest.kiwibundle",
       "build": 1
     }
   },

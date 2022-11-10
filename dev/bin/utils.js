@@ -62,6 +62,7 @@ module.exports.initNative = (path, options) => {
     kiwi_bundle_android_package: options.android.package,
     kiwi_bundle_android_build: options.android.build,
     kiwi_bundle_ios_build: options.ios.build,
+    kiwi_bundle_ios_bundle: options.ios.bundle,
   }
 
   const files = []
