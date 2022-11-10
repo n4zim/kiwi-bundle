@@ -35,6 +35,7 @@ Create a **./package.json** file :
       "build": 1
     },
     "ios": {
+      "bundle": "cc.blueforest.kiwibundle",
       "build": 1
     }
   },
@@ -43,10 +44,10 @@ Create a **./package.json** file :
     "build": "kiwi build"
   },
   "dependencies": {
-    "kiwi-bundle": "4.6.1-8"
+    "kiwi-bundle": "4.6.1-9"
   },
   "devDependencies": {
-    "kiwi-bundle-dev": "4.6.1-8"
+    "kiwi-bundle-dev": "4.6.1-9"
   },
   "browserslist": {
     "production": [
