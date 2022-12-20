@@ -2,7 +2,7 @@ import React from "react"
 import { Platform } from "react-native"
 import { Language, LanguagesObject } from "./types/names"
 import { Context } from "./context"
-import { CURRENT_LANGUAGE } from "./local"
+import { CURRENT_LANGUAGE } from "./language"
 import { AppOptions } from "./types/app"
 import { i18n } from "./i18n"
 import initNavigation, { Navigation } from "./navigation"
@@ -15,7 +15,7 @@ function Page (props: {
   props: { [key: string]: string },
 }) {
   //console.log("PAGE", props.name)
-  const [language, setLanguage] = React.useState<Language>(Language.ENGLISH)
+  const [language, setLanguage] = React.useState<Language>(CURRENT_LANGUAGE.get())
 
   const [page, setPage] = React.useState<string>(props.name)
   props.navigation.bind(newPage => setPage(newPage))
