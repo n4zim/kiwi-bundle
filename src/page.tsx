@@ -22,6 +22,11 @@ function Page (props: {
 
   const Component = props.getComponent(page)
 
+  if(typeof Component === "string") {
+    props.navigation.goTo(Component)
+    return null
+  }
+
   const title = props.getTitle(page)
   if(Platform.OS === "web" && typeof title !== "undefined") {
     document.title = i18n(title)
@@ -52,14 +57,25 @@ export default async function(
 
   const components: { [name: string]: any } = {}
   for(const name of Object.keys(options.routes)) {
-    components[name] = (await options.routes[name].component).default
+    const route = options.routes[name]
+    if(typeof route.component !== "undefined") {
+      components[name] = (await route.component).default
+    } else {
+      components[name] = route.redirect
+    }
   }
 
   return () => <Page
     name={initialName}
     navigation={navigation}
     getComponent={name => components[name]}
-    getTitle={name => options.routes[name].title}
+    getTitle={name => {
+      let title = options.routes[name]?.title
+      if(typeof options?.web?.title !== "undefined") {
+        title = options.web.title(title)
+      }
+      return title
+    }}
     props={props}
   />
 }
