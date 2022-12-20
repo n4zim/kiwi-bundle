@@ -29,13 +29,18 @@ export async function App (options: AppOptions) {
   const props: { [key: string]: string } = {}
 
   const domains = window.location.hostname.split(".").slice(0, -2)
-  const paths = window.location.pathname === "/"
-    ? []
-    : window.location.pathname.slice(1).split("/")
 
   if(routes[domains.length]) {
+    const paths = window.location.pathname === "/"
+      ? []
+      : window.location.pathname.slice(1).split("/")
+
     const pathsRoutes = routes[domains.length][paths.length]
     if(pathsRoutes) {
+      new URLSearchParams(window.location.search).forEach((value, key) => {
+        props[key] = value
+      })
+
       for(const path of pathsRoutes) {
         if(
           path.domains.every((domain, i) => {
@@ -55,7 +60,7 @@ export async function App (options: AppOptions) {
               props[path.slice(1, -1)] = paths[i]
             }
           })
-          overridePath = document.location.pathname
+          overridePath = document.location.pathname + window.location.search
           break
         }
       }
@@ -65,6 +70,8 @@ export async function App (options: AppOptions) {
   if(!firstRoute) {
     firstRoute = keys[0]
   }
+
+  console.log({ overridePath })
 
   const Page = await page(firstRoute, options, overridePath, props)
   createRoot(document.getElementById("root")!).render(<Page/>)
