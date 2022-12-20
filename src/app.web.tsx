@@ -71,8 +71,6 @@ export async function App (options: AppOptions) {
     firstRoute = keys[0]
   }
 
-  console.log({ overridePath })
-
   const Page = await page(firstRoute, options, overridePath, props)
   createRoot(document.getElementById("root")!).render(<Page/>)
 }
