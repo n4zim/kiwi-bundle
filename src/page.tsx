@@ -41,6 +41,26 @@ function Page (props: {
         setLanguage(lang)
       },
       goTo: props.navigation.goTo,
+      web: {
+        updateTitle: title => {
+          if(Platform.OS === "web") {
+            document.title = title
+          }
+        },
+        updateParameter(name, value) {
+          const url = new URL(window.location.href)
+          if(value.length === 0) {
+            url.searchParams.delete(name)
+          } else {
+            url.searchParams.set(name, value)
+          }
+          window.history.replaceState(
+            window.history.state,
+            "",
+            url.pathname + url.search,
+          )
+        },
+      },
     }}
   >
     <Component {...props.props}/>

@@ -6,9 +6,17 @@ export const Context = React.createContext<{
   setLanguage: (language: Language) => void
   page: string
   goTo: (page: string) => void
-    }>({
-      language: Language.ENGLISH,
-      setLanguage: () => {},
-      page: "",
-      goTo: () => {},
-    })
+  web: {
+    updateTitle: (name: string) => void
+    updateParameter: (name: string, value: string) => void
+  },
+}>({
+  language: Language.ENGLISH,
+  setLanguage: () => { },
+  page: "",
+  goTo: () => { },
+  web: {
+    updateTitle: () => { },
+    updateParameter: () => { },
+  },
+})
