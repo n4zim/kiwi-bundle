@@ -3,10 +3,9 @@ import { LanguagesObject } from "./names"
 export type AppOptionsRoute = {
   path: string
   component: Promise<any>
+  redirect?: string
   title?: string | LanguagesObject<string>
-} | {
-  path: string
-  redirect: string
+  init?: () => string | undefined
 }
 
 export type AppOptions = {
