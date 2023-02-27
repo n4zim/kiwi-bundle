@@ -106,7 +106,7 @@ export default async function(
       if(typeof options?.web?.title !== "undefined") {
         title = options.web.title(title as any)
       }
-      return title
+      return title || ""
     }}
     props={props}
   />
