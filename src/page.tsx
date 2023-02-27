@@ -54,7 +54,7 @@ function Page (props: {
       goTo: props.navigation.goTo,
       web: {
         updateTitle: title => {
-          if(Platform.OS === "web") {
+          if(Platform.OS === "web" && typeof title !== "undefined") {
             document.title = title
           }
         },
@@ -106,7 +106,7 @@ export default async function(
       if(typeof options?.web?.title !== "undefined") {
         title = options.web.title(title as any)
       }
-      return title || ""
+      return title
     }}
     props={props}
   />
