@@ -11,6 +11,9 @@ export type AppOptionsRoute = {
 export type AppOptions = {
   key: string
   routes: { [name: string]: AppOptionsRoute }
+  wrappers?: {
+    props?: (props: any) => any
+  }
   web?: {
     title?: (page: string | LanguagesObject<string>) => string | LanguagesObject<string>
   }

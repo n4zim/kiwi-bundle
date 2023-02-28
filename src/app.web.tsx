@@ -26,7 +26,7 @@ export async function App (options: AppOptions) {
   }, {})
 
   let firstRoute: string | undefined, overridePath: string | undefined
-  const props: { [key: string]: string } = {}
+  let props: { [key: string]: string } = {}
 
   const domains = window.location.hostname.split(".").slice(0, -2)
 
@@ -70,6 +70,8 @@ export async function App (options: AppOptions) {
   if(!firstRoute) {
     firstRoute = keys[0]
   }
+
+  if(options?.wrappers?.props) props = options.wrappers.props(props)
 
   const Page = await page(firstRoute, options, overridePath, props)
   createRoot(document.getElementById("root")!).render(<Page/>)
