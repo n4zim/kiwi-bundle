@@ -12,22 +12,29 @@ function Page (props: {
   navigation: Navigation,
   getComponent: (name: string) => any,
   getTitle: (name: string) => string | LanguagesObject<string> | undefined,
-  props: { [key: string]: string },
   init?: (name: string) => AppOptionsRoute["init"],
+  initialProps: { [key: string]: string },
 }) {
   //console.log("PAGE", props.name)
   const [language, setLanguage] = React.useState<Language>(CURRENT_LANGUAGE.get())
-  const [page, setPage] = React.useState<string>(props.name)
-  props.navigation.bind(newPage => setPage(newPage))
+  const [page, setPage] = React.useState<{ name: string, props: any }>({
+    name: props.name,
+    props: props.initialProps,
+  })
 
-  const Component = props.getComponent(page)
+  props.navigation.bind((newPage, newProps) => setPage({
+    name: newPage,
+    props: newProps,
+  }))
+
+  const Component = props.getComponent(page.name)
 
   let redirect: string | undefined
 
   if(typeof Component === "string") redirect = Component
 
   if(typeof redirect === "undefined" && typeof props.init !== "undefined") {
-    const init = props.init(page)
+    const init = props.init(page.name)
     if(typeof init !== "undefined") {
       redirect = init()
     }
@@ -38,7 +45,7 @@ function Page (props: {
     return null
   }
 
-  const title = props.getTitle(page)
+  const title = props.getTitle(page.name)
   if(Platform.OS === "web" && typeof title !== "undefined") {
     document.title = i18n(title)
   }
@@ -46,7 +53,7 @@ function Page (props: {
   return <Context.Provider
     value={{
       language,
-      page,
+      page: page.name,
       setLanguage: lang => {
         CURRENT_LANGUAGE.set(lang)
         setLanguage(lang)
@@ -74,7 +81,7 @@ function Page (props: {
       },
     }}
   >
-    <Component {...props.props}/>
+    <Component {...page.props}/>
   </Context.Provider>
 }
 
@@ -108,6 +115,6 @@ export default async function(
       }
       return title
     }}
-    props={props}
+    initialProps={props}
   />
 }

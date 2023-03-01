@@ -2,8 +2,8 @@ import { BackHandler, Platform } from "react-native"
 import { AppOptions } from "./types/app"
 
 export type Navigation = {
-  bind: (updateFn: (page: string) => void) => void
-  goTo: (page: string, params?: { [key: string]: string }) => void
+  bind: (updateFn: (page: string, props?: { [key: string]: string }) => void) => void
+  goTo: (page: string, props?: { [key: string]: string }) => void
 }
 
 export default function (
@@ -11,7 +11,7 @@ export default function (
   options: AppOptions,
   forcedPath?: string,
 ): Navigation {
-  let update: (page: string) => void = () => { }
+  let update: (page: string, props?: { [key: string]: string }) => void = () => { }
   const history: string[] = [initialName]
   if (Platform.OS === "web") {
     const path = typeof forcedPath !== "undefined"
@@ -37,23 +37,28 @@ export default function (
     bind: updateFn => {
       update = updateFn
     },
-    goTo: (page, params) => {
+    goTo: (page, props) => {
       if (Platform.OS === "web") {
         let prefix = ""
-        if(params) {
+        if(props) {
           prefix = "?"
-          for(const key in params) prefix += `${key}=${params[key]}&`
+          for(const key in props) prefix += `${key}=${props[key]}&`
           prefix = prefix.slice(0, -1)
         }
         window.history.pushState(
-          { page },
+          { page, params: props },
           "",
           options.routes[page].path + prefix,
         )
       } else {
         history.push(page)
       }
-      update(page)
+      update(
+        page,
+        (props && options?.wrappers?.props)
+          ? options.wrappers.props(props)
+          : props,
+      )
     },
   }
 }
