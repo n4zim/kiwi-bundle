@@ -91,7 +91,7 @@ export default async function(
   forcedPath?: string,
   props: { [key: string]: string } = {},
 ) {
-  const navigation = initNavigation(initialName, options, forcedPath)
+  const navigation = initNavigation(initialName, options, forcedPath, props)
 
   const components: { [name: string]: any } = {}
   for(const name of Object.keys(options.routes)) {

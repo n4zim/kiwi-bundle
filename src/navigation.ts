@@ -10,22 +10,23 @@ export default function (
   initialName: string,
   options: AppOptions,
   forcedPath?: string,
+  props?: { [key: string]: string },
 ): Navigation {
   let update: (page: string, props?: { [key: string]: string }) => void = () => { }
   const history: string[] = [initialName]
-  if (Platform.OS === "web") {
+  if(Platform.OS === "web") {
     const path = typeof forcedPath !== "undefined"
       ? forcedPath
       : options.routes[initialName].path
-    window.history.replaceState({ page: initialName }, "", path)
+    window.history.replaceState({ page: initialName, props }, "", path)
     window.onpopstate = (event: any) => {
-      if (event.state && event.state.page) {
-        update(event.state.page)
+      if(event.state && event.state.page) {
+        update(event.state.page, event.state.props)
       }
     }
   } else {
     BackHandler.addEventListener("hardwareBackPress", () => {
-      if (history.length > 1) {
+      if(history.length > 1) {
         history.pop()
         update(history[history.length - 1])
         return true
@@ -38,7 +39,7 @@ export default function (
       update = updateFn
     },
     goTo: (page, props) => {
-      if (Platform.OS === "web") {
+      if(Platform.OS === "web") {
         let prefix = ""
         if(props) {
           prefix = "?"
@@ -46,7 +47,7 @@ export default function (
           prefix = prefix.slice(0, -1)
         }
         window.history.pushState(
-          { page, params: props },
+          { page, props },
           "",
           options.routes[page].path + prefix,
         )
