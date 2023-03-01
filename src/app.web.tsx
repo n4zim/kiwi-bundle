@@ -7,6 +7,8 @@ export async function App (options: AppOptions) {
   //console.log("WEB", options)
   const keys = Object.keys(options.routes)
 
+  const domains: string[] = [] // TODO: fix and enable domains
+
   const routes = keys.reduce<{
     [domainCount: string]: {
       [pathCount: string]: {
@@ -17,7 +19,7 @@ export async function App (options: AppOptions) {
     }
   }>((acc, route) => {
     const split = options.routes[route].path.split("/")
-    const domains: string[] = split[0].length === 0 ? [] : split[0].split(".")
+    //const domains: string[] = split[0].length === 0 ? [] : split[0].split(".")
     const paths = split.length === 2 && split[1].length === 0 ? [] : split.slice(1)
     if(!acc[domains.length]) acc[domains.length] = {}
     if(!acc[domains.length][paths.length]) acc[domains.length][paths.length] = []
@@ -28,9 +30,9 @@ export async function App (options: AppOptions) {
   let firstRoute: string | undefined, overridePath: string | undefined
   let props: { [key: string]: string } = {}
 
-  const domains = window.location.hostname.split(".").slice(0, -2)
+  //const domains = window.location.hostname.split(".").slice(0, -2)
 
-  if(routes[domains.length]) {
+  //if(routes[domains.length]) {
     const paths = window.location.pathname === "/"
       ? []
       : window.location.pathname.slice(1).split("/")
@@ -65,7 +67,7 @@ export async function App (options: AppOptions) {
         }
       }
     }
-  }
+  //}
 
   if(!firstRoute) {
     firstRoute = keys[0]
