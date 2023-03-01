@@ -41,7 +41,7 @@ function Page (props: {
   }
 
   if(typeof redirect !== "undefined") {
-    props.navigation.goTo(Component)
+    props.navigation.goTo(redirect)
     return null
   }
 
