@@ -73,8 +73,6 @@ export async function App (options: AppOptions) {
     firstRoute = keys[0]
   }
 
-  if(options?.wrappers?.props) props = options.wrappers.props(props)
-
   const Page = await page(firstRoute, options, overridePath, props)
   createRoot(document.getElementById("root")!).render(<Page/>)
 }

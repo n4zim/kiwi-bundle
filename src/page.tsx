@@ -12,8 +12,9 @@ function Page (props: {
   navigation: Navigation,
   getComponent: (name: string) => any,
   getTitle: (name: string) => string | LanguagesObject<string> | undefined,
-  init?: (name: string) => AppOptionsRoute["init"],
   initialProps: { [key: string]: string },
+  handleProps: (props: { [key: string]: string }) => { [key: string]: string },
+  init?: (name: string) => AppOptionsRoute["init"],
 }) {
   //console.log("PAGE", props.name)
   const [language, setLanguage] = React.useState<Language>(CURRENT_LANGUAGE.get())
@@ -81,7 +82,7 @@ function Page (props: {
       },
     }}
   >
-    <Component {...page.props}/>
+    <Component {...props.handleProps(page.props)}/>
   </Context.Provider>
 }
 
@@ -111,10 +112,14 @@ export default async function(
     getTitle={name => {
       let title = options.routes[name]?.title
       if(typeof options?.web?.title !== "undefined") {
-        title = options.web.title(title as any)
+        title = options.web.title(title as string)
       }
       return title
     }}
     initialProps={props}
+    handleProps={props => {
+      if(options?.wrappers?.props) return options.wrappers.props(props)
+      return props
+    }}
   />
 }

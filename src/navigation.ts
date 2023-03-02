@@ -54,12 +54,7 @@ export default function (
       } else {
         history.push(page)
       }
-      update(
-        page,
-        (props && options?.wrappers?.props)
-          ? options.wrappers.props(props)
-          : props,
-      )
+      update(page, props)
     },
   }
 }
