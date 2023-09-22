@@ -15,9 +15,11 @@ export default function (
   let update: (page: string, props?: { [key: string]: string }) => void = () => { }
   const history: string[] = [initialName]
   if(Platform.OS === "web") {
-    const path = typeof forcedPath !== "undefined"
-      ? forcedPath
-      : options.routes[initialName].path
+    let path = (
+      typeof forcedPath !== "undefined"
+        ? forcedPath
+        : options.routes[initialName].path
+    ) + window.location.hash
     window.history.replaceState({ page: initialName, props }, "", path)
     window.onpopstate = (event: any) => {
       if(event.state && event.state.page) {
@@ -49,7 +51,7 @@ export default function (
         window.history.pushState(
           { page, props },
           "",
-          options.routes[page].path + prefix,
+          options.routes[page].path + prefix + window.location.hash,
         )
       } else {
         history.push(page)
