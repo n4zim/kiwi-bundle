@@ -1,4 +1,5 @@
 import React from "react"
+import { useAsync } from "react-async"
 import { Platform } from "react-native"
 import { Language, LanguagesObject } from "./types/names"
 import { Context } from "./context"
@@ -37,7 +38,9 @@ function Page (props: {
   if(typeof redirect === "undefined" && typeof props.init !== "undefined") {
     const init = props.init(page.name)
     if(typeof init !== "undefined") {
-      redirect = init()
+      const { data, error } = useAsync({ promiseFn: init })
+      if(error) throw error
+      if(data) redirect = data
     }
   }
 

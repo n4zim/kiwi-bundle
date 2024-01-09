@@ -5,7 +5,7 @@ export type AppOptionsRoute = {
   component: Promise<any>
   redirect?: string
   title?: string | LanguagesObject<string>
-  init?: () => string | undefined
+  init?: () => Promise<string | undefined>
 }
 
 export type AppOptions = {

@@ -8,6 +8,7 @@
   "main": "./dist/index.js",
   "dependencies": {
     "react": "18.2.0",
+    "react-async": "^10.0.1",
     "react-dom": "18.2.0",
     "react-native": "0.70.5",
     "react-native-web": "0.18.10"
