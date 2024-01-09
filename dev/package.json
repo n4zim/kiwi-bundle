@@ -1,6 +1,6 @@
 {
   "name": "kiwi-bundle-dev",
-  "version": "4.6.4-0",
+  "version": "4.6.3-12",
   "description": "A minimalistic React environment for all your cross-platform applications",
   "author": "Nazim Lachter <nazim@blueforest.cc>",
   "repository": "git@github.com:theblueforest/kiwi-bundle.git",
@@ -9,18 +9,18 @@
     "kiwi": "./bin/index.js"
   },
   "dependencies": {
-    "@babel/core": "7.22.20",
-    "@babel/runtime": "7.22.15",
+    "@babel/core": "7.20.2",
+    "@babel/runtime": "7.20.1",
     "@react-native-community/eslint-config": "3.2.0",
-    "@tsconfig/react-native": "3.0.2",
-    "@types/react": "18.2.22",
-    "@types/react-dom": "18.2.7",
-    "@types/react-native": "0.72.2",
-    "@typescript-eslint/eslint-plugin": "6.7.2",
-    "@typescript-eslint/parser": "6.7.2",
-    "eslint": "8.49.0",
-    "metro-react-native-babel-preset": "0.77.0",
+    "@tsconfig/react-native": "2.0.2",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.8",
+    "@types/react-native": "0.70.6",
+    "@typescript-eslint/eslint-plugin": "5.42.1",
+    "@typescript-eslint/parser": "5.42.1",
+    "eslint": "8.27.0",
+    "metro-react-native-babel-preset": "0.73.3",
     "react-scripts": "5.0.1",
-    "typescript": "5.2.2"
+    "typescript": "4.8.4"
   }
 }
