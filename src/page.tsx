@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react"
+import React from "react"
 import { useAsync } from "react-async"
 import { Platform } from "react-native"
 import { Language, LanguagesObject } from "./types/names"
@@ -107,7 +107,7 @@ export default async function(
     }
   }
 
-  return <Page
+  return () => <Page
     name={initialName}
     navigation={navigation}
     getComponent={name => components[name]}
@@ -124,5 +124,5 @@ export default async function(
       if(options?.wrappers?.props) return options.wrappers.props(props)
       return props
     }}
-  /> as ReactNode
+  />
 }
