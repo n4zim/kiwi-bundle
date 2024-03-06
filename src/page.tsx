@@ -1,6 +1,5 @@
 import React from "react"
-import { useAsync } from "react-async"
-import { Platform } from "react-native"
+import { Platform, View } from "react-native"
 import { Language, LanguagesObject } from "./types/names"
 import { Context } from "./context"
 import { CURRENT_LANGUAGE } from "./language"
@@ -8,7 +7,7 @@ import { AppOptions, AppOptionsRoute } from "./types/app"
 import { i18n } from "./i18n"
 import initNavigation, { Navigation } from "./navigation"
 
-function Page (props: {
+function Page(props: {
   name: string,
   navigation: Navigation,
   getComponent: (name: string) => any,
@@ -24,30 +23,35 @@ function Page (props: {
     props: props.initialProps,
   })
 
+  const Component = props.getComponent(page.name)
+
+  let redirect: string | undefined
+  if(typeof Component === "string") redirect = Component
+
+  const mustInit = typeof redirect === "undefined" && typeof props.init !== "undefined"
+  const [locked, setLock] = React.useState(true)
+  React.useEffect(() => {
+    if(mustInit) {
+      const init = props.init!(page.name)
+      if(typeof init !== "undefined") {
+        init().then(result => {
+          redirect = result
+          setLock(false)
+        })
+      }
+    }
+  }, [])
+  if(mustInit && locked) return <View/>
+
+  if(typeof redirect !== "undefined") {
+    props.navigation.goTo(redirect)
+    return <View/>
+  }
+
   props.navigation.bind((newPage, newProps) => setPage({
     name: newPage,
     props: newProps,
   }))
-
-  const Component = props.getComponent(page.name)
-
-  let redirect: string | undefined
-
-  if(typeof Component === "string") redirect = Component
-
-  if(typeof redirect === "undefined" && typeof props.init !== "undefined") {
-    const init = props.init(page.name)
-    if(typeof init !== "undefined") {
-      const { data, error } = useAsync({ promiseFn: init })
-      if(error) throw error
-      if(data) redirect = data
-    }
-  }
-
-  if(typeof redirect !== "undefined") {
-    props.navigation.goTo(redirect)
-    return null
-  }
 
   const title = props.getTitle(page.name)
   if(Platform.OS === "web" && typeof title !== "undefined") {
