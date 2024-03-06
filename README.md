@@ -44,10 +44,10 @@ Create a **./package.json** file :
     "build": "kiwi build"
   },
   "dependencies": {
-    "kiwi-bundle": "4.6.3-14"
+    "kiwi-bundle": "4.6.3-15"
   },
   "devDependencies": {
-    "kiwi-bundle-dev": "4.6.3-14"
+    "kiwi-bundle-dev": "4.6.3-15"
   },
   "browserslist": {
     "production": [
