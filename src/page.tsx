@@ -16,7 +16,6 @@ function Page(props: {
   handleProps: (props: { [key: string]: string }) => { [key: string]: string },
   init?: (name: string) => AppOptionsRoute["init"],
 }) {
-  //console.log("PAGE", props.name)
   const [language, setLanguage] = React.useState<Language>(CURRENT_LANGUAGE.get())
   const [page, setPage] = React.useState<{ name: string, props: any }>({
     name: props.name,
@@ -25,26 +24,35 @@ function Page(props: {
 
   const Component = props.getComponent(page.name)
 
-  let redirect: string | undefined
-  if(typeof Component === "string") redirect = Component
+  const [redirect, setRedirect] = React.useState<string | undefined>(
+    (
+      typeof Component === "string"
+      && typeof props.init === "undefined"
+    ) ? Component : undefined
+  )
 
-  const mustInit = typeof redirect === "undefined" && typeof props.init !== "undefined"
-  const [locked, setLock] = React.useState(true)
+  console.log("PAGE", page, { redirect, language })
+
+  const mustResetRedirect = redirect === page.name
+  const mustInit = typeof props.init !== "undefined" && (
+    typeof redirect === "undefined" || !mustResetRedirect
+  )
+
   React.useEffect(() => {
     if(mustInit) {
       const init = props.init!(page.name)
       if(typeof init !== "undefined") {
         init().then(result => {
-          redirect = result
-          setLock(false)
+          console.log("INIT", result)
+          setRedirect(result)
         })
       }
     }
   }, [])
-  if(mustInit && locked) return <View/>
 
-  if(typeof redirect !== "undefined") {
-    props.navigation.goTo(redirect)
+  if(mustInit || mustResetRedirect) {
+    console.log("LOCKED", mustInit, mustResetRedirect)
+    if(mustResetRedirect) setRedirect(undefined)
     return <View/>
   }
 
@@ -52,6 +60,14 @@ function Page(props: {
     name: newPage,
     props: newProps,
   }))
+
+  if(typeof redirect !== "undefined") {
+    console.log("REDIRECT 3", redirect)
+    props.navigation.goTo(redirect)
+    return <View/>
+  }
+
+  console.log("DISPLAY", page.name, page.props)
 
   const title = props.getTitle(page.name)
   if(Platform.OS === "web" && typeof title !== "undefined") {
@@ -99,6 +115,8 @@ export default async function(
   forcedPath?: string,
   props: { [key: string]: string } = {},
 ) {
+  //console.log("MUST RENDER", initialName, options, forcedPath, props)
+
   const navigation = initNavigation(initialName, options, forcedPath, props)
 
   const components: { [name: string]: any } = {}
