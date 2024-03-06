@@ -56,7 +56,7 @@ export default function (
       } else {
         history.push(page)
       }
-      console.log("GO TO", page, props)
+      //console.log("GO TO", page, props)
       update(page, props)
     },
   }

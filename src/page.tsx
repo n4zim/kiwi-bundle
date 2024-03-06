@@ -17,57 +17,52 @@ function Page(props: {
   init?: (name: string) => AppOptionsRoute["init"],
 }) {
   const [language, setLanguage] = React.useState<Language>(CURRENT_LANGUAGE.get())
-  const [page, setPage] = React.useState<{ name: string, props: any }>({
+  const [page, setPage] = React.useState<{ name: string, props: any, loaded?: true }>({
     name: props.name,
     props: props.initialProps,
   })
-
-  const Component = props.getComponent(page.name)
-
-  const [redirect, setRedirect] = React.useState<string | undefined>(
-    (
-      typeof Component === "string"
-      && typeof props.init === "undefined"
-    ) ? Component : undefined
-  )
-
-  console.log("PAGE", page, { redirect, language })
-
-  const mustResetRedirect = redirect === page.name
-  const mustInit = typeof props.init !== "undefined" && (
-    typeof redirect === "undefined" || !mustResetRedirect
-  )
-
-  React.useEffect(() => {
-    if(mustInit) {
-      const init = props.init!(page.name)
-      if(typeof init !== "undefined") {
-        init().then(result => {
-          console.log("INIT", result)
-          setRedirect(result)
-        })
-      }
-    }
-  }, [])
-
-  if(mustInit || mustResetRedirect) {
-    console.log("LOCKED", mustInit, mustResetRedirect)
-    if(mustResetRedirect) setRedirect(undefined)
-    return <View/>
-  }
 
   props.navigation.bind((newPage, newProps) => setPage({
     name: newPage,
     props: newProps,
   }))
 
-  if(typeof redirect !== "undefined") {
-    console.log("REDIRECT 3", redirect)
-    props.navigation.goTo(redirect)
+  React.useEffect(() => {
+    //console.log("CHECK INIT", page.name)
+    if(!page.loaded) {
+      if(typeof props.init !== "undefined") {
+        const init = props.init!(page.name)
+        if(typeof init !== "undefined") {
+          init().then(result => {
+            //console.log("INIT", result)
+            if(typeof result === "string") {
+              props.navigation.goTo(result)
+            } else {
+              setPage({ ...page, loaded: true })
+            }
+          })
+          return
+        }
+      }
+      setPage({ ...page, loaded: true })
+    }
+  }, [page.name])
+
+  //console.log("PAGE", page, { language })
+
+  const Component = props.getComponent(page.name)
+
+  if(typeof props.init === "undefined" && typeof Component === "string") {
+    props.navigation.goTo(Component)
     return <View/>
   }
 
-  console.log("DISPLAY", page.name, page.props)
+  if(!page.loaded) {
+    //console.log("LOCKED")
+    return <View/>
+  }
+
+  //console.log("DISPLAY", page.name, page.props)
 
   const title = props.getTitle(page.name)
   if(Platform.OS === "web" && typeof title !== "undefined") {
