@@ -1,0 +1,11 @@
+[[language]]
+name = "typescript"
+language-servers = [ "typescript" ]
+indent = { unit = "  ", tab-width = 2 }
+language-id = "typescript"
+auto-format = false
+
+[language-server.typescript]
+command = "tsserver"
+config = { enable = true, lint = true }
+

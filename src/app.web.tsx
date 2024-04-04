@@ -28,7 +28,7 @@ export async function App (options: AppOptions) {
   }, {})
 
   let firstRoute: string | undefined, overridePath: string | undefined
-  let props: { [key: string]: string } = {}
+  const props: { [key: string]: string } = {}
 
   //const domains = window.location.hostname.split(".").slice(0, -2)
 
