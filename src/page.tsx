@@ -1,7 +1,7 @@
 import React from "react"
 import { Platform, View } from "react-native"
 import { Language, LanguagesObject } from "./types/names"
-import { Context } from "./context"
+import { Context, ContextType } from "./context"
 import { CURRENT_LANGUAGE } from "./language"
 import { AppOptions, AppOptionsRoute } from "./types/app"
 import { i18n } from "./i18n"
@@ -69,37 +69,37 @@ function Page(props: {
     document.title = i18n(title)
   }
 
-  return <Context.Provider
-    value={{
-      language,
-      page: page.name,
-      setLanguage: lang => {
-        CURRENT_LANGUAGE.set(lang)
-        setLanguage(lang)
+  const context: ContextType = {
+    language,
+    page: page.name,
+    setLanguage: lang => {
+      CURRENT_LANGUAGE.set(lang)
+      setLanguage(lang)
+    },
+    goTo: props.navigation.goTo,
+    web: {
+      updateTitle: title => {
+        if(Platform.OS === "web" && typeof title !== "undefined") {
+          document.title = title
+        }
       },
-      goTo: props.navigation.goTo,
-      web: {
-        updateTitle: title => {
-          if(Platform.OS === "web" && typeof title !== "undefined") {
-            document.title = title
-          }
-        },
-        updateParameter(name, value) {
-          const url = new URL(window.location.href)
-          if(value.length === 0) {
-            url.searchParams.delete(name)
-          } else {
-            url.searchParams.set(name, value)
-          }
-          window.history.replaceState(
-            window.history.state,
-            "",
-            url.pathname + url.search,
-          )
-        },
+      updateParameter(name, value) {
+        const url = new URL(window.location.href)
+        if(value.length === 0) {
+          url.searchParams.delete(name)
+        } else {
+          url.searchParams.set(name, value)
+        }
+        window.history.replaceState(
+          window.history.state,
+          "",
+          url.pathname + url.search,
+        )
       },
-    }}
-  >
+    },
+  }
+
+  return <Context.Provider value={context}>
     <Component {...props.handleProps(page.props)}/>
   </Context.Provider>
 }

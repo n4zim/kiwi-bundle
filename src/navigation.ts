@@ -3,7 +3,7 @@ import { AppOptions } from "./types/app"
 
 export type Navigation = {
   bind: (updateFn: (page: string, props?: { [key: string]: string }) => void) => void
-  goTo: (page: string, props?: { [key: string]: string }) => void
+  goTo: (page: string) => void
 }
 
 export default function (
@@ -40,18 +40,21 @@ export default function (
     bind: updateFn => {
       update = updateFn
     },
-    goTo: (page, props) => {
-      if(Platform.OS === "web") {
-        let prefix = ""
-        if(props) {
-          prefix = "?"
-          for(const key in props) prefix += `${key}=${props[key]}&`
-          prefix = prefix.slice(0, -1)
+    goTo: to => {
+      const [page, prefix] = to.split("?")
+      const props: { [key: string]: string } = {}
+      if(prefix) {
+        const values = prefix.split("&")
+        for(const value of values) {
+          const [key, val] = value.split("=")
+          props[key] = val
         }
+      }
+      if(Platform.OS === "web") {
         window.history.pushState(
           { page, props },
           "",
-          options.routes[page].path + prefix + window.location.hash,
+          options.routes[page].path + "?" + prefix + window.location.hash,
         )
       } else {
         history.push(page)
