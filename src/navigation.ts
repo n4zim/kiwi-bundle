@@ -42,6 +42,9 @@ export default function (
     },
     goTo: to => {
       const [page, prefix] = to.split("?")
+      if(history.length !== 0 && history[history.length - 1] === page) {
+        return
+      }
       const props: { [key: string]: string } = {}
       if(prefix) {
         const values = prefix.split("&")
