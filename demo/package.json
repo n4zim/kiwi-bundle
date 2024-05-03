@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "kiwi-bundle": "4.6.3-17"
+  },
+  "devDependencies": {
+    "kiwi-bundle-dev": "4.6.3-17"
+  },
+  "scripts": {
+    "start": "kiwi start web",
+    "sync": "rm -rf ./node_modules/kiwi-bundle/dist ./node_modules/.cache && cp -r ../dist ./node_modules/kiwi-bundle/dist"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

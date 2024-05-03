@@ -9,6 +9,9 @@ find ./README.md -type f -exec sed -i 's/"kiwi-bundle-dev": ".*"/"kiwi-bundle-de
 
 find ./dev/package.json -type f -exec sed -i 's/"version": ".*"/"version": "'$VERSION'"/gm' {} +
 
+find  ./demo/package.json -type f -exec sed -i 's/"kiwi-bundle": ".*"/"kiwi-bundle": "'$VERSION'"/gm' {} +
+find  ./demo/package.json -type f -exec sed -i 's/"kiwi-bundle-dev": ".*"/"kiwi-bundle-dev": "'$VERSION'"/gm' {} +
+
 yarn build
 yarn publish --non-interactive
 
