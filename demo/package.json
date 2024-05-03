@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "kiwi start web",
-    "sync": "rm -rf ./node_modules/kiwi-bundle/dist ./node_modules/.cache && cp -r ../dist ./node_modules/kiwi-bundle/dist"
+    "sync": "yarn --cwd .. build && rm -rf ./node_modules/kiwi-bundle/dist ./node_modules/.cache && cp -r ../dist ./node_modules/kiwi-bundle/dist && yarn start"
   },
   "browserslist": {
     "production": [
