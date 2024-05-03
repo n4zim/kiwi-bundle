@@ -15,7 +15,7 @@ export default function (
   let update: (page: string, props?: { [key: string]: string }) => void = () => { }
   const history: string[] = [initialName]
   if(Platform.OS === "web") {
-    let path = (
+    const path = (
       typeof forcedPath !== "undefined"
         ? forcedPath
         : options.routes[initialName].path
@@ -42,9 +42,6 @@ export default function (
     },
     goTo: to => {
       const [page, prefix] = to.split("?")
-      if(history.length !== 0 && history[history.length - 1] === page) {
-        return
-      }
       const props: { [key: string]: string } = {}
       if(prefix) {
         const values = prefix.split("&")
@@ -54,11 +51,11 @@ export default function (
         }
       }
       if(Platform.OS === "web") {
-        window.history.pushState(
-          { page, props },
-          "",
-          options.routes[page].path + "?" + prefix + window.location.hash,
-        )
+        const path = options.routes[page].path
+          + (prefix ? ("?" + prefix) : "")
+          + window.location.hash
+        //console.log("GO TO", page, props, path)
+        window.history.pushState({ page, props }, "", path)
       } else {
         history.push(page)
       }

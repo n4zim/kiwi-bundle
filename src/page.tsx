@@ -17,7 +17,7 @@ function Page(props: {
   init?: (name: string) => AppOptionsRoute["init"],
 }) {
   const [language, setLanguage] = React.useState<Language>(CURRENT_LANGUAGE.get())
-  const [page, setPage] = React.useState<{ name: string, props: any, loaded?: true }>({
+  const [page, setPage] = React.useState<{ name: string, props: any, loaded?: boolean }>({
     name: props.name,
     props: props.initialProps,
   })
@@ -25,6 +25,7 @@ function Page(props: {
   props.navigation.bind((newPage, newProps) => setPage({
     name: newPage,
     props: newProps,
+    loaded: newPage === page.name,
   }))
 
   React.useEffect(() => {
@@ -48,7 +49,7 @@ function Page(props: {
     }
   }, [page.name])
 
-  //console.log("PAGE", page, { language })
+  console.log("PAGE", page, { language })
 
   const Component = props.getComponent(page.name)
 
