@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "kiwi-bundle": "4.6.3-17"
+    "kiwi-bundle": "4.6.3-18"
   },
   "devDependencies": {
-    "kiwi-bundle-dev": "4.6.3-17"
+    "kiwi-bundle-dev": "4.6.3-18"
   },
   "scripts": {
     "start": "kiwi start web",
